@@ -1,15 +1,14 @@
-import HomeScreen from "./HomeScreen";
-import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityIcons";
-import SettingsScreen from "./SettingsScreen";
-import {createMaterialBottomTabNavigator} from "react-native-paper/react-navigation";
-import RecentlyMessagesScreen from "./RecentlyMessages";
+
 import {createIcon, Icon, View} from "@gluestack-ui/themed";
 import {Path, Rect} from "react-native-svg";
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+import DoctorList from "../components/DoctorList";
+import MessageChat from "./MessageChat";
 
 
 
 const Tab = createBottomTabNavigator();
+
 
 const GroupIcon = createIcon({
     viewBox: "0 0 49 49",
@@ -39,10 +38,13 @@ const ChatIcon = createIcon({
 })
 
 
-const ChatScreen = () => {
+const ChatScreen = ({route,navigation}) => {
+
     return (
         <Tab.Navigator
         initialRouteName="Ostatnie wiadomości"
+        screenOptions={{tabBarHideOnKeyboard: true}}
+        detachInactiveScreens={true}
 
         >
 
@@ -51,9 +53,22 @@ const ChatScreen = () => {
                 name="Ostatnie wiadomości"
                 fontSize={20}
 
-                component={RecentlyMessagesScreen}
+                component={DoctorList}
                 options={{
 
+                    headerShown: false,
+                    tabBarLabelStyle: { fontSize: 15 },
+                    tabBarIcon: ({ color }) => (
+                        <ChatIcon size='l' color={color}/>
+
+                    ),
+                }}
+            />
+            <Tab.Screen
+                name="Lista lekarzy"
+                component={DoctorList}
+
+                options={{
                     headerShown: false,
                     tabBarLabelStyle: { fontSize: 15 },
                     tabBarIcon: ({ color }) => (
@@ -61,19 +76,10 @@ const ChatScreen = () => {
                     ),
                 }}
             />
-            <Tab.Screen
-                name="Lista lekarzy"
-                component={SettingsScreen}
-                options={{
-                    headerShown: false,
-                    tabBarLabelStyle: { fontSize: 15 },
-                    tabBarIcon: ({ color }) => (
-                        <ChatIcon size='l' color={color}/>
-                    ),
-                }}
-            />
+
+
         </Tab.Navigator>
     )
 
 }
-export default ChatScreen
+export default ChatScreen;

@@ -8,6 +8,7 @@ import SettingsScreen from "../screens/SettingsScreen";
 import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityIcons";
 import CalendarScreen from "../screens/CalendarScreen";
 import ChatScreen from "../screens/ChatScreen";
+import ChatNavigation from "../screens/ChatNavigation";
 // import {NavigationContainer} from "@react-navigation/native";
 
 
@@ -17,10 +18,11 @@ const MyDrawer = () => {
     // const [active, setActive] = React.useState('');
 
     return (
-        <Drawer.Navigator initialRouteName="Kalendarz">
+        <Drawer.Navigator initialRouteName="Kalendarz"
+        detachInactiveScreens={true}>
 
             <Drawer.Screen name="Kalendarz" component={CalendarScreen} />
-            <Drawer.Screen name="Wiadomości" component={ChatScreen} />
+            <Drawer.Screen name="Wiadomości" component={ChatNavigation} />
             <Drawer.Screen name="Pliki" component={SettingsScreen} />
             <Drawer.Screen name="Gabinety" component={SettingsScreen} />
             <Drawer.Screen name="Konto" component={SettingsScreen} />
