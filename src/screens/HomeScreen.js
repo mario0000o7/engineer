@@ -1,5 +1,4 @@
 import {Text, View} from "react-native";
-import MyTabs from "../components/HomeNavigationBar";
 import {Input, InputField} from "@gluestack-ui/themed";
 
 function HomeScreen() {

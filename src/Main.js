@@ -1,6 +1,5 @@
 
 import { Text } from 'react-native-paper';
-import MyTabs from './components/HomeNavigationBar.js';
 import MyDrawer from "./components/MyDrawer";
 import {NavigationContainer} from "@react-navigation/native";
 

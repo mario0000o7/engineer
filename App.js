@@ -17,11 +17,11 @@ export default function App() {
     return (
         <GluestackUIProvider config={config}>
 
-        <PaperProvider>
+        {/*<PaperProvider>*/}
 
             <Main />
 
-        </PaperProvider>
+        {/*</PaperProvider>*/}
         </GluestackUIProvider>
 
     );

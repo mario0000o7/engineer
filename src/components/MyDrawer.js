@@ -6,8 +6,8 @@ import { createDrawerNavigator } from '@react-navigation/drawer';
 import HomeScreen from "../screens/HomeScreen";
 import SettingsScreen from "../screens/SettingsScreen";
 import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityIcons";
-import MyTabs from "./HomeNavigationBar";
 import CalendarScreen from "../screens/CalendarScreen";
+import ChatScreen from "../screens/ChatScreen";
 // import {NavigationContainer} from "@react-navigation/native";
 
 
@@ -20,7 +20,7 @@ const MyDrawer = () => {
         <Drawer.Navigator initialRouteName="Kalendarz">
 
             <Drawer.Screen name="Kalendarz" component={CalendarScreen} />
-            <Drawer.Screen name="Wiadomości" component={SettingsScreen} />
+            <Drawer.Screen name="Wiadomości" component={ChatScreen} />
             <Drawer.Screen name="Pliki" component={SettingsScreen} />
             <Drawer.Screen name="Gabinety" component={SettingsScreen} />
             <Drawer.Screen name="Konto" component={SettingsScreen} />
