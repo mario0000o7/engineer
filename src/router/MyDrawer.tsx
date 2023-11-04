@@ -8,7 +8,10 @@ const Drawer = createDrawerNavigator<RootStackParamList>();
 
 const MyDrawer = () => {
   return (
-    <Drawer.Navigator initialRouteName={Routes.Calendar} detachInactiveScreens={true}>
+    <Drawer.Navigator
+      id={'MainNavigator'}
+      initialRouteName={Routes.Calendar}
+      detachInactiveScreens={true}>
       <Drawer.Screen name={Routes.Calendar} component={CalendarScreen} options={commonOptions} />
       <Drawer.Screen name={Routes.Chat} component={ChatScreen} options={commonOptions} />
       {/*<Drawer.Screen name="Pliki" component={SettingsScreen} options={commonOptions} />*/}

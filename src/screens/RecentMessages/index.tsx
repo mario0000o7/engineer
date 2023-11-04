@@ -1,31 +1,51 @@
 import DoctorMessage from '../../components/DoctorMessage';
 import { NavigationProps, Routes } from '~/router/navigationTypes';
 import { Searchbar } from 'react-native-paper';
-import { Platform, ScrollView, View } from 'react-native';
+import { ScrollView, View } from 'react-native';
 import styles from '~/screens/RecentMessages/styles';
+import { COLOR } from '~/styles/constants';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
-const RecentMessages = ({ route, navigation }: NavigationProps<Routes.RecentMessages>) => {
+const RecentMessages = ({ navigation, route }: NavigationProps<Routes.RecentMessages>) => {
+  const insets = useSafeAreaInsets();
+
   return (
-    <View style={styles.columnContainer}>
-      {/*<View style={{ width: '90%', alignSelf: 'center' }}>*/}
-      {/*<Searchbar style={{marginRight:10,marginLeft:10}} placeholder="Wyszukaj lekarza" onChangeText={() => {}} value={''} />*/}
-      <View style={{ width: '100%', height: '100%' }}>
-        <ScrollView>
-          {/*<VStack space={4} alignItems="center" justifyContent="center">*/}
-          <DoctorMessage navigation={navigation} route={route} />
-          <DoctorMessage navigation={navigation} route={route} />
-          <DoctorMessage navigation={navigation} route={route} />
-          <DoctorMessage navigation={navigation} route={route} />
-          <DoctorMessage navigation={navigation} route={route} />
-          <DoctorMessage navigation={navigation} route={route} />
-          <DoctorMessage navigation={navigation} route={route} />
-          <DoctorMessage navigation={navigation} route={route} />
-          <DoctorMessage navigation={navigation} route={route} />
-          <DoctorMessage navigation={navigation} route={route} />
+    <View style={[styles.columnContainer]}>
+      <Searchbar
+        style={{
+          marginRight: 10,
+          marginLeft: 10,
+          marginTop: 10,
+          marginBottom: 10,
+          backgroundColor: COLOR.BACKGROUND,
+          borderWidth: 1
+        }}
+        placeholder="Wyszukaj lekarza"
+        onChangeText={() => {}}
+        value={''}
+      />
+      {/*<View style={{ width: '100%'}}>*/}
+      <ScrollView showsHorizontalScrollIndicator={false}>
+        {/*<VStack space={4} alignItems="center" justifyContent="center">*/}
+        <DoctorMessage navigation={navigation} route={route} />
+        <DoctorMessage navigation={navigation} route={route} />
+        <DoctorMessage navigation={navigation} route={route} />
+        <DoctorMessage navigation={navigation} route={route} />
+        <DoctorMessage navigation={navigation} route={route} />
+        <DoctorMessage navigation={navigation} route={route} />
+        <DoctorMessage navigation={navigation} route={route} />
+        <DoctorMessage navigation={navigation} route={route} />
+        <DoctorMessage navigation={navigation} route={route} />
+        <DoctorMessage navigation={navigation} route={route} />
+        <DoctorMessage navigation={navigation} route={route} />
+        <DoctorMessage navigation={navigation} route={route} />
+        <DoctorMessage navigation={navigation} route={route} />
+        <DoctorMessage navigation={navigation} route={route} />
+        <DoctorMessage navigation={navigation} route={route} />
 
-          {/*</VStack>*/}
-        </ScrollView>
-      </View>
+        {/*</VStack>*/}
+      </ScrollView>
+      {/*</View>*/}
     </View>
   );
 };

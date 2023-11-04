@@ -2,6 +2,7 @@ import { Calendar } from 'react-native-calendars';
 import { Text } from 'react-native-paper';
 import { useState } from 'react';
 import { Platform, ScrollView, View } from 'react-native';
+import { SafeAreaView, useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import { LocaleConfig } from 'react-native-calendars/src/index';
 import { VisitComponent } from '~/components/VisitComponent';
@@ -47,6 +48,8 @@ LocaleConfig.defaultLocale = 'pl';
 
 const CalendarScreen = ({ navigation }: NavigationProps<Routes.Calendar>) => {
   const [day, setDay] = useState('');
+  const insets = useSafeAreaInsets();
+
   if (Platform.OS === 'web') {
     return (
       <View
@@ -143,7 +146,7 @@ const CalendarScreen = ({ navigation }: NavigationProps<Routes.Calendar>) => {
               }}>
               Wizyty
             </Text>
-            <ScrollView>
+            <ScrollView showsHorizontalScrollIndicator={false}>
               <VisitComponent />
               <VisitComponent />
               <VisitComponent />
@@ -163,9 +166,10 @@ const CalendarScreen = ({ navigation }: NavigationProps<Routes.Calendar>) => {
       <View
         style={{
           justifyContent: 'center',
+          flex: 1,
           width: '100%',
-          height: '100%',
-          backgroundColor: COLOR.BACKGROUND
+          backgroundColor: COLOR.BACKGROUND,
+          paddingBottom: insets.bottom
         }}>
         <Calendar
           style={{
@@ -215,7 +219,9 @@ const CalendarScreen = ({ navigation }: NavigationProps<Routes.Calendar>) => {
           }}>
           Wizyty
         </Text>
-        <ScrollView style={{ width: '100%', alignSelf: 'center' }}>
+        <ScrollView
+          showsHorizontalScrollIndicator={false}
+          style={{ width: '100%', alignSelf: 'center' }}>
           <VisitComponent />
           <VisitComponent />
           <VisitComponent />

@@ -18,11 +18,10 @@ const styles = StyleSheet.create({
     justifyContent: 'flex-start',
     flexDirection: 'column',
     width: '100%',
-    height: 'auto',
+    height: '100%',
     paddingRight: 10,
     paddingLeft: 10,
-    // paddingTop: 10,
-    // paddingBottom:115
+    backgroundColor: COLOR.BACKGROUND,
   },
 
   itemContainer: {
