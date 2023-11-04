@@ -3,7 +3,7 @@ import { NavigationProps, RootStackParamList, Routes } from '~/router/navigation
 import Message from '~/screens/Message';
 import RecentMessages from '~/screens/RecentMessages';
 import { COLOR } from '~/styles/constants';
-import { useEffect } from 'react';
+
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
 
@@ -11,7 +11,9 @@ const ChatNavigation = ({ navigation, route }: NavigationProps<Routes.ChatNaviga
   return (
     <Stack.Navigator
       initialRouteName={Routes.RecentMessages}
-      screenOptions={{ navigationBarColor: COLOR.BACKGROUND }}>
+      screenOptions={{
+        navigationBarColor: COLOR.BACKGROUND
+      }}>
       <Stack.Screen
         name={Routes.RecentMessages}
         component={RecentMessages}

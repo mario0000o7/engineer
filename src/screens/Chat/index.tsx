@@ -28,6 +28,7 @@ const ChatScreen = ({ navigation }: NavigationProps<Routes.Chat>) => {
           tabBarLabelStyle: styles.tabLabel,
           tabBarActiveTintColor: COLOR.PRIMARY,
           tabBarInactiveTintColor: COLOR.GREY,
+            title: 'Wiadomości',
           tabBarIcon: ({ color, size }) => <Icon source={'message'} color={color} size={size} />
         }}></Tab.Screen>
       <Tab.Screen
@@ -39,6 +40,7 @@ const ChatScreen = ({ navigation }: NavigationProps<Routes.Chat>) => {
           tabBarLabelStyle: styles.tabLabel,
           tabBarActiveTintColor: COLOR.PRIMARY,
           tabBarInactiveTintColor: COLOR.GREY,
+            title: 'Lista lekarzy',
           tabBarIcon: ({ color, size }) => (
             <Icon source={'account-search'} size={size} color={color} />
           )
