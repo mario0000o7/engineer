@@ -1,9 +1,8 @@
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { NavigationProps, RootStackParamList, Routes } from '~/router/navigationTypes';
-import Message from '~/screens/Message';
+import MessageChat from '~/screens/Message';
 import RecentMessages from '~/screens/RecentMessages';
 import { COLOR } from '~/styles/constants';
-
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
 
@@ -21,8 +20,10 @@ const ChatNavigation = ({ navigation, route }: NavigationProps<Routes.ChatNaviga
       />
       <Stack.Screen
         name={Routes.Message}
-        component={Message}
-        options={({ route }) => ({ title: route.params.name })}
+        component={MessageChat}
+        options={{
+          headerShown: false
+        }}
       />
     </Stack.Navigator>
   );

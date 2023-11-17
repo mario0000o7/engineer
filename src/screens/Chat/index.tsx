@@ -7,10 +7,10 @@ import ChatNavigation from '~/router/ChatNavigation';
 import RecentMessages from '~/screens/RecentMessages';
 
 const Tab = createBottomTabNavigator<RootStackParamList>();
+
 export interface ParentNavigationProps {
   parentNavigation: NavigationProps<Routes.Chat>['navigation'];
 }
-import Animated from 'react-native-reanimated';
 
 const ChatScreen = ({ navigation }: NavigationProps<Routes.Chat>) => {
   return (
@@ -28,7 +28,7 @@ const ChatScreen = ({ navigation }: NavigationProps<Routes.Chat>) => {
           tabBarLabelStyle: styles.tabLabel,
           tabBarActiveTintColor: COLOR.PRIMARY,
           tabBarInactiveTintColor: COLOR.GREY,
-            title: 'Wiadomości',
+          title: 'Wiadomości',
           tabBarIcon: ({ color, size }) => <Icon source={'message'} color={color} size={size} />
         }}></Tab.Screen>
       <Tab.Screen
@@ -40,7 +40,7 @@ const ChatScreen = ({ navigation }: NavigationProps<Routes.Chat>) => {
           tabBarLabelStyle: styles.tabLabel,
           tabBarActiveTintColor: COLOR.PRIMARY,
           tabBarInactiveTintColor: COLOR.GREY,
-            title: 'Lista lekarzy',
+          title: 'Lista lekarzy',
           tabBarIcon: ({ color, size }) => (
             <Icon source={'account-search'} size={size} color={color} />
           )

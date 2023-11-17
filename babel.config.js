@@ -14,10 +14,12 @@ module.exports = function (api) {
             '~/screens': './src/screens',
             '~/redux': './src/redux',
             '~/hooks': './src/hooks',
-            '~/styles': './src/styles'
+            '~/styles': './src/styles',
+            '~/utils': './src/utils'
           }
         }
       ],
+      'module:react-native-dotenv',
       'react-native-paper/babel',
       '@babel/plugin-proposal-export-namespace-from',
       'react-native-reanimated/plugin'
