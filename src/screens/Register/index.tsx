@@ -19,7 +19,7 @@ export interface LoginSchema {
   email: string;
 }
 
-const LoginScreen = ({ navigation }: NavigationProps<Routes.Login>) => {
+const RegisterScreen = ({ navigation }: NavigationProps<Routes.Register>) => {
   const dispatch = useAppDispatch();
   const [login, { isLoading }] = useLoginMutation();
   const [resError, setResError] = useState('');
@@ -92,11 +92,11 @@ const LoginScreen = ({ navigation }: NavigationProps<Routes.Login>) => {
           Zaloguj się
         </Button>
         <View style={{ alignSelf: 'center', paddingTop: 5 }}>
-          <Text>Nie posiadasz konta?</Text>
+          <Text>Posiadasz konto?</Text>
           <Text
-            onPress={() => navigation.navigate(Routes.Register)}
+            onPress={() => navigation.navigate(Routes.Login)}
             style={{ color: COLOR.PRIMARY, textAlign: 'center' }}>
-            Zarejestruj się
+            Zaloguj się
           </Text>
         </View>
       </KeyboardAwareScrollView>
@@ -104,4 +104,4 @@ const LoginScreen = ({ navigation }: NavigationProps<Routes.Login>) => {
   );
 };
 
-export default LoginScreen;
+export default RegisterScreen;

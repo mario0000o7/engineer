@@ -9,8 +9,14 @@ import { CometChat } from '@cometchat/chat-sdk-react-native';
 import RegisterNavigation from './src/router/registerNavigation';
 import { Provider } from 'react-redux';
 import { store } from './src/redux/store';
+import { Poppins_400Regular, Poppins_600SemiBold, useFonts } from '@expo-google-fonts/poppins';
+import { StatusBar } from 'expo-status-bar';
 
 export default function App() {
+  const [fontsLoaded, fontError] = useFonts({
+    Poppins_400Regular,
+    Poppins_600SemiBold
+  });
   const appID: string = APP_ID_COSMO_CHAT;
   const region: string = REGION_COSMO_CHAT;
   const appSetting: CometChat.AppSettings = new CometChat.AppSettingsBuilder()
@@ -26,12 +32,18 @@ export default function App() {
       console.log('Initialization failed with error:', error);
     }
   );
+  if (!fontsLoaded && !fontError) {
+    return null;
+  }
   return (
     <Provider store={store}>
       <PaperProvider>
         <SafeAreaProvider>
           <NavigationContainer>
-            <RegisterNavigation />
+            <>
+              <StatusBar style="auto" />
+              <RegisterNavigation />
+            </>
           </NavigationContainer>
         </SafeAreaProvider>
       </PaperProvider>

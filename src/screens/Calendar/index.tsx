@@ -2,7 +2,7 @@ import { Calendar } from 'react-native-calendars';
 import { Text } from 'react-native-paper';
 import { useState } from 'react';
 import { Platform, ScrollView, View } from 'react-native';
-import { SafeAreaView, useSafeAreaInsets } from 'react-native-safe-area-context';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import { LocaleConfig } from 'react-native-calendars/src/index';
 import { VisitComponent } from '~/components/VisitComponent';
@@ -181,9 +181,9 @@ const CalendarScreen = ({ navigation }: NavigationProps<Routes.Calendar>) => {
           }}
           renderArrow={(direction) => {
             if (direction === 'left') {
-              return <Icon source={'arrow-left-thick'} color={COLOR.PRIMARY} size={45} />;
+              return <Icon source={'arrow-left-thick'} color={COLOR.PRIMARY} size={35} />;
             } else {
-              return <Icon source={'arrow-right-thick'} color={COLOR.PRIMARY} size={45} />;
+              return <Icon source={'arrow-right-thick'} color={COLOR.PRIMARY} size={35} />;
             }
           }}
           theme={{
@@ -191,7 +191,7 @@ const CalendarScreen = ({ navigation }: NavigationProps<Routes.Calendar>) => {
             selectedDayBackgroundColor: COLOR.PRIMARY,
             calendarBackground: COLOR.BACKGROUND,
             textMonthFontWeight: 'bold',
-            textMonthFontSize: 30
+            textMonthFontSize: 25
           }}
           onDayPress={(day) => {
             console.log('selected day', day);

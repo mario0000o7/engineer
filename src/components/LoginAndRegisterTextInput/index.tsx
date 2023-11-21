@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { Control, Controller } from 'react-hook-form';
 import { View } from 'react-native';
 import { COLOR } from '~/styles/constants';
-import { TextField } from 'react-native-ui-lib';
+import { TextField, TouchableOpacity } from 'react-native-ui-lib';
 import { MaterialIcons } from '@expo/vector-icons';
 
 interface CustomTextInputProps {
@@ -52,19 +52,25 @@ const CustomTextInput = ({
             onBlur={onBlur}
             onChangeText={onChange}
             value={value}
+            padding={true}
             enableErrors={true}
             validateOnChange={true}
             floatingPlaceholder={true}
             validationMessage={[error!]}
-            maxLength={20}
+            maxLength={40}
             showCharCounter={true}
             scrollEnabled={false}
             trailingAccessory={
               textContentType === 'password' ? (
-                <MaterialIcons name="visibility" size={24} color="black" />
+                <TouchableOpacity
+                  onPress={() => {
+                    setHidePass(!hidePass);
+                  }}>
+                  <MaterialIcons name="visibility" size={24} color="black" />
+                </TouchableOpacity>
               ) : undefined
             }
-            fieldStyle={{ borderBottomWidth: 1, borderBottomColor: COLOR.BLACK }}
+            fieldStyle={{ borderBottomWidth: 2, borderBottomColor: COLOR.BLACK }}
           />
         )}
       />

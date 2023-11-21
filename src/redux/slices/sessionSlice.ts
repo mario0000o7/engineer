@@ -1,12 +1,12 @@
 import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { Jwt } from '~/types/common';
-import * as SecureStore from 'expo-secure-store';
 import { jwtDecode } from 'jwt-decode';
 import 'core-js/stable/atob';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const AUTH_KEY = 'AUTH_TOKEN';
 export const preloadToken = createAsyncThunk('preloadToken', async () => {
-  const token = await SecureStore.getItemAsync(AUTH_KEY);
+  const token = await AsyncStorage.getItem(AUTH_KEY);
 
   return {
     token: token ?? undefined

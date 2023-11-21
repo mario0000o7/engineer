@@ -5,6 +5,7 @@ import { useAppDispatch, useAppSelector } from '~/redux/hooks';
 import MyDrawer from '~/router/MyDrawer';
 import { preloadToken } from '~/redux/slices/sessionSlice';
 import { useEffect } from 'react';
+import RegisterScreen from '~/screens/Register';
 
 const RegisterNavigation = () => {
   const Stack = createNativeStackNavigator<RootStackParamList>();
@@ -31,6 +32,11 @@ const RegisterNavigation = () => {
             options={{ headerShown: false }}
             name={Routes.Login}
             component={LoginScreen}
+          />
+          <Stack.Screen
+            options={{ headerShown: false }}
+            name={Routes.Register}
+            component={RegisterScreen}
           />
         </>
       )}
