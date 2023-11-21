@@ -3,6 +3,7 @@ import CalendarScreen from '~/screens/Calendar';
 import { commonOptions } from '~/router/options';
 import ChatScreen from '~/screens/Chat';
 import { RootStackParamList, Routes } from '~/router/navigationTypes';
+import LogoutScreen from '~/screens/Logout';
 
 const Drawer = createDrawerNavigator<RootStackParamList>();
 
@@ -18,6 +19,7 @@ const MyDrawer = () => {
       {/*<Drawer.Screen name="Gabinety" component={SettingsScreen} options={commonOptions} />*/}
       {/*<Drawer.Screen name="Konto" component={SettingsScreen} options={commonOptions} />*/}
       {/*<Drawer.Screen name="Ustawienia" component={SettingsScreen} options={commonOptions} />*/}
+      <Drawer.Screen name={Routes.Logout} component={LogoutScreen} options={commonOptions} />
     </Drawer.Navigator>
   );
 };

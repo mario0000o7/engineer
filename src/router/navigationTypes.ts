@@ -1,9 +1,9 @@
 /* eslint-disable no-unused-vars */
 
-import {NativeStackNavigationProp, NativeStackScreenProps} from '@react-navigation/native-stack';
-import {ParentNavigationProps} from "~/screens/Chat";
+import { NativeStackScreenProps } from '@react-navigation/native-stack';
 
 export enum Routes {
+  MainNavigation = 'MainNavigation',
   Calendar = 'Calendar',
   Settings = 'Settings',
   Profile = 'Profile',
@@ -14,10 +14,13 @@ export enum Routes {
   RecentMessages = 'RecentMessages',
   DoctorList = 'DoctorList',
   Message = 'Message',
-  ChatNavigation = 'ChatNavigation'
+  ChatNavigation = 'ChatNavigation',
+  LoginNavigation = 'LoginNavigation',
+  Logout = 'Logout'
 }
 
 export type RootStackParamList = {
+  [Routes.MainNavigation]: undefined;
   [Routes.Calendar]: undefined;
   [Routes.Settings]: undefined;
   [Routes.Profile]: undefined;
@@ -29,6 +32,8 @@ export type RootStackParamList = {
   [Routes.DoctorList]: undefined;
   [Routes.Message]: { name: string; id: number };
   [Routes.ChatNavigation]: undefined;
+  [Routes.LoginNavigation]: undefined;
+  [Routes.Logout]: undefined;
 };
 
 export type NavigationProps<T extends Routes> = NativeStackScreenProps<RootStackParamList, T>;
