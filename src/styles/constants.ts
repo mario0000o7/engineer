@@ -5,4 +5,5 @@ export module COLOR {
   export const BACKGROUND = '#FAFAFA';
   export const PRIMARY = '#0038FF';
   export const WHITE = '#FFFFFF';
+  export const BLACK = '#000000';
 }

@@ -1,8 +1,9 @@
 import { useState } from 'react';
 import { Control, Controller } from 'react-hook-form';
 import { View } from 'react-native';
-import { HelperText, TextInput } from 'react-native-paper';
 import { COLOR } from '~/styles/constants';
+import { TextField } from 'react-native-ui-lib';
+import { MaterialIcons } from '@expo/vector-icons';
 
 interface CustomTextInputProps {
   name: string;
@@ -31,43 +32,42 @@ const CustomTextInput = ({
         rules={{
           required: {
             value: true,
-            message: 'This field is required'
+            message: 'Te pole jest wymagane'
           },
           pattern:
             textContentType === 'emailAddress'
               ? {
                   value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i,
-                  message: 'Invalid email address'
+                  message: 'Niepoprawny adres email'
                 }
               : undefined
         }}
         render={({ field: { onChange, onBlur, value } }) => (
-          <TextInput
-            mode="outlined"
+          <TextField
             placeholderTextColor={COLOR.LIGHT_GREY}
             label={label}
-            outlineColor="#E2E2E2"
             placeholder={placeholder}
             secureTextEntry={hidePass}
-            outlineStyle={{
-              borderRadius: 50
-            }}
             textContentType={textContentType}
             onBlur={onBlur}
             onChangeText={onChange}
             value={value}
-            right={
-              textContentType === 'password' && (
-                <TextInput.Icon icon={'eye'} onPress={() => setHidePass((prev) => !prev)} />
-              )
+            enableErrors={true}
+            validateOnChange={true}
+            floatingPlaceholder={true}
+            validationMessage={[error!]}
+            maxLength={20}
+            showCharCounter={true}
+            scrollEnabled={false}
+            trailingAccessory={
+              textContentType === 'password' ? (
+                <MaterialIcons name="visibility" size={24} color="black" />
+              ) : undefined
             }
-            error={!!error}
+            fieldStyle={{ borderBottomWidth: 1, borderBottomColor: COLOR.BLACK }}
           />
         )}
       />
-      <HelperText type="error" visible={!!error} style={{ fontSize: 10, marginTop: -6 }}>
-        {error}
-      </HelperText>
     </View>
   );
 };

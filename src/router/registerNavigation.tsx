@@ -27,7 +27,11 @@ const RegisterNavigation = () => {
         </>
       ) : (
         <>
-          <Stack.Screen name={Routes.Login} component={LoginScreen} />
+          <Stack.Screen
+            options={{ headerShown: false }}
+            name={Routes.Login}
+            component={LoginScreen}
+          />
         </>
       )}
     </Stack.Navigator>
