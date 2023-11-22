@@ -26,7 +26,7 @@ export const sendSmsVerification = async (phoneNumber: string) => {
     const json = await response.data;
     return json.status === 'pending';
   } catch (error) {
-    console.error(error);
+    console.log(error);
     return false;
   }
 };
@@ -52,7 +52,7 @@ export const checkVerification = async (phoneNumber: string, code: string) => {
     console.log(json);
     return json.valid;
   } catch (error) {
-    console.error(error);
+    console.log(error);
     return false;
   }
 };

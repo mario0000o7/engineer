@@ -10,8 +10,15 @@ interface CustomTextInputProps {
   control: Control<any>;
   error?: string;
   placeholder?: string;
-  textContentType?: 'emailAddress' | 'password' | 'telephoneNumber' | 'familyName' | 'givenName';
+  textContentType?:
+    | 'emailAddress'
+    | 'password'
+    | 'telephoneNumber'
+    | 'familyName'
+    | 'givenName'
+    | 'oneTimeCode';
   keyboardType?: 'default' | 'email-address' | 'numeric' | 'phone-pad';
+  maxLength?: number;
   label?: string;
 }
 
@@ -22,7 +29,8 @@ const CustomTextInput = ({
   placeholder,
   textContentType,
   keyboardType,
-  label
+  label,
+  maxLength = 40
 }: CustomTextInputProps) => {
   const [hidePass, setHidePass] = useState(textContentType === 'password');
 
@@ -59,7 +67,7 @@ const CustomTextInput = ({
             validateOnChange={true}
             floatingPlaceholder={true}
             validationMessage={[error!]}
-            maxLength={40}
+            maxLength={maxLength}
             showCharCounter={true}
             scrollEnabled={false}
             autoCorrect={false}
