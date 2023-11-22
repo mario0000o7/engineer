@@ -31,6 +31,7 @@ const VerifyStep = ({ navigation }: NavigationProps<Routes.VerifyStep>) => {
   const [resError, setResError] = useState('');
   const [value, setValue] = useState('');
   const ref = useBlurOnFulfill({ value: value, cellCount: 6 });
+  const [timer, setTimer] = useState(0);
 
   const [props, getCellOnLayoutHandler] = useClearByFocusCell({
     value,
@@ -51,11 +52,7 @@ const VerifyStep = ({ navigation }: NavigationProps<Routes.VerifyStep>) => {
   };
 
   const sendCodeHandler = useCallback(() => {
-    sendSmsVerification(stored.phone).then((result) => {
-      if (!result) {
-        setResError('Nie udało się wysłać kodu weryfikacyjnego');
-      }
-    });
+    onSendCode().then();
   }, [stored.phone]);
 
   useFocusEffect(sendCodeHandler);
@@ -74,7 +71,13 @@ const VerifyStep = ({ navigation }: NavigationProps<Routes.VerifyStep>) => {
   const onSendCode = async () => {
     const result = await sendSmsVerification(stored.phone);
     if (!result) {
+      console.log('error');
       setResError('Nie udało się wysłać kodu weryfikacyjnego');
+    }
+    for (let i = 10; i >= 0; i--) {
+      setTimer(i);
+      console.log(i);
+      await new Promise((resolve) => setTimeout(resolve, 1000));
     }
   };
 
@@ -146,16 +149,20 @@ const VerifyStep = ({ navigation }: NavigationProps<Routes.VerifyStep>) => {
             style={{ fontSize: 12, marginTop: -6, textAlign: 'center' }}>
             {errors.code?.message}
           </HelperText>
-          <Text style={{ alignSelf: 'center', textAlign: 'left' }}>
-            Nie otrzymałeś kodu?{' '}
-            <Text
-              onPress={() => {
-                onSendCode().then();
-              }}
-              style={{ color: COLOR.PRIMARY }}>
-              Wyślij ponownie
+          {timer == 0 ? (
+            <Text style={{ alignSelf: 'center', textAlign: 'left' }}>
+              Nie otrzymałeś kodu?{' '}
+              <Text
+                onPress={() => {
+                  onSendCode().then();
+                }}
+                style={{ color: COLOR.PRIMARY }}>
+                Wyślij ponownie
+              </Text>
             </Text>
-          </Text>
+          ) : (
+            <Text style={{ alignSelf: 'center', textAlign: 'left' }}>{timer}</Text>
+          )}
         </View>
 
         {resError && (
