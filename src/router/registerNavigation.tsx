@@ -5,7 +5,8 @@ import { useAppDispatch, useAppSelector } from '~/redux/hooks';
 import MyDrawer from '~/router/MyDrawer';
 import { preloadToken } from '~/redux/slices/sessionSlice';
 import { useEffect } from 'react';
-import RegisterScreen from '~/screens/Register';
+import EmailStep from '~/screens/Register/EmailStep';
+import VerifyStep from '~/screens/Register/VeryficationPhone';
 
 const RegisterNavigation = () => {
   const Stack = createNativeStackNavigator<RootStackParamList>();
@@ -35,8 +36,13 @@ const RegisterNavigation = () => {
           />
           <Stack.Screen
             options={{ headerShown: false }}
-            name={Routes.Register}
-            component={RegisterScreen}
+            name={Routes.EmailStep}
+            component={EmailStep}
+          />
+          <Stack.Screen
+            options={{ headerShown: false }}
+            name={Routes.VerifyStep}
+            component={VerifyStep}
           />
         </>
       )}

@@ -16,7 +16,10 @@ export enum Routes {
   Message = 'Message',
   ChatNavigation = 'ChatNavigation',
   LoginNavigation = 'LoginNavigation',
-  Logout = 'Logout'
+  Logout = 'Logout',
+  EmailStep = 'EmailStep',
+  PasswordStep = 'PasswordStep',
+  VerifyStep = 'VerifyStep'
 }
 
 export type RootStackParamList = {
@@ -34,6 +37,9 @@ export type RootStackParamList = {
   [Routes.ChatNavigation]: undefined;
   [Routes.LoginNavigation]: undefined;
   [Routes.Logout]: undefined;
+  [Routes.EmailStep]: undefined;
+  [Routes.PasswordStep]: undefined;
+  [Routes.VerifyStep]: undefined;
 };
 
 export type NavigationProps<T extends Routes> = NativeStackScreenProps<RootStackParamList, T>;

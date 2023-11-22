@@ -94,7 +94,7 @@ const LoginScreen = ({ navigation }: NavigationProps<Routes.Login>) => {
         <View style={{ alignSelf: 'center', paddingTop: 5 }}>
           <Text>Nie posiadasz konta?</Text>
           <Text
-            onPress={() => navigation.navigate(Routes.Register)}
+            onPress={() => navigation.navigate(Routes.EmailStep)}
             style={{ color: COLOR.PRIMARY, textAlign: 'center' }}>
             Zarejestruj się
           </Text>

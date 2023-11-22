@@ -10,7 +10,8 @@ interface CustomTextInputProps {
   control: Control<any>;
   error?: string;
   placeholder?: string;
-  textContentType?: 'emailAddress' | 'password';
+  textContentType?: 'emailAddress' | 'password' | 'telephoneNumber' | 'familyName' | 'givenName';
+  keyboardType?: 'default' | 'email-address' | 'numeric' | 'phone-pad';
   label?: string;
 }
 
@@ -20,6 +21,7 @@ const CustomTextInput = ({
   error,
   placeholder,
   textContentType,
+  keyboardType,
   label
 }: CustomTextInputProps) => {
   const [hidePass, setHidePass] = useState(textContentType === 'password');
@@ -60,6 +62,9 @@ const CustomTextInput = ({
             maxLength={40}
             showCharCounter={true}
             scrollEnabled={false}
+            autoCorrect={false}
+            autoComplete={'off'}
+            keyboardType={keyboardType}
             trailingAccessory={
               textContentType === 'password' ? (
                 <TouchableOpacity

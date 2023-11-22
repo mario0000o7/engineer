@@ -19,6 +19,13 @@ export const authApi = baseApi.injectEndpoints({
       }),
       invalidatesTags: ['User']
     }),
+    checkPhone: builder.mutation<{ userExists: boolean }, { phone: string }>({
+      query: (data) => ({
+        method: 'POST',
+        url: '/user/checkPhone',
+        body: data
+      })
+    }),
     checkEmail: builder.mutation<{ userExists: boolean }, { email: string }>({
       query: (data) => ({
         method: 'POST',
@@ -29,4 +36,9 @@ export const authApi = baseApi.injectEndpoints({
   })
 });
 
-export const { useLoginMutation, useRegisterMutation, useCheckEmailMutation } = authApi;
+export const {
+  useLoginMutation,
+  useRegisterMutation,
+  useCheckPhoneMutation,
+  useCheckEmailMutation
+} = authApi;
