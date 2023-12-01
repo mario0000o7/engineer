@@ -3,12 +3,14 @@ import sessionReducer from './slices/sessionSlice';
 import registerReducer from './slices/registerSlice';
 import { sessionListenerMiddleware } from './middleware';
 import { baseApi } from './api/baseApi';
+import twilioReducer from '~/redux/reducers/twilioReducer';
 
 export const store = configureStore({
   reducer: {
     session: sessionReducer,
     register: registerReducer,
-    [baseApi.reducerPath]: baseApi.reducer
+    [baseApi.reducerPath]: baseApi.reducer,
+    twilio: twilioReducer
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({

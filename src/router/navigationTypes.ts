@@ -19,7 +19,8 @@ export enum Routes {
   Logout = 'Logout',
   EmailStep = 'EmailStep',
   PasswordStep = 'PasswordStep',
-  VerifyStep = 'VerifyStep'
+  VerifyStep = 'VerifyStep',
+  BirthStep = 'BirthStep'
 }
 
 export type RootStackParamList = {
@@ -40,6 +41,7 @@ export type RootStackParamList = {
   [Routes.EmailStep]: undefined;
   [Routes.PasswordStep]: undefined;
   [Routes.VerifyStep]: undefined;
+  [Routes.BirthStep]: undefined;
 };
 
 export type NavigationProps<T extends Routes> = NativeStackScreenProps<RootStackParamList, T>;

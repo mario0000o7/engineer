@@ -7,6 +7,7 @@ import { preloadToken } from '~/redux/slices/sessionSlice';
 import { useEffect } from 'react';
 import EmailStep from '~/screens/Register/EmailStep';
 import VerifyStep from '~/screens/Register/VeryficationPhone';
+import BirthStep from '~/screens/Register/BirthStep';
 
 const RegisterNavigation = () => {
   const Stack = createNativeStackNavigator<RootStackParamList>();
@@ -43,6 +44,11 @@ const RegisterNavigation = () => {
             options={{ headerShown: false }}
             name={Routes.VerifyStep}
             component={VerifyStep}
+          />
+          <Stack.Screen
+            options={{ headerShown: false }}
+            name={Routes.BirthStep}
+            component={BirthStep}
           />
         </>
       )}

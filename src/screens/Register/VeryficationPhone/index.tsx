@@ -1,25 +1,20 @@
 import { SafeAreaView, View } from 'react-native';
 import { NavigationProps, Routes } from '~/router/navigationTypes';
-import { useAppSelector } from '~/redux/hooks';
-import { Button, HelperText } from 'react-native-paper';
+import { useAppDispatch, useAppSelector } from '~/redux/hooks';
+import { Button } from 'react-native-paper';
 
 // import {Nexmo} from 'nexmo';
-import { checkVerification, sendSmsVerification } from '~/utils/sendVerifySMS';
+import { sendSmsVerification } from '~/utils/sendVerifySMS';
 import { useCallback, useState } from 'react';
 import { COLOR } from '~/styles/constants';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import { Controller, useForm } from 'react-hook-form';
+import { useForm } from 'react-hook-form';
 import ErrorChip from '~/components/ErrorChip';
 import RegisterLogo from '~/assets/registerLogo.svg';
 import { Text } from 'react-native-ui-lib';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
-import {
-  CodeField,
-  Cursor,
-  useBlurOnFulfill,
-  useClearByFocusCell
-} from 'react-native-confirmation-code-field';
-import { styles } from '~/screens/Register/VeryficationPhone/styles';
+import OPTCodeInput from '~/components/OPTCodeInput';
+import { checkVerificationRedux, clearError, sendVerificationRedux } from '~/redux/api/twilio';
 import { useFocusEffect } from '@react-navigation/native';
 
 export interface VerifySchema {
@@ -29,30 +24,20 @@ export interface VerifySchema {
 const VerifyStep = ({ navigation }: NavigationProps<Routes.VerifyStep>) => {
   const stored = useAppSelector((state) => state.register);
   const [resError, setResError] = useState('');
-  const [value, setValue] = useState('');
-  const ref = useBlurOnFulfill({ value: value, cellCount: 6 });
   const [timer, setTimer] = useState(0);
-
-  const [props, getCellOnLayoutHandler] = useClearByFocusCell({
-    value,
-    setValue
-  });
-  // sendSmsVerification(stored.phone).then();
+  const twilio = useAppSelector((state) => state.twilio);
+  const dispatch = useAppDispatch();
 
   const insets = useSafeAreaInsets();
 
   const onSubmit = async ({ code }: VerifySchema) => {
-    console.log('code', code);
-    const result = await checkVerification(stored.phone, code);
-    if (result) {
-      navigation.navigate(Routes.Register);
-    } else {
-      setResError('Kod weryfikacyjny jest niepoprawny');
-    }
+    await dispatch(checkVerificationRedux(stored.phone, code));
+    console.log(twilio.error);
   };
 
   const sendCodeHandler = useCallback(() => {
-    onSendCode().then();
+    // onSendCode().then();
+    dispatch(sendVerificationRedux(stored.phone)).then();
   }, [stored.phone]);
 
   useFocusEffect(sendCodeHandler);
@@ -69,7 +54,7 @@ const VerifyStep = ({ navigation }: NavigationProps<Routes.VerifyStep>) => {
   });
 
   const onSendCode = async () => {
-    const result = await sendSmsVerification(stored.phone);
+    const result = sendSmsVerification(stored.phone);
     if (!result) {
       console.log('error');
       setResError('Nie udało się wysłać kodu weryfikacyjnego');
@@ -106,49 +91,7 @@ const VerifyStep = ({ navigation }: NavigationProps<Routes.VerifyStep>) => {
           <Text style={{ alignSelf: 'center', textAlign: 'left' }}>
             Wprowadź kod weryfikacyjny, który otrzymałeś na swój numer telefonu
           </Text>
-          <Controller
-            name={'code'}
-            control={control}
-            rules={{
-              required: {
-                value: true,
-                message: 'Te pole jest wymagane'
-              },
-              pattern: {
-                value: /^[0-9]{6}$/,
-                message: 'Niepoprawny kod weryfikacyjny'
-              }
-            }}
-            render={({ field: { onChange, onBlur, value } }) => (
-              <CodeField
-                ref={ref}
-                {...props}
-                value={value}
-                onChangeText={(text) => {
-                  onChange(text);
-                }}
-                cellCount={6}
-                onBlur={onBlur}
-                rootStyle={styles.codeFieldRoot}
-                keyboardType="number-pad"
-                textContentType="oneTimeCode"
-                renderCell={({ index, symbol, isFocused }) => (
-                  <Text
-                    key={index}
-                    style={[styles.cell, isFocused && styles.focusCell]}
-                    onLayout={getCellOnLayoutHandler(index)}>
-                    {symbol || (isFocused ? <Cursor /> : null)}
-                  </Text>
-                )}
-              />
-            )}
-          />
-          <HelperText
-            type="error"
-            visible={!!errors}
-            style={{ fontSize: 12, marginTop: -6, textAlign: 'center' }}>
-            {errors.code?.message}
-          </HelperText>
+          <OPTCodeInput name={'code'} control={control} error={errors.code?.message} />
           {timer == 0 ? (
             <Text style={{ alignSelf: 'center', textAlign: 'left' }}>
               Nie otrzymałeś kodu?{' '}
@@ -165,18 +108,24 @@ const VerifyStep = ({ navigation }: NavigationProps<Routes.VerifyStep>) => {
           )}
         </View>
 
-        {resError && (
+        {twilio.error && (
           <View style={{ width: 300, alignSelf: 'center' }}>
-            <ErrorChip onClose={() => setResError('')} errorMsg={resError} />
+            <ErrorChip
+              onClose={() => {
+                dispatch(clearError());
+              }}
+              errorMsg={twilio.error!}
+            />
           </View>
         )}
 
         <Button
           textColor={COLOR.WHITE}
           buttonColor={COLOR.PRIMARY}
+          loading={twilio.loading}
           style={{ width: 200, alignSelf: 'center', marginTop: 20 }}
           onPress={handleSubmit(onSubmit)}>
-          Zatwierdź
+          Kontynuuj
         </Button>
         <View style={{ alignSelf: 'center' }}>
           <Text s>Posiadasz konto?</Text>

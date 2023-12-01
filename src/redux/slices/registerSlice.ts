@@ -8,6 +8,7 @@ export interface RegisterState {
   firstName?: string;
   lastName?: string;
   birthDate?: Date;
+  gender?: string;
 }
 
 const initialState: RegisterState = {
@@ -17,7 +18,8 @@ const initialState: RegisterState = {
   role: 0,
   firstName: '',
   lastName: '',
-  birthDate: new Date()
+  birthDate: new Date(),
+  gender: ''
 };
 
 const registerSlice = createSlice({
@@ -44,11 +46,22 @@ const registerSlice = createSlice({
     },
     setBirthDate(state, action: PayloadAction<Date>) {
       state.birthDate = action.payload;
+    },
+    setGender(state, action: PayloadAction<string>) {
+      state.gender = action.payload;
     }
   }
 });
 
-export const { setEmail, setPassword, setPhone, setRole, setFirstName, setLastName, setBirthDate } =
-  registerSlice.actions;
+export const {
+  setEmail,
+  setPassword,
+  setPhone,
+  setRole,
+  setFirstName,
+  setLastName,
+  setBirthDate,
+  setGender
+} = registerSlice.actions;
 
 export default registerSlice.reducer;
