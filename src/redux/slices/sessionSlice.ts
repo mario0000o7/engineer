@@ -16,14 +16,12 @@ export const preloadToken = createAsyncThunk('preloadToken', async () => {
 interface JwtProps {
   id: number;
   email: string;
-  uuid: string;
 }
 
 export interface SessionState {
   token?: Jwt;
   id?: number;
   email?: string;
-  uuid?: string;
 }
 
 const initialState: SessionState = {};
@@ -38,7 +36,6 @@ const sessionSlice = createSlice({
       console.log(decoded);
       state.id = decoded.id;
       state.email = decoded.email;
-      state.uuid = decoded.uuid;
     },
     clearCurrentSessionData(state) {
       state.token = undefined;

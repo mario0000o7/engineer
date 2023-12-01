@@ -4,7 +4,6 @@ import { useAppDispatch, useAppSelector } from '~/redux/hooks';
 import { Button } from 'react-native-paper';
 
 // import {Nexmo} from 'nexmo';
-import { sendSmsVerification } from '~/utils/sendVerifySMS';
 import { useCallback, useState } from 'react';
 import { COLOR } from '~/styles/constants';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
@@ -23,7 +22,6 @@ export interface VerifySchema {
 
 const VerifyStep = ({ navigation }: NavigationProps<Routes.VerifyStep>) => {
   const stored = useAppSelector((state) => state.register);
-  const [resError, setResError] = useState('');
   const [timer, setTimer] = useState(0);
   const twilio = useAppSelector((state) => state.twilio);
   const dispatch = useAppDispatch();
@@ -33,10 +31,10 @@ const VerifyStep = ({ navigation }: NavigationProps<Routes.VerifyStep>) => {
   const onSubmit = async ({ code }: VerifySchema) => {
     await dispatch(checkVerificationRedux(stored.phone, code));
     console.log(twilio.error);
+    navigation.navigate(Routes.BirthStep);
   };
 
   const sendCodeHandler = useCallback(() => {
-    // onSendCode().then();
     dispatch(sendVerificationRedux(stored.phone)).then();
   }, [stored.phone]);
 
@@ -54,11 +52,8 @@ const VerifyStep = ({ navigation }: NavigationProps<Routes.VerifyStep>) => {
   });
 
   const onSendCode = async () => {
-    const result = sendSmsVerification(stored.phone);
-    if (!result) {
-      console.log('error');
-      setResError('Nie udało się wysłać kodu weryfikacyjnego');
-    }
+    // const result = sendSmsVerification(stored.phone);
+    dispatch(sendVerificationRedux(stored.phone)).then();
     for (let i = 10; i >= 0; i--) {
       setTimer(i);
       console.log(i);

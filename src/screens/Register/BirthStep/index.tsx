@@ -10,10 +10,12 @@ import ErrorChip from '~/components/ErrorChip';
 import RegisterLogo from '~/assets/registerLogo.svg';
 import { Text, View } from 'react-native-ui-lib';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
-import { setBirthDate, setGender } from '~/redux/slices/registerSlice';
+import { setBirthDate, setGender, setPassword } from '~/redux/slices/registerSlice';
 import DateInputCustom from '~/components/DateInputCustom';
 import GenderSelectCustom from '~/components/GenderSelectCustom';
 import LoginAndRegisterTextInput from '~/components/LoginAndRegisterTextInput';
+import { useRegisterMutation } from '~/redux/api/authApi';
+import { setToken } from '~/redux/slices/sessionSlice';
 
 export interface VerifySchema {
   birthDate: Date;
@@ -26,6 +28,8 @@ const BirthStep = ({ navigation }: NavigationProps<Routes.BirthStep>) => {
   const stored = useAppSelector((state) => state.register);
   const [resError, setResError] = useState('');
   const dispatch = useAppDispatch();
+  const [register, { isLoading }] = useRegisterMutation();
+  const registerState = useAppSelector((state) => state.register);
 
   const insets = useSafeAreaInsets();
 
@@ -34,10 +38,18 @@ const BirthStep = ({ navigation }: NavigationProps<Routes.BirthStep>) => {
       setResError('Hasła nie są takie same');
       return;
     }
-    console.log('birthDate', birthDate);
     dispatch(setBirthDate(birthDate));
     dispatch(setGender(gender));
-    navigation.navigate(Routes.EmailStep);
+    dispatch(setPassword(password));
+    register({ ...registerState, password: password, gender: gender, birthDate: birthDate })
+      .unwrap()
+      .then(({ token }) => {
+        dispatch(setToken(token));
+      })
+      .catch((err) => {
+        console.log(err);
+        setResError('Coś poszło nie tak');
+      });
   };
 
   const {
@@ -109,9 +121,10 @@ const BirthStep = ({ navigation }: NavigationProps<Routes.BirthStep>) => {
         <Button
           textColor={COLOR.WHITE}
           buttonColor={COLOR.PRIMARY}
+          loading={isLoading}
           style={{ width: 200, alignSelf: 'center', marginTop: 20 }}
           onPress={handleSubmit(onSubmit)}>
-          Zatwierdź
+          Utwórz konto
         </Button>
         <View style={{ alignSelf: 'center' }}>
           <Text s>Posiadasz konto?</Text>

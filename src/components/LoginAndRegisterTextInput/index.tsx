@@ -29,13 +29,15 @@ const CustomTextInput = ({
   placeholder,
   textContentType,
   keyboardType,
-  label,
   maxLength = 40
 }: CustomTextInputProps) => {
   const [hidePass, setHidePass] = useState(textContentType === 'password');
 
   return (
-    <View>
+    <View
+      style={{
+        marginVertical: 0
+      }}>
       <Controller
         name={name}
         control={control}
@@ -50,32 +52,55 @@ const CustomTextInput = ({
                   value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i,
                   message: 'Niepoprawny adres email'
                 }
+              : textContentType === 'telephoneNumber'
+              ? {
+                  value: /^[0-9 ]{11}$/i,
+                  message: 'Niepoprawny numer telefonu'
+                }
               : undefined
         }}
         render={({ field: { onChange, onBlur, value } }) => (
           <TextField
             placeholderTextColor={COLOR.LIGHT_GREY}
-            label={label}
             placeholder={placeholder}
+            floatingPlaceholderColor={COLOR.PRIMARY}
             secureTextEntry={hidePass}
             textContentType={textContentType}
             onBlur={onBlur}
+            fieldStyle={{
+              borderWidth: 5,
+              borderColor: COLOR.PRIMARY,
+              borderRadius: 50,
+              paddingHorizontal: 10,
+              paddingVertical: 10
+            }}
+            floatingPlaceholderStyle={{
+              marginTop: value ? -15 : 0
+            }}
+            textAlignVertical={'center'}
             onChangeText={onChange}
             value={value}
-            padding={true}
             enableErrors={true}
             validateOnChange={true}
             floatingPlaceholder={true}
             validationMessage={[error!]}
             maxLength={maxLength}
-            showCharCounter={true}
-            scrollEnabled={false}
+            showCharCounter={false}
+            scrollEnabled={true}
             autoCorrect={false}
             autoComplete={'off'}
+            validationMessageStyle={{
+              marginLeft: 10,
+              display: error ? 'flex' : 'none'
+            }}
+            text90={true}
             keyboardType={keyboardType}
             trailingAccessory={
               textContentType === 'password' ? (
                 <TouchableOpacity
+                  style={{
+                    display: value ? 'flex' : 'none'
+                  }}
                   onPress={() => {
                     setHidePass(!hidePass);
                   }}>
@@ -83,7 +108,7 @@ const CustomTextInput = ({
                 </TouchableOpacity>
               ) : undefined
             }
-            fieldStyle={{ borderBottomWidth: 2, borderBottomColor: COLOR.BLACK }}
+            // fieldStyle={{ borderBottomWidth: 2, borderBottomColor: COLOR.BLACK }}
           />
         )}
       />

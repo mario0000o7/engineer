@@ -11,7 +11,13 @@ import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view
 import { View } from 'react-native';
 import { Button } from 'react-native-paper';
 import { NavigationProps, Routes } from '~/router/navigationTypes';
-import { setEmail, setFirstName, setLastName, setPhone } from '~/redux/slices/registerSlice';
+import {
+  setEmail,
+  setFirstName,
+  setLastName,
+  setPhone,
+  setRole
+} from '~/redux/slices/registerSlice';
 import RegisterLogo from '~/assets/registerLogo.svg';
 
 // ignore app already initialized error in snack
@@ -57,6 +63,7 @@ const EmailStep = ({ navigation }: NavigationProps<Routes.EmailStep>) => {
         } else {
           isEmailChecked = true;
           dispatch(setEmail(email));
+          dispatch(setRole(1));
         }
       })
       .catch((err) => {
