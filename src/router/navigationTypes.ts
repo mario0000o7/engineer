@@ -12,15 +12,19 @@ export enum Routes {
   Chat = 'Chat',
   Files = 'Files',
   RecentMessages = 'RecentMessages',
+  ContactListNavigatorRecent = 'ContactListNavigatorRecent',
+  ContactListNavigatorStable = 'ContactListNavigatorStable',
+  ContactListAll = 'ContactListAll',
   DoctorList = 'DoctorList',
-  Message = 'Message',
   ChatNavigation = 'ChatNavigation',
   LoginNavigation = 'LoginNavigation',
   Logout = 'Logout',
   EmailStep = 'EmailStep',
   PasswordStep = 'PasswordStep',
   VerifyStep = 'VerifyStep',
-  BirthStep = 'BirthStep'
+  BirthStep = 'BirthStep',
+  Message = 'Message',
+  ContactItem = 'ContactItem'
 }
 
 export type RootStackParamList = {
@@ -42,6 +46,10 @@ export type RootStackParamList = {
   [Routes.PasswordStep]: undefined;
   [Routes.VerifyStep]: undefined;
   [Routes.BirthStep]: undefined;
+  [Routes.ContactListNavigatorRecent]: undefined;
+  [Routes.ContactListNavigatorStable]: undefined;
+  [Routes.ContactListAll]: undefined;
+  [Routes.ContactItem]: undefined;
 };
 
 export type NavigationProps<T extends Routes> = NativeStackScreenProps<RootStackParamList, T>;

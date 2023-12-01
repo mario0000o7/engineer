@@ -1,8 +1,8 @@
-import DoctorMessage from '../../components/DoctorMessage';
+import ContactItem from '../../../components/ContactItem';
 import { NavigationProps, Routes } from '~/router/navigationTypes';
 import { Searchbar } from 'react-native-paper';
 import { ScrollView, View } from 'react-native';
-import styles from '~/screens/RecentMessages/styles';
+import styles from '~/screens/Chat/RecentMessages/styles';
 import { COLOR } from '~/styles/constants';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
@@ -27,21 +27,21 @@ const RecentMessages = ({ navigation, route }: NavigationProps<Routes.RecentMess
       {/*<View style={{ width: '100%'}}>*/}
       <ScrollView showsHorizontalScrollIndicator={false}>
         {/*<VStack space={4} alignItems="center" justifyContent="center">*/}
-        <DoctorMessage navigation={navigation} route={route} />
-        <DoctorMessage navigation={navigation} route={route} />
-        <DoctorMessage navigation={navigation} route={route} />
-        <DoctorMessage navigation={navigation} route={route} />
-        <DoctorMessage navigation={navigation} route={route} />
-        <DoctorMessage navigation={navigation} route={route} />
-        <DoctorMessage navigation={navigation} route={route} />
-        <DoctorMessage navigation={navigation} route={route} />
-        <DoctorMessage navigation={navigation} route={route} />
-        <DoctorMessage navigation={navigation} route={route} />
-        <DoctorMessage navigation={navigation} route={route} />
-        <DoctorMessage navigation={navigation} route={route} />
-        <DoctorMessage navigation={navigation} route={route} />
-        <DoctorMessage navigation={navigation} route={route} />
-        <DoctorMessage navigation={navigation} route={route} />
+        <ContactItem navigation={navigation} route={route} />
+        <ContactItem navigation={navigation} route={route} />
+        <ContactItem navigation={navigation} route={route} />
+        <ContactItem navigation={navigation} route={route} />
+        <ContactItem navigation={navigation} route={route} />
+        <ContactItem navigation={navigation} route={route} />
+        <ContactItem navigation={navigation} route={route} />
+        <ContactItem navigation={navigation} route={route} />
+        <ContactItem navigation={navigation} route={route} />
+        <ContactItem navigation={navigation} route={route} />
+        <ContactItem navigation={navigation} route={route} />
+        <ContactItem navigation={navigation} route={route} />
+        <ContactItem navigation={navigation} route={route} />
+        <ContactItem navigation={navigation} route={route} />
+        <ContactItem navigation={navigation} route={route} />
 
         {/*</VStack>*/}
       </ScrollView>

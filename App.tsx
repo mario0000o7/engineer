@@ -17,6 +17,7 @@ export default function App() {
     Poppins_400Regular,
     Poppins_600SemiBold
   });
+
   const appID: string = APP_ID_COSMO_CHAT;
   const region: string = REGION_COSMO_CHAT;
   const appSetting: CometChat.AppSettings = new CometChat.AppSettingsBuilder()

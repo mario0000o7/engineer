@@ -7,13 +7,16 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 const AUTH_KEY = 'AUTH_TOKEN';
 export const preloadToken = createAsyncThunk('preloadToken', async () => {
   const token = await AsyncStorage.getItem(AUTH_KEY);
+  const decoded = jwtDecode(token ?? '') as JwtProps;
 
   return {
-    token: token ?? undefined
+    token: token ?? undefined,
+    id: decoded.id ?? undefined,
+    email: decoded.email ?? undefined
   };
 });
 
-interface JwtProps {
+export interface JwtProps {
   id: number;
   email: string;
 }
@@ -47,6 +50,8 @@ const sessionSlice = createSlice({
   extraReducers: (builder) => {
     builder.addCase(preloadToken.fulfilled, (state, action) => {
       state.token = action.payload.token;
+      state.id = action.payload.id;
+      state.email = action.payload.email;
     });
   }
 });

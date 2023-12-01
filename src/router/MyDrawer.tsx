@@ -1,7 +1,7 @@
 import { createDrawerNavigator } from '@react-navigation/drawer';
 import CalendarScreen from '~/screens/Calendar';
 import { commonOptions } from '~/router/options';
-import ChatScreen from '~/screens/Chat';
+import ChatScreen from '~/router/ChatNavigation';
 import { RootStackParamList, Routes } from '~/router/navigationTypes';
 import LogoutScreen from '~/screens/Logout';
 

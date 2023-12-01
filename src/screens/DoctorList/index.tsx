@@ -14,7 +14,7 @@ const DoctorList = ({ route, navigation }: NavigationProps<Routes.DoctorList>) =
       {/*  </Input>*/}
       {/*  <ScrollView>*/}
       {/*    <VStack space={4} alignItems="center" justifyContent="center">*/}
-      {/*      <DoctorMessage navigation={navigation} route={route} />*/}
+      {/*      <ContactItem navigation={navigation} route={route} />*/}
       {/*    </VStack>*/}
       {/*  </ScrollView>*/}
       {/*</View>*/}

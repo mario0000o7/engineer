@@ -1,12 +1,11 @@
 import { NavigationProps, Routes } from '~/router/navigationTypes';
 import { useCallback, useState } from 'react';
-import { Platform, TouchableOpacity, View } from 'react-native';
+import { TouchableOpacity, View } from 'react-native';
 import { useFocusEffect } from '@react-navigation/native';
 import { IconButton } from 'react-native-paper';
 import * as DocumentPicker from 'expo-document-picker';
 import Ionicons from '@expo/vector-icons/Ionicons';
 import { Fontisto } from '@expo/vector-icons';
-
 import {
   Bubble,
   BubbleProps,
@@ -19,103 +18,75 @@ import {
   User
 } from 'react-native-gifted-chat';
 import { COLOR } from '~/styles/constants';
-import createUser from '~/utils/createUser';
 import login from '~/utils/login';
 import { CometChat } from '@cometchat/chat-sdk-react-native';
+import { useAppSelector } from '~/redux/hooks';
+import createUser from '~/utils/createUser';
 import TextMessage = CometChat.TextMessage;
 import CustomMessage = CometChat.CustomMessage;
 import MediaMessage = CometChat.MediaMessage;
 
-interface IState {
-  messages: any[];
-  step: number;
-  loadEarlier?: boolean;
-  isLoadingEarlier?: boolean;
-  isTyping: boolean;
-}
-
-enum ActionKind {
-  SEND_MESSAGE = 'SEND_MESSAGE',
-  LOAD_EARLIER_MESSAGES = 'LOAD_EARLIER_MESSAGES',
-  LOAD_EARLIER_START = 'LOAD_EARLIER_START',
-  SET_IS_TYPING = 'SET_IS_TYPING',
-  RECEIVE_MESSAGE = 'RECEIVE_MESSAGE'
-  // LOAD_EARLIER_END = 'LOAD_EARLIER_END',
-}
+const pl = require('dayjs/locale/pl');
 
 // An interface for our actions
-interface StateAction {
-  type: ActionKind;
-  payload?: any;
-}
 
 const MessageChat = ({ navigation, route }: NavigationProps<Routes.Message>) => {
   const drawer = navigation.getParent()?.getParent();
-  const id = Platform.OS === 'android' ? 'user1' : 'user2';
-
+  const id = useAppSelector((state) => state.session.id);
+  const idString = id?.toString();
+  const email = useAppSelector((state) => state.session.email);
+  const [user, setUser] = useState<User>({
+    _id: '',
+    name: '',
+    avatar: ''
+  });
+  const [messages, setMessages] = useState<IMessage[]>([]);
+  createUser(idString!, email!);
+  login(idString!);
   const messagesRequest = new CometChat.MessagesRequestBuilder()
-    .setUID('test1')
+    .setUID(route.params.id.toString())
     .setLimit(30)
     .build();
-  messagesRequest.fetchPrevious().then(
-    (messages) => {
-      console.log('Message list fetched:', messages);
-      console.log('RECEIVER', messages.at(0)?.getReceiver());
-      console.log('SENDER', messages.at(0)?.getSender());
-    },
-    (error) => {
-      console.log('Message fetching failed with error:', error);
-    }
-  );
+  console.log('ID', idString);
 
-  function reducer(state: IState, action: StateAction) {
-    switch (action.type) {
-      case ActionKind.SEND_MESSAGE: {
-        return {
-          ...state,
-          step: state.step + 1,
-          messages: action.payload
-        };
-      }
-      case ActionKind.LOAD_EARLIER_MESSAGES: {
-        return {
-          ...state,
-          loadEarlier: true,
-          isLoadingEarlier: false,
-          messages: action.payload
-        };
-      }
-      case ActionKind.LOAD_EARLIER_START: {
-        return {
-          ...state,
-          isLoadingEarlier: true
-        };
-      }
-      case ActionKind.SET_IS_TYPING: {
-        return {
-          ...state,
-          isTyping: action.payload
-        };
-      }
-      case ActionKind.RECEIVE_MESSAGE: {
-        return {
-          ...state,
-          messages: action.payload
-        };
-      }
-    }
-  }
+  // CometChat.getConversation(route.params.id.toString(), CometChat.RECEIVER_TYPE.USER).then(
+  //   (conversation) => {
+  //     // console.log('Conversation details fetched for user:', conversation);
+  //     const messageList: IMessage[] = [];
+  //     console.log('LAST MESSAGE', conversation);
+  //     for (let i = 0; i < conversation.getLastMessage().length; i++) {
+  //       // setMessages((previousMessages) =>
+  //       //   GiftedChat.append(previousMessages, mapMessage(conversation.getLastMessage()[i]))
+  //       // );
+  //     }
+  //     // setMessages((previousMessages) => GiftedChat.append(previousMessages, messageList));
+  //   },
+  //   (error) => {
+  //     console.log('Conversation details fetching failed with error:', error);
+  //   }
+  // );
 
-  const [messages, setMessages] = useState<IMessage[]>([]);
-  if (Platform.OS === 'android') {
-    createUser('test1', 'user1');
-    login('test1');
-  }
+  const getHistoryHandler = useCallback(() => {
+    messagesRequest.fetchPrevious().then(
+      (messages) => {
+        // console.log('Message list fetched:', messages[0]);
+        // console.log(mapMessage(messages[0] as TextMessage));
+        let messageList: IMessage[] = [];
+        for (let i = 0; i < messages.length; i++) {
+          messageList = messageList.concat(mapMessage(messages[i] as TextMessage));
+          console.log('AFTER', messageList[i].user.avatar);
+          console.log('MESSAGE', messageList[i]);
+        }
+        setUser(messageList.find((value) => value.user._id === idString)?.user!);
+        setMessages(messageList.reverse());
+      },
+      (error) => {
+        console.log('Message fetching failed with error:', error);
+      }
+    );
+  }, []);
 
-  if (Platform.OS === 'ios') {
-    createUser('test2', 'user2');
-    login('test2');
-  }
+  useFocusEffect(getHistoryHandler);
 
   // const [channel, setChannel] = useState<Channel>({
   //   _actions: {
@@ -206,10 +177,10 @@ const MessageChat = ({ navigation, route }: NavigationProps<Routes.Message>) => 
   function mapMessage(message: TextMessage): IMessage[] {
     return [
       {
-        user: mapUser(message.getReceiver()),
+        user: mapUser(message.getSender()),
         _id: message.getId(),
         text: message.getText(),
-        createdAt: new Date()
+        createdAt: new Date(message.getSentAt() * 1000)
       }
     ];
   }
@@ -230,7 +201,7 @@ const MessageChat = ({ navigation, route }: NavigationProps<Routes.Message>) => 
   }
 
   const headerHandler = useCallback(() => {
-    const listenerID = Platform.OS === 'android' ? 'user1' : 'user2';
+    const listenerID = id!.toString();
     CometChat.addMessageListener(
       listenerID,
       new CometChat.MessageListener({
@@ -330,7 +301,7 @@ const MessageChat = ({ navigation, route }: NavigationProps<Routes.Message>) => 
   const onSend = useCallback((message: IMessage[] = []) => {
     console.log(message[0].text);
     const messageText = new CometChat.TextMessage(
-      'test1',
+      route.params.id.toString(),
       message[0].text,
       CometChat.RECEIVER_TYPE.USER
     );
@@ -343,6 +314,7 @@ const MessageChat = ({ navigation, route }: NavigationProps<Routes.Message>) => 
         console.log('Message sending failed with exception:', error);
       }
     );
+    console.log(message);
     setMessages((previousMessages) => GiftedChat.append(previousMessages, message));
   }, []);
 
@@ -359,8 +331,10 @@ const MessageChat = ({ navigation, route }: NavigationProps<Routes.Message>) => 
     // <KeyboardAwareScrollView>
     <View style={{ width: '100%', height: '100%' }}>
       <GiftedChat
+        user={user}
         messages={messages}
         onSend={onSend}
+        locale={pl}
         renderBubble={renderBubble}
         renderMessageText={renderMessageText}
         renderSend={renderSend}

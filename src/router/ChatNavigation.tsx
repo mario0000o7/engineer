@@ -1,32 +1,52 @@
-import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { NavigationProps, RootStackParamList, Routes } from '~/router/navigationTypes';
-import MessageChat from '~/screens/Message';
-import RecentMessages from '~/screens/RecentMessages';
+import Icon from 'react-native-paper/src/components/Icon';
+import styles from '~/router/styles';
 import { COLOR } from '~/styles/constants';
+import ContactListNavigatorRecent from '~/screens/Chat/ContactListNavigatorRecent';
+import ContactListNavigatorStable from '~/screens/Chat/ContactListNavigatorStable';
 
-const Stack = createNativeStackNavigator<RootStackParamList>();
+const Tab = createBottomTabNavigator<RootStackParamList>();
 
-const ChatNavigation = ({ navigation, route }: NavigationProps<Routes.ChatNavigation>) => {
+export interface ParentNavigationProps {
+  parentNavigation: NavigationProps<Routes.Chat>['navigation'];
+}
+
+const ChatScreen = ({ navigation }: NavigationProps<Routes.Chat>) => {
   return (
-    <Stack.Navigator
-      initialRouteName={Routes.RecentMessages}
-      screenOptions={{
-        navigationBarColor: COLOR.BACKGROUND
-      }}>
-      <Stack.Screen
-        name={Routes.RecentMessages}
-        component={RecentMessages}
-        options={{ headerShown: false }}
-      />
-      <Stack.Screen
-        name={Routes.Message}
-        component={MessageChat}
+    <Tab.Navigator
+      initialRouteName={Routes.ContactListNavigatorRecent}
+      screenOptions={{ tabBarHideOnKeyboard: true }}
+      detachInactiveScreens={true}
+      sceneContainerStyle={styles.tabScreen}>
+      <Tab.Screen
+        name={Routes.ContactListNavigatorRecent}
+        component={ContactListNavigatorRecent}
         options={{
-          headerShown: false
+          tabBarStyle: styles.tabContent,
+          headerShown: false,
+          tabBarLabelStyle: styles.tabLabel,
+          tabBarActiveTintColor: COLOR.PRIMARY,
+          tabBarInactiveTintColor: COLOR.GREY,
+          title: 'Wiadomości',
+          tabBarIcon: ({ color, size }) => <Icon source={'message'} color={color} size={size} />
+        }}></Tab.Screen>
+      <Tab.Screen
+        name={Routes.ContactListNavigatorStable}
+        component={ContactListNavigatorStable}
+        options={{
+          tabBarStyle: styles.tabContent,
+          headerShown: false,
+          tabBarLabelStyle: styles.tabLabel,
+          tabBarActiveTintColor: COLOR.PRIMARY,
+          tabBarInactiveTintColor: COLOR.GREY,
+          title: 'Lista lekarzy',
+          tabBarIcon: ({ color, size }) => (
+            <Icon source={'account-search'} size={size} color={color} />
+          )
         }}
       />
-    </Stack.Navigator>
+    </Tab.Navigator>
   );
 };
-
-export default ChatNavigation;
+export default ChatScreen;

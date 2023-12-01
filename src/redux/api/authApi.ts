@@ -32,6 +32,20 @@ export const authApi = baseApi.injectEndpoints({
         url: '/user/checkEmail',
         body: data
       })
+    }),
+    findUser: builder.mutation<[RegisterState], { fullName: string; role: number }>({
+      query: (data) => ({
+        method: 'POST',
+        url: '/user/findUser',
+        body: data
+      })
+    }),
+    getAllDoctors: builder.mutation<[RegisterState], void>({
+      query: (data) => ({
+        method: 'GET',
+        url: '/user/getAllDoctors',
+        body: data
+      })
     })
   })
 });
@@ -40,5 +54,7 @@ export const {
   useLoginMutation,
   useRegisterMutation,
   useCheckPhoneMutation,
-  useCheckEmailMutation
+  useCheckEmailMutation,
+  useFindUserMutation,
+  useGetAllDoctorsMutation
 } = authApi;
