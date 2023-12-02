@@ -1,7 +1,7 @@
 import { Bubble, BubbleProps } from 'react-native-gifted-chat';
 import { COLOR } from '~/styles/constants';
 import CustomMessage from '~/types/CustomMessage';
-import { TouchableOpacity } from 'react-native-ui-lib';
+import { Image, TouchableOpacity } from 'react-native-ui-lib';
 import { NavigationProps, Routes } from '~/router/navigationTypes';
 import PDFIcon from '~/assets/pdf.svg';
 
@@ -15,10 +15,27 @@ const CustomBubble = (
         style={{ margin: 3 }}
         onPress={() => {
           navigator.navigation.navigate(Routes.PDFViewer, {
-            uri: props.currentMessage!.file!.uri
+            file: props.currentMessage!.file!
           });
         }}>
         <PDFIcon width={100} height={100} />
+      </TouchableOpacity>
+    );
+  };
+
+  const customViewImage = () => {
+    return (
+      <TouchableOpacity
+        style={{ margin: 3 }}
+        onPress={() => {
+          navigator.navigation.navigate(Routes.PDFViewer, {
+            file: props.currentMessage!.file!
+          });
+        }}>
+        <Image
+          source={{ uri: props.currentMessage!.file!.uri }}
+          style={{ width: 100, height: 100, borderRadius: 10 }}
+        />
       </TouchableOpacity>
     );
   };
@@ -42,7 +59,6 @@ const CustomBubble = (
     }
     default: {
       if (props.currentMessage?.file?.mimeType?.includes('image')) {
-        props.currentMessage.image = props.currentMessage.file.uri;
         return (
           <Bubble
             wrapperStyle={{
@@ -54,6 +70,7 @@ const CustomBubble = (
               }
             }}
             {...props}
+            renderCustomView={customViewImage}
           />
         );
       } else {

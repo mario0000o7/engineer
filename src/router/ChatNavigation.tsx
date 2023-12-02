@@ -16,7 +16,7 @@ const ChatScreen = ({ navigation }: NavigationProps<Routes.Chat>) => {
   return (
     <Tab.Navigator
       initialRouteName={Routes.ContactListNavigatorRecent}
-      screenOptions={{ tabBarHideOnKeyboard: true }}
+      screenOptions={{ tabBarHideOnKeyboard: true, headerShown: false }}
       detachInactiveScreens={true}
       sceneContainerStyle={styles.tabScreen}>
       <Tab.Screen

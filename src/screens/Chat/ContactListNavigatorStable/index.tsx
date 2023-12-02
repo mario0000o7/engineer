@@ -25,16 +25,16 @@ const ContactListNavigatorStable = ({
       <Stack.Screen
         name={Routes.Message}
         component={MessageChat}
-        options={{
-          headerShown: false
-        }}
+        options={({ route }) => ({
+          headerTitle: route.params.name
+        })}
       />
       <Stack.Screen
         name={Routes.PDFViewer}
         component={PDFViewer}
-        options={{
-          headerShown: false
-        }}
+        options={() => ({
+          headerTitle: ''
+        })}
       />
     </Stack.Navigator>
   );

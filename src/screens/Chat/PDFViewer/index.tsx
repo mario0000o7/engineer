@@ -1,36 +1,27 @@
 import { NavigationProps, Routes } from '~/router/navigationTypes';
 import WebView from 'react-native-webview';
-import { useCallback } from 'react';
-import { IconButton } from 'react-native-paper';
+import { useRef } from 'react';
 import { useFocusEffect } from '@react-navigation/native';
+import { View } from 'react-native-ui-lib';
 
 export const PDFViewer = ({ navigation, route }: NavigationProps<Routes.PDFViewer>) => {
-  const drawer = navigation.getParent()?.getParent();
-  const headerHandler = useCallback(() => {
-    drawer?.setOptions({
-      headerTitle: 'Podgląd PDF',
-      headerLeft: () => (
-        <IconButton
-          onPress={() => {
-            drawer?.setOptions({
-              headerShown: true
-            });
-            navigation.goBack();
-          }}
-          icon={'arrow-left'}
-        />
-      )
-    });
-    return () => {
-      drawer?.setOptions({
-        headerLeft: undefined,
-        headerTitle: undefined
-      });
-    };
-  }, []);
-  useFocusEffect(headerHandler);
+  const webViewRef = useRef<WebView>(null);
+  useFocusEffect(() => {
+    webViewRef.current?.reload();
+  });
 
-  return <WebView source={{ uri: route.params.uri }} />;
+  return (
+    <View style={{ flex: 1 }}>
+      <WebView
+        style={{ flex: 1 }}
+        domStorageEnabled={true}
+        ref={webViewRef}
+        scalesPageToFit={true}
+        startInLoadingState={true}
+        source={{ uri: route.params.file.uri }}
+      />
+    </View>
+  );
 };
 
 export default PDFViewer;

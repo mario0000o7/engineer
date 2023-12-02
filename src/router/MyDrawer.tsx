@@ -15,6 +15,7 @@ const MyDrawer = () => {
       detachInactiveScreens={true}>
       <Drawer.Screen name={Routes.Calendar} component={CalendarScreen} options={commonOptions} />
       <Drawer.Screen name={Routes.Chat} component={ChatScreen} options={commonOptions} />
+      {/*<Drawer.Screen name="Pacjenci" component={SettingsScreen} options={commonOptions} />*/}
       {/*<Drawer.Screen name="Pliki" component={SettingsScreen} options={commonOptions} />*/}
       {/*<Drawer.Screen name="Gabinety" component={SettingsScreen} options={commonOptions} />*/}
       {/*<Drawer.Screen name="Konto" component={SettingsScreen} options={commonOptions} />*/}

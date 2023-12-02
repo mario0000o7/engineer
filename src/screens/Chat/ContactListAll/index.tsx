@@ -11,7 +11,7 @@ import { RegisterState } from '~/redux/slices/registerSlice';
 import { createShimmerPlaceholder } from 'react-native-shimmer-placeholder';
 
 import { LinearGradient } from 'expo-linear-gradient';
-import { View } from 'react-native-ui-lib';
+import { LoaderScreen, View } from 'react-native-ui-lib';
 
 const ShimmerPlaceholder = createShimmerPlaceholder(LinearGradient);
 
@@ -46,7 +46,9 @@ const ContactListAll = ({ navigation, route }: NavigationProps<Routes.ContactLis
         onChangeText={() => {}}
         value={''}
       />
+
       {/*<View style={{ width: '100%'}}>*/}
+
       <ScrollView showsHorizontalScrollIndicator={false}>
         {/*<VStack space={4} alignItems="center" justifyContent="center">*/}
         {listDoctors.map((doctor) => {
@@ -54,7 +56,9 @@ const ContactListAll = ({ navigation, route }: NavigationProps<Routes.ContactLis
         })}
 
         {/*</VStack>*/}
+        {isLoading && <LoaderScreen color={COLOR.PRIMARY} />}
       </ScrollView>
+
       {/*</View>*/}
     </View>
   );

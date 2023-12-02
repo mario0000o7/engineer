@@ -1,12 +1,10 @@
-import React, { useCallback } from 'react';
-import { GiftedChat } from 'react-native-gifted-chat';
+import { useCallback } from 'react';
 import { CometChat } from '@cometchat/chat-sdk-react-native';
 import CustomMessage from '~/types/CustomMessage';
+import { ThunkDispatch } from '@reduxjs/toolkit';
+import { appendMessageRedux } from '~/redux/api/giftedChat';
 
-export const onSend = (
-  receiverID: string,
-  setMessage: React.Dispatch<React.SetStateAction<CustomMessage[]>>
-) =>
+export const onSend = (receiverID: string, dispatch: ThunkDispatch<any, any, any>) =>
   useCallback((message: CustomMessage[] = []) => {
     let messageText;
     if (message[0].file) {
@@ -40,5 +38,5 @@ export const onSend = (
       );
     }
 
-    setMessage((previousMessages) => GiftedChat.append(previousMessages, message));
+    dispatch(appendMessageRedux(message[0])).then();
   }, []);

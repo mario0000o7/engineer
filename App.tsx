@@ -11,7 +11,13 @@ import { Provider } from 'react-redux';
 import { store } from './src/redux/store';
 import { Poppins_400Regular, Poppins_600SemiBold, useFonts } from '@expo-google-fonts/poppins';
 import { StatusBar } from 'expo-status-bar';
+import { LogBox } from 'react-native';
 
+// Ignore log notification by message
+LogBox.ignoreLogs(['Warning: ...']);
+
+//Ignore all log notifications
+LogBox.ignoreAllLogs();
 export default function App() {
   const [fontsLoaded, fontError] = useFonts({
     Poppins_400Regular,
@@ -36,6 +42,7 @@ export default function App() {
   if (!fontsLoaded && !fontError) {
     return null;
   }
+
   return (
     <Provider store={store}>
       <PaperProvider>

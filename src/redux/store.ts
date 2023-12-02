@@ -1,6 +1,7 @@
 import { configureStore } from '@reduxjs/toolkit';
 import sessionReducer from './slices/sessionSlice';
 import registerReducer from './slices/registerSlice';
+import giftedChatReducer from '~/redux/reducers/giftedChatReducer';
 import { sessionListenerMiddleware } from './middleware';
 import { baseApi } from './api/baseApi';
 import twilioReducer from '~/redux/reducers/twilioReducer';
@@ -10,7 +11,8 @@ export const store = configureStore({
     session: sessionReducer,
     register: registerReducer,
     [baseApi.reducerPath]: baseApi.reducer,
-    twilio: twilioReducer
+    twilio: twilioReducer,
+    chat: giftedChatReducer
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({

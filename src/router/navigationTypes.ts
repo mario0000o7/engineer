@@ -1,6 +1,7 @@
 /* eslint-disable no-unused-vars */
 
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
+import { CustomFile } from '~/types/CustomMessage';
 
 export enum Routes {
   MainNavigation = 'MainNavigation',
@@ -51,7 +52,7 @@ export type RootStackParamList = {
   [Routes.ContactListNavigatorStable]: undefined;
   [Routes.ContactListAll]: undefined;
   [Routes.ContactItem]: undefined;
-  [Routes.PDFViewer]: { uri: string };
+  [Routes.PDFViewer]: { file: CustomFile };
 };
 
 export type NavigationProps<T extends Routes> = NativeStackScreenProps<RootStackParamList, T>;
