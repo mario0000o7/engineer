@@ -1,13 +1,19 @@
 import ContactItem from '../../../components/ContactItem';
 import { NavigationProps, Routes } from '~/router/navigationTypes';
 import { Searchbar } from 'react-native-paper';
-import { ScrollView, View } from 'react-native';
+import { ScrollView } from 'react-native';
 import styles from '~/screens/Chat/RecentMessages/styles';
 import { COLOR } from '~/styles/constants';
 import { useGetAllDoctorsMutation } from '~/redux/api/authApi';
 import { useCallback, useState } from 'react';
 import { useFocusEffect } from '@react-navigation/native';
 import { RegisterState } from '~/redux/slices/registerSlice';
+import { createShimmerPlaceholder } from 'react-native-shimmer-placeholder';
+
+import { LinearGradient } from 'expo-linear-gradient';
+import { View } from 'react-native-ui-lib';
+
+const ShimmerPlaceholder = createShimmerPlaceholder(LinearGradient);
 
 const ContactListAll = ({ navigation, route }: NavigationProps<Routes.ContactListAll>) => {
   const [getAllDoctors, { isLoading }] = useGetAllDoctorsMutation();
