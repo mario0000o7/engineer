@@ -1,13 +1,20 @@
-import { IMessage, Send, SendProps } from 'react-native-gifted-chat';
+import { Send, SendProps } from 'react-native-gifted-chat';
 import { TouchableOpacity, View } from 'react-native';
 import { _pickDocument } from '~/utils/chat';
 import { Fontisto } from '@expo/vector-icons';
 import Ionicons from '@expo/vector-icons/Ionicons';
+import CustomMessage from '~/types/CustomMessage';
 
-export const renderSend = (props: SendProps<IMessage>) => {
+export const renderSend = (props: SendProps<CustomMessage>) => {
   return (
     <View style={{ flexDirection: 'row' }}>
-      <TouchableOpacity onPress={_pickDocument}>
+      <TouchableOpacity
+        onPress={async () => {
+          _pickDocument().then((res) => {
+            console.log('RES', res);
+            props.onSend!({ file: res! }, true);
+          });
+        }}>
         <Fontisto
           type="font-awesome"
           size={25}

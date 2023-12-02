@@ -1,5 +1,12 @@
 import { IMessage, QuickReplies, User } from 'react-native-gifted-chat';
 
+export interface CustomFile {
+  name: string;
+  extension: string;
+  mimeType: string;
+  uri: string;
+}
+
 export default class CustomMessage implements IMessage {
   _id: string | number;
   text: string;
@@ -13,9 +20,9 @@ export default class CustomMessage implements IMessage {
   received?: boolean;
   pending?: boolean;
   quickReplies?: QuickReplies;
-  pdf?: string;
+  file?: CustomFile;
 
-  constructor(props: IMessage, pdf?: string) {
+  constructor(props: IMessage, file?: CustomFile) {
     this._id = props._id;
     this.audio = props.audio;
     this.createdAt = props.createdAt;
@@ -28,6 +35,6 @@ export default class CustomMessage implements IMessage {
     this.text = props.text;
     this.user = props.user;
     this.video = props.video;
-    this.pdf = pdf;
+    this.file = file;
   }
 }

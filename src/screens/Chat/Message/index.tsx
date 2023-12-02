@@ -17,8 +17,6 @@ import { onSend } from '~/hooks/useOnSend';
 import { useChatInit } from '~/hooks/useChatInit';
 import CustomBubble from '~/components/Chat/CustomBubble';
 
-const pl = require('dayjs/locale/pl');
-
 // An interface for our actions
 
 const MessageChat = ({ navigation, route }: NavigationProps<Routes.Message>) => {
@@ -76,7 +74,7 @@ const MessageChat = ({ navigation, route }: NavigationProps<Routes.Message>) => 
         user={user}
         messages={messages}
         onSend={onSend(route.params.id.toString(), setMessages)}
-        renderBubble={CustomBubble}
+        renderBubble={(props) => CustomBubble(props, { navigation, route })}
         renderMessageText={renderMessageText}
         renderSend={renderSend}
         alwaysShowSend={true}

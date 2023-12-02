@@ -3,7 +3,7 @@ import { Text, View } from 'react-native';
 import CustomMessage from '~/types/CustomMessage';
 
 export const CustomView = (props: BubbleProps<CustomMessage>) => {
-  if (props.currentMessage?.pdf) {
+  if (props.currentMessage?.file) {
     return (
       <View style={{ backgroundColor: 'red' }}>
         <Text>hello</Text>

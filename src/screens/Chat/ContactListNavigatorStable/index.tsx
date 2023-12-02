@@ -3,6 +3,7 @@ import { NavigationProps, RootStackParamList, Routes } from '~/router/navigation
 import { COLOR } from '~/styles/constants';
 import MessageChat from '~/screens/Chat/Message';
 import ContactListAll from '~/screens/Chat/ContactListAll';
+import PDFViewer from '~/screens/Chat/PDFViewer';
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
 
@@ -24,6 +25,13 @@ const ContactListNavigatorStable = ({
       <Stack.Screen
         name={Routes.Message}
         component={MessageChat}
+        options={{
+          headerShown: false
+        }}
+      />
+      <Stack.Screen
+        name={Routes.PDFViewer}
+        component={PDFViewer}
         options={{
           headerShown: false
         }}

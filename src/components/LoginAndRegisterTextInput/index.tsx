@@ -54,7 +54,7 @@ const CustomTextInput = ({
                 }
               : textContentType === 'telephoneNumber'
               ? {
-                  value: /^[0-9 ]{11}$/i,
+                  value: /^[0-9 ]{9}$/i,
                   message: 'Niepoprawny numer telefonu'
                 }
               : undefined

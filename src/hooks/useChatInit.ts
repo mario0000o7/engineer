@@ -29,7 +29,7 @@ export const useChatInit = (
       (messages) => {
         let messageList: IMessage[] = [];
         for (let i = 0; i < messages.length; i++) {
-          messageList = messageList.concat(mapMessage(messages[i] as TextMessage));
+          messageList = messageList.concat(mapMessage(messages[i] as TextMessage | MediaMessage));
         }
         setUser(messageList.find((value) => value.user._id === idString)?.user!);
         setMessage(messageList.reverse());

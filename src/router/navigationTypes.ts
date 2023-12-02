@@ -24,7 +24,8 @@ export enum Routes {
   VerifyStep = 'VerifyStep',
   BirthStep = 'BirthStep',
   Message = 'Message',
-  ContactItem = 'ContactItem'
+  ContactItem = 'ContactItem',
+  PDFViewer = 'PDFViewer'
 }
 
 export type RootStackParamList = {
@@ -50,6 +51,7 @@ export type RootStackParamList = {
   [Routes.ContactListNavigatorStable]: undefined;
   [Routes.ContactListAll]: undefined;
   [Routes.ContactItem]: undefined;
+  [Routes.PDFViewer]: { uri: string };
 };
 
 export type NavigationProps<T extends Routes> = NativeStackScreenProps<RootStackParamList, T>;

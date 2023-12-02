@@ -56,7 +56,6 @@ const VerifyStep = ({ navigation }: NavigationProps<Routes.VerifyStep>) => {
     dispatch(sendVerificationRedux(stored.phone)).then();
     for (let i = 10; i >= 0; i--) {
       setTimer(i);
-      console.log(i);
       await new Promise((resolve) => setTimeout(resolve, 1000));
     }
   };

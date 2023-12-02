@@ -1,8 +1,10 @@
 import { CometChat } from '@cometchat/chat-sdk-react-native';
 
-import { IMessage, User } from 'react-native-gifted-chat';
+import { User } from 'react-native-gifted-chat';
 import * as DocumentPicker from 'expo-document-picker';
+import CustomMessage, { CustomFile } from '~/types/CustomMessage';
 import TextMessage = CometChat.TextMessage;
+import MediaMessage = CometChat.MediaMessage;
 
 export function mapUser(user: CometChat.User | CometChat.Group): User {
   if (user instanceof CometChat.Group) {
@@ -19,28 +21,52 @@ export function mapUser(user: CometChat.User | CometChat.Group): User {
   };
 }
 
-export function mapMessage(message: TextMessage): IMessage[] {
-  return [
-    {
-      user: mapUser(message.getSender()),
-      _id: message.getId(),
-      text: message.getText(),
-      createdAt: new Date(message.getSentAt() * 1000)
-    }
-  ];
+export function mapMessage(message: TextMessage | MediaMessage): CustomMessage[] {
+  if (message instanceof MediaMessage) {
+    return [
+      {
+        user: mapUser(message.getSender()),
+        _id: message.getId(),
+        text: '',
+        createdAt: new Date(message.getSentAt() * 1000),
+        file: {
+          uri: message.getAttachment().getUrl(),
+          mimeType: message.getAttachment().getMimeType(),
+          name: message.getAttachment().getName(),
+          extension: message.getAttachment().getExtension()
+        }
+      }
+    ];
+  } else {
+    return [
+      {
+        user: mapUser(message.getSender()),
+        _id: message.getId(),
+        text: message.getText(),
+        createdAt: new Date(message.getSentAt() * 1000)
+      }
+    ];
+  }
 }
 
-export const _pickDocument = async () => {
-  const result = await DocumentPicker.getDocumentAsync({
-    type: 'application/pdf'
-  });
-  if (result.canceled) {
-    return;
+export const _pickDocument = async (): Promise<CustomFile | null> => {
+  try {
+    const result = await DocumentPicker.getDocumentAsync({
+      type: ['application/pdf', 'image/*']
+    });
+
+    if (result.canceled) {
+      return null;
+    }
+
+    return {
+      uri: result.assets[0].uri!,
+      mimeType: result.assets[0].mimeType!,
+      name: result.assets[0].name!,
+      extension: result.assets[0].name.split('.').pop() || 'pdf'
+    };
+  } catch (error) {
+    console.log('Error picking document:', error);
+    return null;
   }
-  const file = {
-    uri: result.assets![0].uri,
-    type: 'application/pdf',
-    name: result.assets![0].name
-  };
-  // setFile(file);
 };
