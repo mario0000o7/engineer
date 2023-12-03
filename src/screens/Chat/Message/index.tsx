@@ -11,6 +11,8 @@ import CustomBubble from '~/components/Chat/CustomBubble';
 // @ts-ignore
 import pl from 'dayjs/locale/pl';
 import { LoaderScreen } from 'react-native-ui-lib';
+import { renderSend } from '~/components/Chat/renderSend/renderSend';
+import { renderAction } from '~/components/Chat/renderAction';
 
 // eslint-disable-next-line no-unused-vars
 // An interface for our actions
@@ -43,13 +45,13 @@ const MessageChat = ({ navigation, route }: NavigationProps<Routes.Message>) => 
         onSend={onSend(route.params.id.toString(), dispatchChat)}
         renderBubble={(props) => CustomBubble(props, { navigation, route })}
         renderMessageText={renderMessageText}
-        // renderChatEmpty={() => <LoaderScreen color={COLOR.PRIMARY} />}
-        // renderLoading={() => <LoaderScreen color={COLOR.PRIMARY} />}
+        renderSend={renderSend}
         renderFooter={() =>
           chat.loading ? (
             <LoaderScreen backgroundColor={'transparent'} color={COLOR.PRIMARY} />
           ) : null
         }
+        renderActions={renderAction}
         alwaysShowSend={true}
         locale={pl}
       />
