@@ -10,7 +10,7 @@ import CustomBubble from '~/components/Chat/CustomBubble';
 
 // @ts-ignore
 import pl from 'dayjs/locale/pl';
-import { LoaderScreen } from 'react-native-ui-lib';
+import { LoaderScreen, Text } from 'react-native-ui-lib';
 import { renderSend } from '~/components/Chat/renderSend/renderSend';
 import { renderAction } from '~/components/Chat/renderAction';
 
@@ -52,6 +52,18 @@ const MessageChat = ({ navigation, route }: NavigationProps<Routes.Message>) => 
             <LoaderScreen backgroundColor={'transparent'} color={COLOR.PRIMARY} />
           ) : null
         }
+        renderChatEmpty={() => (
+          <View
+            style={{
+              flex: 1,
+              justifyContent: 'center',
+              alignItems: 'center',
+              transform: [{ scaleY: -1 }],
+              display: chat.loading ? 'none' : 'flex'
+            }}>
+            <Text style={{ color: COLOR.PRIMARY }}>Brak wiadomości</Text>
+          </View>
+        )}
         renderActions={renderAction}
         alwaysShowSend={true}
         locale={pl}

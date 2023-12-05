@@ -63,7 +63,7 @@ const EmailStep = ({ navigation }: NavigationProps<Routes.EmailStep>) => {
         } else {
           isEmailChecked = true;
           dispatch(setEmail(email));
-          dispatch(setRole(1));
+          dispatch(setRole(2));
         }
       })
       .catch((err) => {

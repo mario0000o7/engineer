@@ -25,7 +25,6 @@ const giftedChatReducer = (state = initialState, action: any): GiftedChatState =
       };
 
     case 'GET_MESSAGES_SUCCESS':
-      console.log('GET_MESSAGES_SUCCESS');
       return {
         ...state,
         loading: false,
@@ -67,6 +66,11 @@ const giftedChatReducer = (state = initialState, action: any): GiftedChatState =
         ...state,
         loading: false,
         error: 'Wystąpił błąd podczas pobierania wiadomości.'
+      };
+    case 'CLEAR_MESSAGES':
+      return {
+        ...state,
+        messages: []
       };
 
     default:

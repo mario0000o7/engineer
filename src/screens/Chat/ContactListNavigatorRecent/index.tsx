@@ -10,7 +10,7 @@ const Stack = createNativeStackNavigator<RootStackParamList>();
 const ContactListNavigatorRecent = ({
   navigation,
   route
-}: NavigationProps<Routes.ContactListNavigatorStable>) => {
+}: NavigationProps<Routes.ContactListNavigatorRecent>) => {
   return (
     <Stack.Navigator
       initialRouteName={Routes.RecentMessages}

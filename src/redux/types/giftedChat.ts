@@ -10,6 +10,7 @@ export const GET_MESSAGES_SUCCESS = 'GET_MESSAGES_SUCCESS';
 export const GET_MESSAGES_FAILURE = 'GET_MESSAGES_FAILURE';
 export const APPEND_MESSAGE = 'APPEND_MESSAGE';
 
+export const CLEAR_MESSAGES = 'CLEAR_MESSAGES';
 export const GET_RECENT_CONVERSATIONS_REQUEST = 'GET_RECENT_CONVERSATIONS_REQUEST';
 export const GET_RECENT_CONVERSATIONS_SUCCESS = 'GET_RECENT_CONVERSATIONS_SUCCESS';
 export const GET_RECENT_CONVERSATIONS_FAILURE = 'GET_RECENT_CONVERSATIONS_FAILURE';
@@ -55,6 +56,10 @@ export interface GetRecentConversationsFailureAction {
   type: typeof GET_RECENT_CONVERSATIONS_FAILURE;
 }
 
+export interface ClearMessagesAction {
+  type: typeof CLEAR_MESSAGES;
+}
+
 export type GiftedChatActionTypes =
   | LoginRequestAction
   | LoginSuccessAction
@@ -65,7 +70,8 @@ export type GiftedChatActionTypes =
   | AppendMessageAction
   | GetRecentConversationsRequestAction
   | GetRecentConversationsSuccessAction
-  | GetRecentConversationsFailureAction;
+  | GetRecentConversationsFailureAction
+  | ClearMessagesAction;
 
 export interface GiftedChatState {
   loading: boolean;
