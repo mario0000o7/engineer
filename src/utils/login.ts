@@ -14,7 +14,7 @@ function login(UID: string): Promise<CometChat.User | null> {
           },
           (error: CometChat.CometChatException) => {
             console.log('Login failed with exception:', { error });
-            return null;
+            throw error;
           }
         );
       } else {
@@ -23,7 +23,7 @@ function login(UID: string): Promise<CometChat.User | null> {
     })
     .catch((error: CometChat.CometChatException) => {
       console.log('Some Error Occurred', { error });
-      return null;
+      throw error;
     });
 }
 

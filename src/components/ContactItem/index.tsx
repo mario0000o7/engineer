@@ -15,6 +15,7 @@ const ContactItem = ({ navigation, registerState }: ContactItemProps) => {
   // setDoctorName('Lek. Jan Kowalski')
   const id = useAppSelector((state) => state.session.id);
   const token = useAppSelector((state) => state.session.token);
+  console.log('ContactItem', registerState.unReadMessages);
 
   return (
     <View style={[styles.container, styles.shadow]}>
@@ -29,19 +30,23 @@ const ContactItem = ({ navigation, registerState }: ContactItemProps) => {
         </View>
         {/*</View>*/}
         <View style={{ flexDirection: 'row' }}>
-          <View
-            style={{
-              backgroundColor: COLOR.LIGHT_GREEN,
-              height: 20,
-              width: 20,
-              borderRadius: 20,
-              marginRight: -15,
-              marginTop: 4
-            }}>
-            <Text style={{ textAlign: 'center', marginTop: 1 }}>
-              {!registerState !== 0 ? registerState.unReadMessages : 0}
-            </Text>
-          </View>
+          {registerState.unReadMessages! >= 1 && registerState.unReadMessages! !== undefined && (
+            <View
+              style={{
+                backgroundColor: COLOR.LIGHT_GREEN,
+                height: 20,
+                width: 20,
+                borderRadius: 20,
+                marginRight: -15,
+                marginTop: 4
+              }}>
+              <Text style={{ textAlign: 'center', marginTop: 1 }}>
+                {registerState.unReadMessages <= 99 && registerState.unReadMessages >= 1
+                  ? registerState.unReadMessages
+                  : 99}
+              </Text>
+            </View>
+          )}
           <IconButton
             icon={'chat'}
             mode={'contained-tonal'}

@@ -9,11 +9,12 @@ import MediaMessage = CometChat.MediaMessage;
 
 export const useChatInit = (
   id: number,
+  mail: string,
   receiverId: number,
   dispatch: ThunkDispatch<any, any, any>
 ) =>
   useCallback(() => {
-    dispatch(loginUserRedux(id.toString())).then((value) => {
+    dispatch(loginUserRedux(id.toString(), mail)).then((value) => {
       console.log('loginUserRedux', value);
       dispatch(getMessagesRedux(id.toString(), receiverId.toString())).then();
     });

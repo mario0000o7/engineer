@@ -1,53 +1,70 @@
 import ContactItem from '../../../components/ContactItem';
 import { NavigationProps, Routes } from '~/router/navigationTypes';
-import { Searchbar } from 'react-native-paper';
 import { ScrollView } from 'react-native';
 import styles from '~/screens/Chat/RecentMessages/styles';
 import { COLOR } from '~/styles/constants';
-import { useCallback } from 'react';
+import { useCallback, useState } from 'react';
 import { useFocusEffect } from '@react-navigation/native';
 import { LoaderScreen, View } from 'react-native-ui-lib';
 import { getRecentConversationsStatesRedux, loginUserRedux } from '~/redux/api/giftedChat';
 import { useAppDispatch, useAppSelector } from '~/redux/hooks';
 import { useGetUserByIdsMutation } from '~/redux/api/authApi';
+import SearchingContact from '~/components/Chat/searchingContact';
+import { useForm } from 'react-hook-form';
+
+export interface SearchSchema {
+  fullName: string;
+}
 
 const ContactListRecent = ({ navigation, route }: NavigationProps<Routes.ContactListAll>) => {
   const id = useAppSelector((state) => state.session.id);
+  const mail = useAppSelector((state) => state.session.email);
   const chat = useAppSelector((state) => state.chat);
   const dispatchChat = useAppDispatch();
+  const [tmpConversations, setTmpConversations] = useState(chat.conversations);
   const [getUserByIds] = useGetUserByIdsMutation();
 
   const getAllUsersHandler = useCallback(() => {
-    dispatchChat(loginUserRedux(id!.toString())).then(() => {
+    dispatchChat(loginUserRedux(id!.toString(), mail!)).then(() => {
       dispatchChat(getRecentConversationsStatesRedux(getUserByIds)).then();
     });
   }, []);
+  const { control, handleSubmit, formState } = useForm<SearchSchema>({
+    mode: 'onChange',
+    defaultValues: {
+      fullName: ''
+    }
+  });
+  const { isSubmitted } = formState;
+
+  const onSubmit = (data: SearchSchema) => {
+    console.log(data);
+    const result = chat.conversations.filter((conversation) => {
+      return (
+        conversation.firstName!.toLowerCase().includes(data.fullName.toLowerCase()) ||
+        conversation.lastName!.toLowerCase().includes(data.fullName.toLowerCase())
+      );
+    });
+    setTmpConversations(result);
+  };
 
   useFocusEffect(getAllUsersHandler);
 
   return (
     <View style={[styles.columnContainer]}>
-      <Searchbar
-        style={{
-          marginRight: 10,
-          marginLeft: 10,
-          marginTop: 10,
-          marginBottom: 10,
-          backgroundColor: COLOR.BACKGROUND,
-          borderWidth: 1
-        }}
-        placeholder="Wyszukaj lekarza"
-        onChangeText={() => {}}
-        value={''}
-      />
+      <SearchingContact name={'fullName'} control={control} onSubmit={handleSubmit(onSubmit)} />
 
       {/*<View style={{ width: '100%'}}>*/}
 
       <ScrollView showsHorizontalScrollIndicator={false}>
         {/*<VStack space={4} alignItems="center" justifyContent="center">*/}
-        {chat.conversations.map((doctor) => {
-          return <ContactItem key={doctor.id} navigation={navigation} registerState={doctor} />;
-        })}
+        {isSubmitted
+          ? tmpConversations.map((doctor) => {
+              return <ContactItem key={doctor.id} navigation={navigation} registerState={doctor} />;
+            })
+          : chat.conversations.map((doctor) => {
+              return <ContactItem key={doctor.id} navigation={navigation} registerState={doctor} />;
+            })}
 
         {/*</VStack>*/}
         {chat.loading && <LoaderScreen color={COLOR.PRIMARY} />}

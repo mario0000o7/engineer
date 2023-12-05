@@ -13,21 +13,30 @@ import {
 } from '@reduxjs/toolkit/query';
 import { MutationTrigger } from '@reduxjs/toolkit/dist/query/react/buildHooks';
 import { RegisterState } from '~/redux/slices/registerSlice';
+import createUser from '~/utils/createUser';
 import TextMessage = CometChat.TextMessage;
 import MediaMessage = CometChat.MediaMessage;
 
-export const loginUserRedux = (id: string) => async (dispatch: Dispatch<GiftedChatActionTypes>) => {
-  dispatch({ type: 'LOGIN_REQUEST' });
+export const loginUserRedux =
+  (id: string, mail: string) => async (dispatch: Dispatch<GiftedChatActionTypes>) => {
+    dispatch({ type: 'LOGIN_REQUEST' });
 
-  try {
-    const result = await login(id);
-    dispatch({ type: 'LOGIN_SUCCESS' });
-    return result;
-  } catch (error) {
-    dispatch({ type: 'LOGIN_FAILURE' });
-    return null;
-  }
-};
+    try {
+      const result = await login(id);
+      dispatch({ type: 'LOGIN_SUCCESS' });
+      return result;
+    } catch (error) {
+      try {
+        console.log('Creating user');
+        await createUser(id, mail);
+        await login(id);
+        dispatch({ type: 'LOGIN_SUCCESS' });
+      } catch (error) {
+        dispatch({ type: 'LOGIN_FAILURE' });
+      }
+      return null;
+    }
+  };
 
 export const getMessagesRedux =
   (idString: string, receiverIdString: string) =>
@@ -43,6 +52,7 @@ export const getMessagesRedux =
         (messages) => {
           let messageList: IMessage[] = [];
           for (let i = 0; i < messages.length; i++) {
+            CometChat.markAsRead(messages[i] as TextMessage | MediaMessage);
             messageList = messageList.concat(mapMessage(messages[i] as TextMessage | MediaMessage));
           }
           const user = messageList.find((value) => value.user._id === idString)?.user!;
@@ -53,6 +63,7 @@ export const getMessagesRedux =
         },
         (error) => {
           console.log('Message fetching failed with error:', error);
+          dispatch({ type: 'GET_MESSAGES_FAILURE' });
         }
       );
     } catch (error) {
@@ -92,6 +103,7 @@ export const getRecentConversationsStatesRedux =
           for (let i = 0; i < conversationList.length; i++) {
             const user = conversationList[i].getConversationWith();
             unreadMessageCountList.push(conversationList[i].getUnreadMessageCount());
+            console.log('unreadMessageCountList', unreadMessageCountList[i]);
             if (user instanceof CometChat.User) {
               console.log('user', user);
               uidList.push(parseInt(user.getUid()));
@@ -101,17 +113,22 @@ export const getRecentConversationsStatesRedux =
           getUserByIds({ ids: uidList.reverse() })
             .unwrap()
             .then((value: RegisterState[]) => {
-              for (let i = 0; i < value.length; i++) {
-                value[i].unReadMessages = unreadMessageCountList[i];
+              let userList: RegisterState[] = [];
+              for (let i = value.length - 1; i >= 0; i--) {
+                userList = userList.concat({
+                  ...value[i],
+                  unReadMessages: unreadMessageCountList[i]
+                });
               }
               console.log('value', value);
               dispatch({
                 type: 'GET_RECENT_CONVERSATIONS_SUCCESS',
-                payload: value
+                payload: userList
               });
             });
         },
         (error: CometChat.CometChatException) => {
+          dispatch({ type: 'GET_RECENT_CONVERSATIONS_FAILURE' });
           console.log('Conversations list fetching failed with error:', error);
         }
       );

@@ -19,10 +19,11 @@ import { renderAction } from '~/components/Chat/renderAction';
 
 const MessageChat = ({ navigation, route }: NavigationProps<Routes.Message>) => {
   const id = useAppSelector((state) => state.session.id);
+  const mail = useAppSelector((state) => state.session.email);
   const chat = useAppSelector((state) => state.chat);
   const dispatchChat = useAppDispatch();
 
-  useFocusEffect(useChatInit(id!, route.params.id, dispatchChat));
+  useFocusEffect(useChatInit(id!, mail!, route.params.id, dispatchChat));
 
   // add a function attach file using DocumentPicker.pick
 
