@@ -1,7 +1,6 @@
 import ContactItem from '../../../components/ContactItem';
 import { NavigationProps, Routes } from '~/router/navigationTypes';
 import { ScrollView } from 'react-native';
-import styles from '~/screens/Chat/RecentMessages/styles';
 import { COLOR } from '~/styles/constants';
 import { useCallback, useState } from 'react';
 import { useFocusEffect } from '@react-navigation/native';
@@ -11,6 +10,7 @@ import { useAppDispatch, useAppSelector } from '~/redux/hooks';
 import { useGetUserByIdsMutation } from '~/redux/api/authApi';
 import SearchingContact from '~/components/Chat/searchingContact';
 import { useForm } from 'react-hook-form';
+import styles from '~/screens/Chat/ContactListRecent/styles';
 
 export interface SearchSchema {
   fullName: string;

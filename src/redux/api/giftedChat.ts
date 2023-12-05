@@ -103,7 +103,6 @@ export const getRecentConversationsStatesRedux =
           for (let i = 0; i < conversationList.length; i++) {
             const user = conversationList[i].getConversationWith();
             unreadMessageCountList.push(conversationList[i].getUnreadMessageCount());
-            console.log('unreadMessageCountList', unreadMessageCountList[i]);
             if (user instanceof CometChat.User) {
               uidList.push(parseInt(user.getUid()));
             }

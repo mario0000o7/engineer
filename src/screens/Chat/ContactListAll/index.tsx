@@ -1,7 +1,6 @@
 import ContactItem from '../../../components/ContactItem';
 import { NavigationProps, Routes } from '~/router/navigationTypes';
 import { ScrollView } from 'react-native';
-import styles from '~/screens/Chat/RecentMessages/styles';
 import { COLOR } from '~/styles/constants';
 import { useFindUserMutation, useGetAllDoctorsMutation } from '~/redux/api/authApi';
 import { useCallback, useState } from 'react';
@@ -12,6 +11,7 @@ import { LoaderScreen, View } from 'react-native-ui-lib';
 import { useForm } from 'react-hook-form';
 import { SearchSchema } from '~/screens/Chat/ContactListRecent/ContactListRecent';
 import SearchingContact from '~/components/Chat/searchingContact';
+import styles from '~/screens/Chat/ContactListRecent/styles';
 
 const ContactListAll = ({ navigation, route }: NavigationProps<Routes.ContactListAll>) => {
   const [getAllDoctors, { isLoading }] = useGetAllDoctorsMutation();
