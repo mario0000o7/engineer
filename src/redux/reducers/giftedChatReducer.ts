@@ -4,7 +4,8 @@ const initialState: GiftedChatState = {
   loading: false,
   error: null,
   messages: [],
-  user: undefined
+  user: undefined,
+  conversations: []
 };
 
 const giftedChatReducer = (state = initialState, action: any): GiftedChatState => {
@@ -48,6 +49,24 @@ const giftedChatReducer = (state = initialState, action: any): GiftedChatState =
       return {
         ...state,
         messages: [action.payload, ...state.messages]
+      };
+    case 'GET_RECENT_CONVERSATIONS_REQUEST':
+      return {
+        ...state,
+        loading: true,
+        error: null
+      };
+    case 'GET_RECENT_CONVERSATIONS_SUCCESS':
+      return {
+        ...state,
+        loading: false,
+        conversations: action.payload
+      };
+    case 'GET_RECENT_CONVERSATIONS_FAILURE':
+      return {
+        ...state,
+        loading: false,
+        error: 'Wystąpił błąd podczas pobierania wiadomości.'
       };
 
     default:

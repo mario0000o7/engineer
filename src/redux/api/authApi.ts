@@ -46,6 +46,13 @@ export const authApi = baseApi.injectEndpoints({
         url: '/user/getAllDoctors',
         body: data
       })
+    }),
+    getUserByIds: builder.mutation<[RegisterState], { ids: number[] }>({
+      query: (data) => ({
+        method: 'POST',
+        url: '/user/getUserByIds',
+        body: data
+      })
     })
   })
 });
@@ -56,5 +63,6 @@ export const {
   useCheckPhoneMutation,
   useCheckEmailMutation,
   useFindUserMutation,
+  useGetUserByIdsMutation,
   useGetAllDoctorsMutation
 } = authApi;

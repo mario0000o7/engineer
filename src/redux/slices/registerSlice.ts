@@ -10,6 +10,7 @@ export interface RegisterState {
   lastName?: string;
   birthDate?: Date;
   gender?: string;
+  unReadMessages?: number;
 }
 
 const initialState: RegisterState = {
@@ -20,7 +21,8 @@ const initialState: RegisterState = {
   firstName: '',
   lastName: '',
   birthDate: new Date(),
-  gender: ''
+  gender: '',
+  unReadMessages: 0
 };
 
 const registerSlice = createSlice({
@@ -50,6 +52,9 @@ const registerSlice = createSlice({
     },
     setGender(state, action: PayloadAction<string>) {
       state.gender = action.payload;
+    },
+    setUnReadMessages(state, action: PayloadAction<number>) {
+      state.unReadMessages = action.payload;
     }
   }
 });
@@ -62,7 +67,8 @@ export const {
   setFirstName,
   setLastName,
   setBirthDate,
-  setGender
+  setGender,
+  setUnReadMessages
 } = registerSlice.actions;
 
 export default registerSlice.reducer;

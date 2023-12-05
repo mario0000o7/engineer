@@ -4,25 +4,23 @@ import { Searchbar } from 'react-native-paper';
 import { ScrollView } from 'react-native';
 import styles from '~/screens/Chat/RecentMessages/styles';
 import { COLOR } from '~/styles/constants';
-import { useGetAllDoctorsMutation } from '~/redux/api/authApi';
-import { useCallback, useState } from 'react';
+import { useCallback } from 'react';
 import { useFocusEffect } from '@react-navigation/native';
-import { RegisterState } from '~/redux/slices/registerSlice';
-
 import { LoaderScreen, View } from 'react-native-ui-lib';
+import { getRecentConversationsStatesRedux, loginUserRedux } from '~/redux/api/giftedChat';
+import { useAppDispatch, useAppSelector } from '~/redux/hooks';
+import { useGetUserByIdsMutation } from '~/redux/api/authApi';
 
-const ContactListAll = ({ navigation, route }: NavigationProps<Routes.ContactListAll>) => {
-  const [getAllDoctors, { isLoading }] = useGetAllDoctorsMutation();
-  const [listDoctors, setListDoctors] = useState<RegisterState[]>([]);
+const ContactListRecent = ({ navigation, route }: NavigationProps<Routes.ContactListAll>) => {
+  const id = useAppSelector((state) => state.session.id);
+  const chat = useAppSelector((state) => state.chat);
+  const dispatchChat = useAppDispatch();
+  const [getUserByIds] = useGetUserByIdsMutation();
 
   const getAllUsersHandler = useCallback(() => {
-    getAllDoctors()
-      .unwrap()
-      .then((res) => {
-        const listDoctors = res as RegisterState[];
-        console.log(listDoctors);
-        setListDoctors(listDoctors);
-      });
+    dispatchChat(loginUserRedux(id!.toString())).then(() => {
+      dispatchChat(getRecentConversationsStatesRedux(getUserByIds)).then();
+    });
   }, []);
 
   useFocusEffect(getAllUsersHandler);
@@ -47,16 +45,16 @@ const ContactListAll = ({ navigation, route }: NavigationProps<Routes.ContactLis
 
       <ScrollView showsHorizontalScrollIndicator={false}>
         {/*<VStack space={4} alignItems="center" justifyContent="center">*/}
-        {listDoctors.map((doctor) => {
+        {chat.conversations.map((doctor) => {
           return <ContactItem key={doctor.id} navigation={navigation} registerState={doctor} />;
         })}
 
         {/*</VStack>*/}
-        {isLoading && <LoaderScreen color={COLOR.PRIMARY} />}
+        {chat.loading && <LoaderScreen color={COLOR.PRIMARY} />}
       </ScrollView>
 
       {/*</View>*/}
     </View>
   );
 };
-export default ContactListAll;
+export default ContactListRecent;

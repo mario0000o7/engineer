@@ -13,9 +13,11 @@ export const useChatInit = (
   dispatch: ThunkDispatch<any, any, any>
 ) =>
   useCallback(() => {
-    dispatch(loginUserRedux(id.toString())).then();
+    dispatch(loginUserRedux(id.toString())).then((value) => {
+      console.log('loginUserRedux', value);
+      dispatch(getMessagesRedux(id.toString(), receiverId.toString())).then();
+    });
 
-    dispatch(getMessagesRedux(id.toString(), receiverId.toString())).then();
     const listenerID = id!.toString();
     CometChat.addMessageListener(
       listenerID,

@@ -6,4 +6,6 @@ export module COLOR {
   export const PRIMARY = '#0038FF';
   export const WHITE = '#FFFFFF';
   export const BLACK = '#000000';
+
+  export const LIGHT_GREEN = '#00FF00';
 }

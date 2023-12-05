@@ -1,4 +1,4 @@
-import { View } from 'react-native';
+import { View } from 'react-native-ui-lib';
 import styles from '~/components/ContactItem/styles';
 import { IconButton, Text } from 'react-native-paper';
 import { COLOR } from '~/styles/constants';
@@ -28,19 +28,34 @@ const ContactItem = ({ navigation, registerState }: ContactItemProps) => {
           <Text style={styles.title}>Ginekolog i Położnictwo</Text>
         </View>
         {/*</View>*/}
-        <IconButton
-          icon={'chat'}
-          mode={'contained-tonal'}
-          size={50}
-          iconColor={COLOR.WHITE}
-          style={{ backgroundColor: COLOR.PRIMARY }}
-          onPress={() => {
-            navigation.navigate(Routes.Message, {
-              name: `Lek. ${registerState.firstName} ${registerState.lastName}`,
-              id: registerState.id!
-            });
-          }}
-        />
+        <View style={{ flexDirection: 'row' }}>
+          <View
+            style={{
+              backgroundColor: COLOR.LIGHT_GREEN,
+              height: 20,
+              width: 20,
+              borderRadius: 20,
+              marginRight: -15,
+              marginTop: 4
+            }}>
+            <Text style={{ textAlign: 'center', marginTop: 1 }}>
+              {!registerState !== 0 ? registerState.unReadMessages : 0}
+            </Text>
+          </View>
+          <IconButton
+            icon={'chat'}
+            mode={'contained-tonal'}
+            size={50}
+            iconColor={COLOR.WHITE}
+            style={{ backgroundColor: COLOR.PRIMARY }}
+            onPress={() => {
+              navigation.navigate(Routes.Message, {
+                name: `Lek. ${registerState.firstName} ${registerState.lastName}`,
+                id: registerState.id!
+              });
+            }}
+          />
+        </View>
       </View>
     </View>
   );
