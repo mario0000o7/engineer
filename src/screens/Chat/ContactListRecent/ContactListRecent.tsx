@@ -38,7 +38,6 @@ const ContactListRecent = ({ navigation, route }: NavigationProps<Routes.Contact
   const { isSubmitted } = formState;
 
   const onSubmit = (data: SearchSchema) => {
-    console.log(data);
     const result = chat.conversations.filter((conversation) => {
       return (
         conversation.firstName!.toLowerCase().includes(data.fullName.toLowerCase()) ||

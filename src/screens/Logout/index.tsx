@@ -8,7 +8,6 @@ const LogoutScreen = () => {
   const dispatch = useAppDispatch();
 
   const logoutHandler = useCallback(() => {
-    console.log('logout');
     dispatch(logOut());
   }, []);
 

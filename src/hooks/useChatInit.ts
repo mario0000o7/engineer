@@ -15,7 +15,6 @@ export const useChatInit = (
 ) =>
   useCallback(() => {
     dispatch(loginUserRedux(id.toString(), mail)).then((value) => {
-      console.log('loginUserRedux', value);
       dispatch(getMessagesRedux(id.toString(), receiverId.toString())).then();
     });
 

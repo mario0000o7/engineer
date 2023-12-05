@@ -27,7 +27,6 @@ export const loginUserRedux =
       return result;
     } catch (error) {
       try {
-        console.log('Creating user');
         await createUser(id, mail);
         await login(id);
         dispatch({ type: 'LOGIN_SUCCESS' });
@@ -105,11 +104,9 @@ export const getRecentConversationsStatesRedux =
             unreadMessageCountList.push(conversationList[i].getUnreadMessageCount());
             console.log('unreadMessageCountList', unreadMessageCountList[i]);
             if (user instanceof CometChat.User) {
-              console.log('user', user);
               uidList.push(parseInt(user.getUid()));
             }
           }
-          console.log('uidList', uidList);
           getUserByIds({ ids: uidList.reverse() })
             .unwrap()
             .then((value: RegisterState[]) => {
@@ -120,7 +117,6 @@ export const getRecentConversationsStatesRedux =
                   unReadMessages: unreadMessageCountList[i]
                 });
               }
-              console.log('value', value);
               dispatch({
                 type: 'GET_RECENT_CONVERSATIONS_SUCCESS',
                 payload: userList

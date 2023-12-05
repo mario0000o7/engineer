@@ -1,58 +1,69 @@
 import ContactItem from '../../../components/ContactItem';
 import { NavigationProps, Routes } from '~/router/navigationTypes';
-import { Searchbar } from 'react-native-paper';
 import { ScrollView } from 'react-native';
 import styles from '~/screens/Chat/RecentMessages/styles';
 import { COLOR } from '~/styles/constants';
-import { useGetAllDoctorsMutation } from '~/redux/api/authApi';
+import { useFindUserMutation, useGetAllDoctorsMutation } from '~/redux/api/authApi';
 import { useCallback, useState } from 'react';
 import { useFocusEffect } from '@react-navigation/native';
 import { RegisterState } from '~/redux/slices/registerSlice';
 
 import { LoaderScreen, View } from 'react-native-ui-lib';
+import { useForm } from 'react-hook-form';
+import { SearchSchema } from '~/screens/Chat/ContactListRecent/ContactListRecent';
+import SearchingContact from '~/components/Chat/searchingContact';
 
 const ContactListAll = ({ navigation, route }: NavigationProps<Routes.ContactListAll>) => {
   const [getAllDoctors, { isLoading }] = useGetAllDoctorsMutation();
   const [listDoctors, setListDoctors] = useState<RegisterState[]>([]);
+  const [tmpConversations, setTmpConversations] = useState(listDoctors);
+  const [findUser, { isLoading: isLoadingFindUser }] = useFindUserMutation();
 
   const getAllUsersHandler = useCallback(() => {
     getAllDoctors()
       .unwrap()
       .then((res) => {
         const listDoctors = res as RegisterState[];
-        console.log(listDoctors);
         setListDoctors(listDoctors);
       });
   }, []);
+
+  const { control, handleSubmit, formState } = useForm<SearchSchema>({
+    mode: 'onChange',
+    defaultValues: {
+      fullName: ''
+    }
+  });
+  const { isSubmitted } = formState;
+  const onSubmit = (data: SearchSchema) => {
+    findUser({ fullName: data.fullName, role: 1 })
+      .unwrap()
+      .then((res) => {
+        const listDoctors = res as RegisterState[];
+        setTmpConversations(listDoctors);
+      });
+  };
 
   useFocusEffect(getAllUsersHandler);
 
   return (
     <View style={[styles.columnContainer]}>
-      <Searchbar
-        style={{
-          marginRight: 10,
-          marginLeft: 10,
-          marginTop: 10,
-          marginBottom: 10,
-          backgroundColor: COLOR.BACKGROUND,
-          borderWidth: 1
-        }}
-        placeholder="Wyszukaj lekarza"
-        onChangeText={() => {}}
-        value={''}
-      />
+      <SearchingContact name={'fullName'} control={control} onSubmit={handleSubmit(onSubmit)} />
 
       {/*<View style={{ width: '100%'}}>*/}
 
       <ScrollView showsHorizontalScrollIndicator={false}>
         {/*<VStack space={4} alignItems="center" justifyContent="center">*/}
-        {listDoctors.map((doctor) => {
-          return <ContactItem key={doctor.id} navigation={navigation} registerState={doctor} />;
-        })}
+        {isSubmitted
+          ? tmpConversations.map((doctor) => {
+              return <ContactItem key={doctor.id} navigation={navigation} registerState={doctor} />;
+            })
+          : listDoctors.map((doctor) => {
+              return <ContactItem key={doctor.id} navigation={navigation} registerState={doctor} />;
+            })}
 
         {/*</VStack>*/}
-        {isLoading && <LoaderScreen color={COLOR.PRIMARY} />}
+        {isLoading || (isLoadingFindUser && <LoaderScreen color={COLOR.PRIMARY} />)}
       </ScrollView>
 
       {/*</View>*/}

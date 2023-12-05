@@ -17,7 +17,6 @@ export const onSend = (receiverID: string, dispatch: ThunkDispatch<any, any, any
       );
       CometChat.sendMediaMessage(mediaMessage).then(
         (mediaMessage) => {
-          console.log('message', mediaMessage);
           receivedMessage = mapMessage(mediaMessage as CometChat.MediaMessage)[0];
           dispatch(appendMessageRedux(receivedMessage)).then();
 

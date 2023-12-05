@@ -36,7 +36,6 @@ const sessionSlice = createSlice({
     setToken(state, action: PayloadAction<Jwt>) {
       state.token = action.payload;
       const decoded = jwtDecode(action.payload) as JwtProps;
-      console.log(decoded);
       state.id = decoded.id;
       state.email = decoded.email;
     },

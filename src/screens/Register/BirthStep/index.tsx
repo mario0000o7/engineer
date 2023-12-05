@@ -15,9 +15,7 @@ import DateInputCustom from '~/components/DateInputCustom';
 import GenderSelectCustom from '~/components/GenderSelectCustom';
 import LoginAndRegisterTextInput from '~/components/LoginAndRegisterTextInput';
 import { useRegisterMutation } from '~/redux/api/authApi';
-import { JwtProps, setToken } from '~/redux/slices/sessionSlice';
-import createUser from '~/utils/createUser';
-import { jwtDecode } from 'jwt-decode';
+import { setToken } from '~/redux/slices/sessionSlice';
 
 export interface VerifySchema {
   birthDate: Date;
@@ -46,8 +44,6 @@ const BirthStep = ({ navigation }: NavigationProps<Routes.BirthStep>) => {
     register({ ...registerState, password: password, gender: gender, birthDate: birthDate })
       .unwrap()
       .then(({ token }) => {
-        const decoded = jwtDecode(token ?? '') as JwtProps;
-        createUser(decoded!.id.toString(), decoded.email!);
         dispatch(setToken(token));
       })
       .catch((err) => {

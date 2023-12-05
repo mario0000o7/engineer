@@ -15,7 +15,6 @@ const ContactItem = ({ navigation, registerState }: ContactItemProps) => {
   // setDoctorName('Lek. Jan Kowalski')
   const id = useAppSelector((state) => state.session.id);
   const token = useAppSelector((state) => state.session.token);
-  console.log('ContactItem', registerState.unReadMessages);
 
   return (
     <View style={[styles.container, styles.shadow]}>

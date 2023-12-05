@@ -15,6 +15,7 @@ function createUser(UID: string, name: string) {
     },
     (error: CometChat.CometChatException) => {
       console.log('error', error);
+      throw error;
     }
   );
 }

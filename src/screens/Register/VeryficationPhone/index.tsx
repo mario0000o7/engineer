@@ -30,7 +30,6 @@ const VerifyStep = ({ navigation }: NavigationProps<Routes.VerifyStep>) => {
 
   const onSubmit = async ({ code }: VerifySchema) => {
     await dispatch(checkVerificationRedux(stored.phone, code));
-    console.log(twilio.error);
     navigation.navigate(Routes.BirthStep);
   };
 
