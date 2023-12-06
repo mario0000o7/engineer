@@ -29,8 +29,9 @@ const SearchingContact = ({ control, name, onSubmit }: CustomTextInputProps) => 
               marginLeft: 10,
               marginTop: 10,
               marginBottom: 10,
+              borderColor: COLOR.PRIMARY,
               backgroundColor: COLOR.BACKGROUND,
-              borderWidth: 1
+              borderWidth: 3
             }}
             onBlur={onBlur}
             onChangeText={(text) => {

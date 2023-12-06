@@ -2,24 +2,24 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { NavigationProps, RootStackParamList, Routes } from '~/router/navigationTypes';
 import { COLOR } from '~/styles/constants';
 import MessageChat from '~/screens/Chat/Message';
-import ContactListAll from '~/screens/Chat/ContactListAll';
 import PDFViewer from '~/screens/Chat/PDFViewer';
+import OfficeList from '~/screens/Office/OfficeList';
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
 
-const ContactListNavigatorStable = ({
+const OfficeNavigator = ({
   navigation,
   route
-}: NavigationProps<Routes.ContactListNavigatorStable>) => {
+}: NavigationProps<Routes.ContactListNavigatorRecent>) => {
   return (
     <Stack.Navigator
-      initialRouteName={Routes.ContactListAll}
+      initialRouteName={Routes.OfficeList}
       screenOptions={{
         navigationBarColor: COLOR.BACKGROUND
       }}>
       <Stack.Screen
-        name={Routes.ContactListAll}
-        component={ContactListAll}
+        name={Routes.OfficeList}
+        component={OfficeList}
         options={{ headerShown: false }}
       />
       <Stack.Screen
@@ -40,4 +40,4 @@ const ContactListNavigatorStable = ({
   );
 };
 
-export default ContactListNavigatorStable;
+export default OfficeNavigator;

@@ -11,8 +11,6 @@ export enum Routes {
   Login = 'Login',
   Register = 'Register',
   Chat = 'Chat',
-  Files = 'Files',
-  RecentMessages = 'RecentMessages',
   ContactListNavigatorRecent = 'ContactListNavigatorRecent',
   ContactListNavigatorStable = 'ContactListNavigatorStable',
   ContactListAll = 'ContactListAll',
@@ -22,13 +20,15 @@ export enum Routes {
   LoginNavigation = 'LoginNavigation',
   Logout = 'Logout',
   EmailStep = 'EmailStep',
-  PasswordStep = 'PasswordStep',
   VerifyStep = 'VerifyStep',
   BirthStep = 'BirthStep',
   Message = 'Message',
   ContactItem = 'ContactItem',
   PDFViewer = 'PDFViewer',
-  RegisterDoctor = 'RegisterDoctor'
+  RegisterDoctor = 'RegisterDoctor',
+  OfficeList = 'OfficeList',
+  OfficeNavigator = 'OfficeNavigator',
+  OfficeItem = 'OfficeItem'
 }
 
 export type RootStackParamList = {
@@ -39,15 +39,12 @@ export type RootStackParamList = {
   [Routes.Login]: undefined;
   [Routes.Register]: undefined;
   [Routes.Chat]: undefined;
-  [Routes.Files]: undefined;
-  [Routes.RecentMessages]: undefined;
   [Routes.DoctorList]: undefined;
   [Routes.Message]: { name: string; id: number };
   [Routes.ChatNavigation]: undefined;
   [Routes.LoginNavigation]: undefined;
   [Routes.Logout]: undefined;
   [Routes.EmailStep]: { role: number; title: string };
-  [Routes.PasswordStep]: undefined;
   [Routes.VerifyStep]: undefined;
   [Routes.BirthStep]: undefined;
   [Routes.ContactListNavigatorRecent]: undefined;
@@ -57,6 +54,9 @@ export type RootStackParamList = {
   [Routes.RegisterDoctor]: undefined;
   [Routes.PDFViewer]: { file: CustomFile };
   [Routes.ContactListRecent]: undefined;
+  [Routes.OfficeList]: undefined;
+  [Routes.OfficeNavigator]: undefined;
+  [Routes.OfficeItem]: undefined;
 };
 
 export type NavigationProps<T extends Routes> = NativeStackScreenProps<RootStackParamList, T>;

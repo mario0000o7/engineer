@@ -8,4 +8,6 @@ export module COLOR {
   export const BLACK = '#000000';
 
   export const LIGHT_GREEN = '#00FF00';
+  export const GREEN = '#00B300';
+  export const ORANGE = '#FFA500';
 }

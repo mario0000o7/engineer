@@ -13,7 +13,7 @@ const ContactListNavigatorRecent = ({
 }: NavigationProps<Routes.ContactListNavigatorRecent>) => {
   return (
     <Stack.Navigator
-      initialRouteName={Routes.RecentMessages}
+      initialRouteName={Routes.ContactListRecent}
       screenOptions={{
         navigationBarColor: COLOR.BACKGROUND
       }}>
