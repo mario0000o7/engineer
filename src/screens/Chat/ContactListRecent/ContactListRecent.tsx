@@ -16,7 +16,7 @@ export interface SearchSchema {
   fullName: string;
 }
 
-const ContactListRecent = ({ navigation, route }: NavigationProps<Routes.ContactListAll>) => {
+const ContactListRecent = ({ navigation, route }: NavigationProps<Routes.ContactListRecent>) => {
   const id = useAppSelector((state) => state.session.id);
   const mail = useAppSelector((state) => state.session.email);
   const chat = useAppSelector((state) => state.chat);

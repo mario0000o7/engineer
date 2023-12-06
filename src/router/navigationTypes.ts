@@ -16,6 +16,7 @@ export enum Routes {
   ContactListNavigatorRecent = 'ContactListNavigatorRecent',
   ContactListNavigatorStable = 'ContactListNavigatorStable',
   ContactListAll = 'ContactListAll',
+  ContactListRecent = 'ContactListRecent',
   DoctorList = 'DoctorList',
   ChatNavigation = 'ChatNavigation',
   LoginNavigation = 'LoginNavigation',
@@ -45,7 +46,7 @@ export type RootStackParamList = {
   [Routes.ChatNavigation]: undefined;
   [Routes.LoginNavigation]: undefined;
   [Routes.Logout]: undefined;
-  [Routes.EmailStep]: { role: number };
+  [Routes.EmailStep]: { role: number; title: string };
   [Routes.PasswordStep]: undefined;
   [Routes.VerifyStep]: undefined;
   [Routes.BirthStep]: undefined;
@@ -55,6 +56,7 @@ export type RootStackParamList = {
   [Routes.ContactItem]: undefined;
   [Routes.RegisterDoctor]: undefined;
   [Routes.PDFViewer]: { file: CustomFile };
+  [Routes.ContactListRecent]: undefined;
 };
 
 export type NavigationProps<T extends Routes> = NativeStackScreenProps<RootStackParamList, T>;

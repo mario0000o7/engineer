@@ -40,7 +40,7 @@ const RegisterNavigation = () => {
             options={{ headerShown: false }}
             name={Routes.EmailStep}
             component={EmailStep}
-            initialParams={{ role: 2 }}
+            initialParams={{ role: 2, title: 'Pacjent' }}
           />
           <Stack.Screen
             options={{ headerShown: false }}

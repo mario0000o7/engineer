@@ -16,7 +16,8 @@ import {
   setLastName,
   setPhone,
   setPhoneCode,
-  setRole
+  setRole,
+  setTitle
 } from '~/redux/slices/registerSlice';
 import RegisterLogo from '~/assets/registerLogo.svg';
 import PhoneCode from '~/components/phoneCode';
@@ -67,6 +68,7 @@ const EmailStep = ({ navigation, route }: NavigationProps<Routes.EmailStep>) => 
           isEmailChecked = true;
           dispatch(setEmail(email));
           dispatch(setRole(route.params.role));
+          dispatch(setTitle(route.params.title));
         }
       })
       .catch((err) => {
@@ -143,7 +145,7 @@ const EmailStep = ({ navigation, route }: NavigationProps<Routes.EmailStep>) => 
             label={'Email'}
             keyboardType={'email-address'}
           />
-          <View row={true}>
+          <View row={true} style={{ width: 300 }}>
             <PhoneCode name={'phoneCode'} control={control} />
             <View style={{ width: 200 }}>
               <CustomTextInput
@@ -182,7 +184,10 @@ const EmailStep = ({ navigation, route }: NavigationProps<Routes.EmailStep>) => 
             <Text>{route.params.role == 2 ? 'Jesteś usługodawcą?' : 'Jesteś klientem?'}</Text>
             <Text
               onPress={() =>
-                navigation.navigate(Routes.EmailStep, { role: route.params.role == 2 ? 1 : 2 })
+                navigation.navigate(Routes.EmailStep, {
+                  role: route.params.role == 2 ? 1 : 2,
+                  title: route.params.role == 2 ? '' : 'Pacjent'
+                })
               }
               style={{ color: COLOR.PRIMARY, textAlign: 'center' }}>
               Kliknij tutaj

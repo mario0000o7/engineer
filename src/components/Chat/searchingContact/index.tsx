@@ -37,8 +37,12 @@ const SearchingContact = ({ control, name, onSubmit }: CustomTextInputProps) => 
               onChange(text);
               onSubmit!();
             }}
-            placeholder="Wyszukaj lekarza"
+            placeholderTextColor={COLOR.LIGHT_GREY}
+            placeholder="Wyszukaj użytkownika"
             value={value}
+            inputStyle={{
+              color: COLOR.BLACK
+            }}
             // onSubmitEditing={onSubmit}
             onClearIconPress={() => (value = '')}
           />

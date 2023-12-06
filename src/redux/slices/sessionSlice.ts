@@ -12,19 +12,22 @@ export const preloadToken = createAsyncThunk('preloadToken', async () => {
   return {
     token: token ?? undefined,
     id: decoded.id ?? undefined,
-    email: decoded.email ?? undefined
+    email: decoded.email ?? undefined,
+    role: decoded.role ?? undefined
   };
 });
 
 export interface JwtProps {
   id: number;
   email: string;
+  role: number;
 }
 
 export interface SessionState {
   token?: Jwt;
   id?: number;
   email?: string;
+  role?: number;
 }
 
 const initialState: SessionState = {};
@@ -51,6 +54,7 @@ const sessionSlice = createSlice({
       state.token = action.payload.token;
       state.id = action.payload.id;
       state.email = action.payload.email;
+      state.role = action.payload.role;
     });
   }
 });

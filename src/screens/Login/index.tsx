@@ -70,6 +70,7 @@ const LoginScreen = ({ navigation }: NavigationProps<Routes.Login>) => {
             error={errors.email?.message}
             placeholder={'Adres email'}
             textContentType={'emailAddress'}
+            keyboardType={'email-address'}
             label={'Email'}
           />
           <CustomTextInput
@@ -94,7 +95,7 @@ const LoginScreen = ({ navigation }: NavigationProps<Routes.Login>) => {
         <View style={{ alignSelf: 'center', paddingTop: 5 }}>
           <Text>Nie posiadasz konta?</Text>
           <Text
-            onPress={() => navigation.navigate(Routes.EmailStep, { role: 2 })}
+            onPress={() => navigation.navigate(Routes.EmailStep, { role: 2, title: 'Pacjent' })}
             style={{ color: COLOR.PRIMARY, textAlign: 'center' }}>
             Zarejestruj się
           </Text>

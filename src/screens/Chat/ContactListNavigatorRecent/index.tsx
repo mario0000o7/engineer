@@ -18,7 +18,7 @@ const ContactListNavigatorRecent = ({
         navigationBarColor: COLOR.BACKGROUND
       }}>
       <Stack.Screen
-        name={Routes.ContactListAll}
+        name={Routes.ContactListRecent}
         component={ContactListRecent}
         options={{ headerShown: false }}
       />

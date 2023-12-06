@@ -11,7 +11,7 @@ interface CustomTextInputProps {
 
 const phoneCode = ({ control, name, error }: CustomTextInputProps) => {
   return (
-    <View style={{ width: 'auto' }}>
+    <View style={{ width: 'auto', maxWidth: 100 }}>
       <Controller
         name={name}
         control={control}

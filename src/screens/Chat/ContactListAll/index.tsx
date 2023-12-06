@@ -2,7 +2,7 @@ import ContactItem from '../../../components/ContactItem';
 import { NavigationProps, Routes } from '~/router/navigationTypes';
 import { ScrollView } from 'react-native';
 import { COLOR } from '~/styles/constants';
-import { useFindUserMutation, useGetAllDoctorsMutation } from '~/redux/api/authApi';
+import { useFindUserMutation, useGetAllUsersMutation } from '~/redux/api/authApi';
 import { useCallback, useState } from 'react';
 import { useFocusEffect } from '@react-navigation/native';
 import { RegisterState } from '~/redux/slices/registerSlice';
@@ -12,15 +12,17 @@ import { useForm } from 'react-hook-form';
 import { SearchSchema } from '~/screens/Chat/ContactListRecent/ContactListRecent';
 import SearchingContact from '~/components/Chat/searchingContact';
 import styles from '~/screens/Chat/ContactListRecent/styles';
+import { useAppSelector } from '~/redux/hooks';
 
 const ContactListAll = ({ navigation, route }: NavigationProps<Routes.ContactListAll>) => {
-  const [getAllDoctors, { isLoading }] = useGetAllDoctorsMutation();
+  const [getAllUsers, { isLoading }] = useGetAllUsersMutation();
   const [listDoctors, setListDoctors] = useState<RegisterState[]>([]);
   const [tmpConversations, setTmpConversations] = useState(listDoctors);
   const [findUser, { isLoading: isLoadingFindUser }] = useFindUserMutation();
+  const session = useAppSelector((state) => state.session);
 
   const getAllUsersHandler = useCallback(() => {
-    getAllDoctors()
+    getAllUsers({ role: session.role === 1 ? 2 : 1 })
       .unwrap()
       .then((res) => {
         const listDoctors = res as RegisterState[];
@@ -36,7 +38,7 @@ const ContactListAll = ({ navigation, route }: NavigationProps<Routes.ContactLis
   });
   const { isSubmitted } = formState;
   const onSubmit = (data: SearchSchema) => {
-    findUser({ fullName: data.fullName, role: 1 })
+    findUser({ fullName: data.fullName, role: session.role === 1 ? 2 : 1 })
       .unwrap()
       .then((res) => {
         const listDoctors = res as RegisterState[];
