@@ -5,7 +5,7 @@ import { RootState } from '../store';
 export const baseApi = createApi({
   reducerPath: 'baseApi',
   baseQuery: fetchBaseQuery({
-    baseUrl: `http://192.168.0.11:8080/api`,
+    baseUrl: `https://engineer-backend.onrender.com/api`,
     prepareHeaders: (headers, { getState }) => {
       const session = (getState() as RootState).session;
       if (session.token) {
