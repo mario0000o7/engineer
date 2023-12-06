@@ -13,6 +13,13 @@ const MyDrawer = () => {
     <Drawer.Navigator
       id={'MainNavigator'}
       initialRouteName={Routes.Calendar}
+      screenOptions={{
+        drawerType: 'front',
+        drawerStyle: {
+          backgroundColor: 'red',
+          width: 50
+        }
+      }}
       detachInactiveScreens={true}>
       <Drawer.Screen
         name={Routes.Calendar}

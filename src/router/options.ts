@@ -5,6 +5,7 @@ export const commonOptions = {
     backgroundColor: COLOR.BACKGROUND
   },
   drawerStyle: {
-    backgroundColor: COLOR.BACKGROUND
+    backgroundColor: COLOR.BACKGROUND,
+    width: 150
   }
 };
