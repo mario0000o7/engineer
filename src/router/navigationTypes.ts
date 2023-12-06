@@ -26,7 +26,8 @@ export enum Routes {
   BirthStep = 'BirthStep',
   Message = 'Message',
   ContactItem = 'ContactItem',
-  PDFViewer = 'PDFViewer'
+  PDFViewer = 'PDFViewer',
+  RegisterDoctor = 'RegisterDoctor'
 }
 
 export type RootStackParamList = {
@@ -44,7 +45,7 @@ export type RootStackParamList = {
   [Routes.ChatNavigation]: undefined;
   [Routes.LoginNavigation]: undefined;
   [Routes.Logout]: undefined;
-  [Routes.EmailStep]: undefined;
+  [Routes.EmailStep]: { role: number };
   [Routes.PasswordStep]: undefined;
   [Routes.VerifyStep]: undefined;
   [Routes.BirthStep]: undefined;
@@ -52,6 +53,7 @@ export type RootStackParamList = {
   [Routes.ContactListNavigatorStable]: undefined;
   [Routes.ContactListAll]: undefined;
   [Routes.ContactItem]: undefined;
+  [Routes.RegisterDoctor]: undefined;
   [Routes.PDFViewer]: { file: CustomFile };
 };
 

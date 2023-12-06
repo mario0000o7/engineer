@@ -34,7 +34,7 @@ const VerifyStep = ({ navigation }: NavigationProps<Routes.VerifyStep>) => {
   };
 
   const sendCodeHandler = useCallback(() => {
-    dispatch(sendVerificationRedux(stored.phone)).then();
+    dispatch(sendVerificationRedux(stored.phoneCode + stored.phone)).then();
   }, [stored.phone]);
 
   useFocusEffect(sendCodeHandler);
@@ -52,7 +52,7 @@ const VerifyStep = ({ navigation }: NavigationProps<Routes.VerifyStep>) => {
 
   const onSendCode = async () => {
     // const result = sendSmsVerification(stored.phone);
-    dispatch(sendVerificationRedux(stored.phone)).then();
+    dispatch(sendVerificationRedux(stored.phoneCode + stored.phone)).then();
     for (let i = 10; i >= 0; i--) {
       setTimer(i);
       await new Promise((resolve) => setTimeout(resolve, 1000));

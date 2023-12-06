@@ -16,7 +16,13 @@ interface CustomTextInputProps {
     | 'telephoneNumber'
     | 'familyName'
     | 'givenName'
-    | 'oneTimeCode';
+    | 'oneTimeCode'
+    | 'streetAddressLine1'
+    | 'streetAddressLine2'
+    | 'addressCity'
+    | 'postalCode'
+    | 'jobTitle'
+    | 'countryName';
   keyboardType?: 'default' | 'email-address' | 'numeric' | 'phone-pad';
   maxLength?: number;
   label?: string;
@@ -43,7 +49,7 @@ const CustomTextInput = ({
         control={control}
         rules={{
           required: {
-            value: true,
+            value: textContentType !== 'streetAddressLine2',
             message: 'Te pole jest wymagane'
           },
           pattern:
@@ -75,7 +81,7 @@ const CustomTextInput = ({
               paddingVertical: 10
             }}
             floatingPlaceholderStyle={{
-              marginTop: value ? -15 : 0
+              marginTop: value ? -17 : 0
             }}
             textAlignVertical={'center'}
             onChangeText={onChange}

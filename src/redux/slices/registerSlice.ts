@@ -10,7 +10,14 @@ export interface RegisterState {
   lastName?: string;
   birthDate?: Date;
   gender?: string;
+  title?: string;
+  address1?: string;
+  address2?: string;
+  city?: string;
+  country?: string;
+  postalCode?: string;
   unReadMessages?: number;
+  phoneCode?: string;
 }
 
 const initialState: RegisterState = {
@@ -22,7 +29,14 @@ const initialState: RegisterState = {
   lastName: '',
   birthDate: new Date(),
   gender: '',
-  unReadMessages: 0
+  unReadMessages: 0,
+  title: '',
+  address1: '',
+  address2: '',
+  city: '',
+  country: '',
+  postalCode: '',
+  phoneCode: ''
 };
 
 const registerSlice = createSlice({
@@ -55,6 +69,27 @@ const registerSlice = createSlice({
     },
     setUnReadMessages(state, action: PayloadAction<number>) {
       state.unReadMessages = action.payload;
+    },
+    setTitle(state, action: PayloadAction<string>) {
+      state.title = action.payload;
+    },
+    setAddress1(state, action: PayloadAction<string>) {
+      state.address1 = action.payload;
+    },
+    setAddress2(state, action: PayloadAction<string>) {
+      state.address2 = action.payload;
+    },
+    setCity(state, action: PayloadAction<string>) {
+      state.city = action.payload;
+    },
+    setCountry(state, action: PayloadAction<string>) {
+      state.country = action.payload;
+    },
+    setPostalCode(state, action: PayloadAction<string>) {
+      state.postalCode = action.payload;
+    },
+    setPhoneCode(state, action: PayloadAction<string>) {
+      state.phoneCode = action.payload;
     }
   }
 });
@@ -68,6 +103,13 @@ export const {
   setLastName,
   setBirthDate,
   setGender,
+  setTitle,
+  setAddress1,
+  setAddress2,
+  setCity,
+  setCountry,
+  setPostalCode,
+  setPhoneCode,
   setUnReadMessages
 } = registerSlice.actions;
 

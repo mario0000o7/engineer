@@ -2,7 +2,7 @@ import { GiftedChatActionTypes } from '~/redux/types/giftedChat';
 import { Dispatch } from 'redux';
 import login from '~/utils/login';
 import { IMessage } from 'react-native-gifted-chat';
-import { mapMessage } from '~/utils/chat';
+import { mapMessage, mapUser } from '~/utils/chat';
 import { CometChat } from '@cometchat/chat-sdk-react-native';
 import {
   BaseQueryFn,
@@ -23,13 +23,17 @@ export const loginUserRedux =
 
     try {
       const result = await login(id);
-      dispatch({ type: 'LOGIN_SUCCESS' });
+      const user = await CometChat.getLoggedinUser();
+      console.log('User:', user);
+
+      dispatch({ type: 'LOGIN_SUCCESS', payload: mapUser(user!) });
       return result;
     } catch (error) {
       try {
         await createUser(id, mail);
         await login(id);
-        dispatch({ type: 'LOGIN_SUCCESS' });
+        const user = await CometChat.getLoggedinUser();
+        dispatch({ type: 'LOGIN_SUCCESS', payload: mapUser(user!) });
       } catch (error) {
         dispatch({ type: 'LOGIN_FAILURE' });
       }
@@ -38,8 +42,7 @@ export const loginUserRedux =
   };
 
 export const getMessagesRedux =
-  (idString: string, receiverIdString: string) =>
-  async (dispatch: Dispatch<GiftedChatActionTypes>) => {
+  (receiverIdString: string) => async (dispatch: Dispatch<GiftedChatActionTypes>) => {
     dispatch({ type: 'CLEAR_MESSAGES' });
     dispatch({ type: 'GET_MESSAGES_REQUEST' });
 
@@ -55,10 +58,10 @@ export const getMessagesRedux =
             CometChat.markAsRead(messages[i] as TextMessage | MediaMessage);
             messageList = messageList.concat(mapMessage(messages[i] as TextMessage | MediaMessage));
           }
-          const user = messageList.find((value) => value.user._id === idString)?.user!;
+
           dispatch({
             type: 'GET_MESSAGES_SUCCESS',
-            payload: { messages: messageList.reverse(), user: user }
+            payload: { messages: messageList.reverse() }
           });
         },
         (error) => {

@@ -5,10 +5,9 @@ import { useAppDispatch, useAppSelector } from '~/redux/hooks';
 import { useCheckEmailMutation, useCheckPhoneMutation } from '~/redux/api/authApi';
 import CustomTextInput from '~/components/LoginAndRegisterTextInput';
 import ErrorChip from '~/components/ErrorChip';
-import { Text } from 'react-native-ui-lib';
+import { Text, View } from 'react-native-ui-lib';
 import { COLOR } from '~/styles/constants';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
-import { View } from 'react-native';
 import { Button } from 'react-native-paper';
 import { NavigationProps, Routes } from '~/router/navigationTypes';
 import {
@@ -16,9 +15,11 @@ import {
   setFirstName,
   setLastName,
   setPhone,
+  setPhoneCode,
   setRole
 } from '~/redux/slices/registerSlice';
 import RegisterLogo from '~/assets/registerLogo.svg';
+import PhoneCode from '~/components/phoneCode';
 
 // ignore app already initialized error in snack
 export interface RegisterSchema {
@@ -27,9 +28,10 @@ export interface RegisterSchema {
   lastName: string;
   phone: string;
   role: number;
+  phoneCode: string;
 }
 
-const EmailStep = ({ navigation }: NavigationProps<Routes.EmailStep>) => {
+const EmailStep = ({ navigation, route }: NavigationProps<Routes.EmailStep>) => {
   const dispatch = useAppDispatch();
   const [checkEmail, { isLoading }] = useCheckEmailMutation();
   const [checkPhone, { isLoading: isLoadingPhoneNumber }] = useCheckPhoneMutation();
@@ -48,11 +50,12 @@ const EmailStep = ({ navigation }: NavigationProps<Routes.EmailStep>) => {
       firstName: stored.firstName,
       lastName: stored.lastName,
       phone: stored.phone,
-      role: stored.role
+      role: stored.role,
+      phoneCode: '+48'
     }
   });
 
-  const onSubmit = async ({ email, phone, firstName, lastName }: RegisterSchema) => {
+  const onSubmit = async ({ email, phone, firstName, lastName, phoneCode }: RegisterSchema) => {
     let isEmailChecked = false;
     let isPhoneChecked = false;
     await checkEmail({ email })
@@ -63,7 +66,7 @@ const EmailStep = ({ navigation }: NavigationProps<Routes.EmailStep>) => {
         } else {
           isEmailChecked = true;
           dispatch(setEmail(email));
-          dispatch(setRole(2));
+          dispatch(setRole(route.params.role));
         }
       })
       .catch((err) => {
@@ -78,6 +81,7 @@ const EmailStep = ({ navigation }: NavigationProps<Routes.EmailStep>) => {
         } else {
           isPhoneChecked = true;
           dispatch(setPhone(phone));
+          dispatch(setPhoneCode(phoneCode));
         }
       })
       .catch((err) => {
@@ -87,7 +91,7 @@ const EmailStep = ({ navigation }: NavigationProps<Routes.EmailStep>) => {
     if (isEmailChecked && isPhoneChecked) {
       dispatch(setFirstName(firstName));
       dispatch(setLastName(lastName));
-      navigation.navigate(Routes.VerifyStep);
+      navigation.navigate(route.params.role == 2 ? Routes.VerifyStep : Routes.RegisterDoctor);
     }
   };
 
@@ -110,7 +114,7 @@ const EmailStep = ({ navigation }: NavigationProps<Routes.EmailStep>) => {
           }}>
           Rejestracja
         </Text>
-        <RegisterLogo height={300} />
+        <RegisterLogo height={150} />
         <View style={{ width: 300, alignSelf: 'center' }}>
           <CustomTextInput
             name={'firstName'}
@@ -139,15 +143,21 @@ const EmailStep = ({ navigation }: NavigationProps<Routes.EmailStep>) => {
             label={'Email'}
             keyboardType={'email-address'}
           />
-          <CustomTextInput
-            name={'phone'}
-            control={control}
-            error={errors.phone?.message}
-            placeholder={'Numer telefonu'}
-            textContentType={'telephoneNumber'}
-            label={'phone'}
-            keyboardType={'phone-pad'}
-          />
+          <View row={true}>
+            <PhoneCode name={'phoneCode'} control={control} />
+            <View style={{ width: 200 }}>
+              <CustomTextInput
+                maxLength={9}
+                name={'phone'}
+                control={control}
+                error={errors.phone?.message}
+                placeholder={'Numer telefonu'}
+                textContentType={'telephoneNumber'}
+                label={'phone'}
+                keyboardType={'phone-pad'}
+              />
+            </View>
+          </View>
           {resError && <ErrorChip onClose={() => setResError('')} errorMsg={resError} />}
         </View>
 
@@ -169,9 +179,11 @@ const EmailStep = ({ navigation }: NavigationProps<Routes.EmailStep>) => {
             </Text>
           </View>
           <View style={{ paddingLeft: 10 }}>
-            <Text>Jesteś usługodawcą?</Text>
+            <Text>{route.params.role == 2 ? 'Jesteś usługodawcą?' : 'Jesteś klientem?'}</Text>
             <Text
-              onPress={() => navigation.navigate(Routes.Login)}
+              onPress={() =>
+                navigation.navigate(Routes.EmailStep, { role: route.params.role == 2 ? 1 : 2 })
+              }
               style={{ color: COLOR.PRIMARY, textAlign: 'center' }}>
               Kliknij tutaj
             </Text>

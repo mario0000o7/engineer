@@ -8,6 +8,7 @@ import { useEffect } from 'react';
 import EmailStep from '~/screens/Register/EmailStep';
 import VerifyStep from '~/screens/Register/VeryficationPhone';
 import BirthStep from '~/screens/Register/BirthStep';
+import RegisterDoctor from '~/screens/Register/RegisterDoctor';
 
 const RegisterNavigation = () => {
   const Stack = createNativeStackNavigator<RootStackParamList>();
@@ -39,6 +40,7 @@ const RegisterNavigation = () => {
             options={{ headerShown: false }}
             name={Routes.EmailStep}
             component={EmailStep}
+            initialParams={{ role: 2 }}
           />
           <Stack.Screen
             options={{ headerShown: false }}
@@ -49,6 +51,11 @@ const RegisterNavigation = () => {
             options={{ headerShown: false }}
             name={Routes.BirthStep}
             component={BirthStep}
+          />
+          <Stack.Screen
+            options={{ headerShown: false }}
+            name={Routes.RegisterDoctor}
+            component={RegisterDoctor}
           />
         </>
       )}

@@ -21,15 +21,15 @@ const giftedChatReducer = (state = initialState, action: any): GiftedChatState =
     case 'LOGIN_SUCCESS':
       return {
         ...state,
-        loading: false
+        loading: false,
+        user: action.payload
       };
 
     case 'GET_MESSAGES_SUCCESS':
       return {
         ...state,
         loading: false,
-        messages: action.payload.messages,
-        user: action.payload.user
+        messages: action.payload.messages
       };
 
     case 'LOGIN_FAILURE':

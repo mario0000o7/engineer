@@ -8,7 +8,7 @@ import qs from 'qs';
 export const sendSmsVerification = async (phoneNumber: string) => {
   try {
     const body = {
-      To: '+48' + phoneNumber.replaceAll(/\s/g, ''),
+      To: phoneNumber.replaceAll(/\s/g, ''),
       Channel: 'sms'
     };
 

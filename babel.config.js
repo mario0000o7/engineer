@@ -15,7 +15,8 @@ module.exports = function (api) {
             '~/redux': './src/redux',
             '~/hooks': './src/hooks',
             '~/styles': './src/styles',
-            '~/utils': './src/utils'
+            '~/utils': './src/utils',
+            '~/types': './src/types'
           }
         }
       ],
