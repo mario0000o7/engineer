@@ -10,4 +10,6 @@ export module COLOR {
   export const LIGHT_GREEN = '#00FF00';
   export const GREEN = '#00B300';
   export const ORANGE = '#FFA500';
+  export const RED = '#FF0000';
+  export const YELLOW = '#FFFF00';
 }

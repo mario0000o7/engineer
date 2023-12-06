@@ -1,9 +1,9 @@
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { NavigationProps, RootStackParamList, Routes } from '~/router/navigationTypes';
 import { COLOR } from '~/styles/constants';
-import MessageChat from '~/screens/Chat/Message';
 import PDFViewer from '~/screens/Chat/PDFViewer';
 import OfficeList from '~/screens/Office/OfficeList';
+import OfficeDetails from '~/screens/Office/OfficeDetails';
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
 
@@ -23,8 +23,8 @@ const OfficeNavigator = ({
         options={{ headerShown: false }}
       />
       <Stack.Screen
-        name={Routes.Message}
-        component={MessageChat}
+        name={Routes.OfficeDetails}
+        component={OfficeDetails}
         options={({ route }) => ({
           headerTitle: route.params.name
         })}

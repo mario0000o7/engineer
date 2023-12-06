@@ -18,7 +18,11 @@ const OfficeList = ({ navigation }: NavigationProps<Routes.OfficeList>) => {
             flex: 1
           }}
         />
-        <TouchableOpacity marginL-5>
+        <TouchableOpacity
+          marginL-5
+          onPress={() =>
+            navigation.navigate(Routes.OfficeDetails, { create: true, name: 'Utwórz gabinet' })
+          }>
           <AntDesign name={'pluscircle'} size={50} color={COLOR.GREEN} />
         </TouchableOpacity>
       </View>

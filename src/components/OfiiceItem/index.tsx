@@ -33,6 +33,12 @@ const OfficeItem = ({ navigation }: OfficeItemProps) => {
         </View>
         <View style={{ marginLeft: 'auto' }}>
           <TouchableOpacity
+            onPress={() => {
+              navigation.navigate(Routes.OfficeDetails, {
+                id: 1,
+                name: 'Gabinet Stomatologiczny Ząbek'
+              });
+            }}
             centerV={true}
             centerH={true}
             style={{ width: 50, height: 50 }}

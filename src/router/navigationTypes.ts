@@ -28,7 +28,8 @@ export enum Routes {
   RegisterDoctor = 'RegisterDoctor',
   OfficeList = 'OfficeList',
   OfficeNavigator = 'OfficeNavigator',
-  OfficeItem = 'OfficeItem'
+  OfficeItem = 'OfficeItem',
+  OfficeDetails = 'OfficeDetails'
 }
 
 export type RootStackParamList = {
@@ -57,6 +58,7 @@ export type RootStackParamList = {
   [Routes.OfficeList]: undefined;
   [Routes.OfficeNavigator]: undefined;
   [Routes.OfficeItem]: undefined;
+  [Routes.OfficeDetails]: { name: string; id: number; create?: boolean };
 };
 
 export type NavigationProps<T extends Routes> = NativeStackScreenProps<RootStackParamList, T>;
