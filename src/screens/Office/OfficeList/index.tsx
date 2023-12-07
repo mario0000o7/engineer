@@ -9,7 +9,7 @@ import { COLOR } from '~/styles/constants';
 const OfficeList = ({ navigation }: NavigationProps<Routes.OfficeList>) => {
   return (
     <View useSafeArea={true} width={'100%'} backgroundColor={COLOR.BACKGROUND}>
-      <View centerV={true} row={true} margin={10}>
+      <View centerV={true} row={true} margin-10>
         <Searchbar
           style={{
             backgroundColor: COLOR.BACKGROUND,
@@ -17,11 +17,16 @@ const OfficeList = ({ navigation }: NavigationProps<Routes.OfficeList>) => {
             borderColor: COLOR.PRIMARY,
             flex: 1
           }}
+          value={''}
         />
         <TouchableOpacity
           marginL-5
           onPress={() =>
-            navigation.navigate(Routes.OfficeDetails, { create: true, name: 'Utwórz gabinet' })
+            navigation.navigate(Routes.OfficeDetails, {
+              create: true,
+              name: 'Utwórz gabinet',
+              id: 0
+            })
           }>
           <AntDesign name={'pluscircle'} size={50} color={COLOR.GREEN} />
         </TouchableOpacity>

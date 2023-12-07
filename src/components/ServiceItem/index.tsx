@@ -1,11 +1,17 @@
-import { Text, View } from 'react-native-ui-lib';
+import { TextField, View } from 'react-native-ui-lib';
 
 const ServiceItem = () => {
   return (
-    <View>
-      <Text>Nazwa usługi</Text>
-      <Text>Czas trwania</Text>
-      <Text>Cena usługi</Text>
+    <View margin-5 row={true}>
+      <View>
+        <TextField placeholder={'Nazwa usługi'} />
+      </View>
+      <View style={{ marginLeft: 'auto' }}>
+        <TextField placeholder={'Czas trwania'} />
+      </View>
+      <View style={{ marginLeft: 'auto' }}>
+        <TextField placeholder={'Cena usługi'} />
+      </View>
     </View>
   );
 };

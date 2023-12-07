@@ -13,7 +13,7 @@ const OfficeItem = ({ navigation }: OfficeItemProps) => {
       backgroundColor={COLOR.BACKGROUND}
       style={{ borderWidth: 3, borderColor: COLOR.PRIMARY }}
       height={150}
-      padding={10}
+      padding-10
       br50={true}
       marginL-10
       marginR-10

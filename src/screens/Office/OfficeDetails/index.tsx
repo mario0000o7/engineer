@@ -1,5 +1,5 @@
 import { NavigationProps, Routes } from '~/router/navigationTypes';
-import { TextField, View } from 'react-native-ui-lib';
+import { Text, TextField, View } from 'react-native-ui-lib';
 import { ScrollView } from 'react-native';
 import { Button } from 'react-native-paper';
 import { COLOR } from '~/styles/constants';
@@ -64,6 +64,17 @@ const OfficeDetails = ({ navigation, route }: NavigationProps<Routes.OfficeDetai
                 placeholder={'Kod pocztowy'}
                 floatingPlaceholder={true}
               />
+            </View>
+          </View>
+          <View height={30} row={true} padding-5 marginT-10 style={{ borderBottomWidth: 3 }}>
+            <View>
+              <Text>Nazwa usługi</Text>
+            </View>
+            <View style={{ marginLeft: 'auto' }}>
+              <Text>Czas trwania</Text>
+            </View>
+            <View style={{ marginLeft: 'auto' }}>
+              <Text>Cena usługi</Text>
             </View>
           </View>
           <ScrollView
