@@ -20,6 +20,7 @@ const ContactListAll = ({ navigation, route }: NavigationProps<Routes.ContactLis
   const [tmpConversations, setTmpConversations] = useState(listDoctors);
   const [findUser, { isLoading: isLoadingFindUser }] = useFindUserMutation();
   const session = useAppSelector((state) => state.session);
+  console.log(session);
 
   const getAllUsersHandler = useCallback(() => {
     getAllUsers({ role: session.role === 1 ? 2 : 1 })

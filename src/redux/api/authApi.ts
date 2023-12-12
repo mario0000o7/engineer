@@ -1,5 +1,6 @@
 import { RegisterState } from '../slices/registerSlice';
 import { baseApi } from './baseApi';
+import { OfficeState } from '~/types/office';
 
 export const authApi = baseApi.injectEndpoints({
   endpoints: (builder) => ({
@@ -53,6 +54,34 @@ export const authApi = baseApi.injectEndpoints({
         url: '/user/getUserByIds',
         body: data
       })
+    }),
+    createOffice: builder.mutation<void, OfficeState>({
+      query: (data) => ({
+        method: 'POST',
+        url: '/office/create',
+        body: data
+      })
+    }),
+    getOfficesByIdOwner: builder.mutation<[OfficeState], { ownerId: number }>({
+      query: (data) => ({
+        method: 'POST',
+        url: '/office/retrieveByOwnerId',
+        body: data
+      })
+    }),
+    updateOffice: builder.mutation<number, OfficeState>({
+      query: (data) => ({
+        method: 'POST',
+        url: '/office/update',
+        body: data
+      })
+    }),
+    deleteOffice: builder.mutation<number, { officeId: number }>({
+      query: (data) => ({
+        method: 'POST',
+        url: '/office/delete',
+        body: data
+      })
     })
   })
 });
@@ -64,5 +93,9 @@ export const {
   useCheckEmailMutation,
   useFindUserMutation,
   useGetUserByIdsMutation,
-  useGetAllUsersMutation
+  useGetAllUsersMutation,
+  useCreateOfficeMutation,
+  useGetOfficesByIdOwnerMutation,
+  useUpdateOfficeMutation,
+  useDeleteOfficeMutation
 } = authApi;

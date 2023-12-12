@@ -18,7 +18,7 @@ import TextMessage = CometChat.TextMessage;
 import MediaMessage = CometChat.MediaMessage;
 
 export const loginUserRedux =
-  (id: string, mail: string) => async (dispatch: Dispatch<GiftedChatActionTypes>) => {
+  (id: string, mail: string, role: number) => async (dispatch: Dispatch<GiftedChatActionTypes>) => {
     dispatch({ type: 'LOGIN_REQUEST' });
 
     try {
@@ -30,7 +30,7 @@ export const loginUserRedux =
       return result;
     } catch (error) {
       try {
-        await createUser(id, mail);
+        await createUser(id, mail, role);
         await login(id);
         const user = await CometChat.getLoggedinUser();
         dispatch({ type: 'LOGIN_SUCCESS', payload: mapUser(user!) });

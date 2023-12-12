@@ -2,12 +2,14 @@ import { NavigationProps, Routes } from '~/router/navigationTypes';
 import { Text, TouchableOpacity, View } from 'react-native-ui-lib';
 import { COLOR } from '~/styles/constants';
 import Feather from 'react-native-vector-icons/Feather';
+import { OfficeState } from '~/types/office';
 
 interface OfficeItemProps {
   navigation: NavigationProps<Routes.OfficeList>['navigation'];
+  office: OfficeState;
 }
 
-const OfficeItem = ({ navigation }: OfficeItemProps) => {
+const OfficeItem = ({ navigation, office }: OfficeItemProps) => {
   return (
     <View
       backgroundColor={COLOR.BACKGROUND}
@@ -24,19 +26,20 @@ const OfficeItem = ({ navigation }: OfficeItemProps) => {
           fontFamily: 'Poppins_600SemiBold',
           fontSize: 25
         }}>
-        Gabinet Stomatologiczny Ząbek
+        {office.name}
       </Text>
       <View row={true}>
         <View>
-          <Text style={{ fontFamily: 'Poppins_400Regular', fontSize: 15 }}>ul. Wrocławska 12</Text>
-          <Text style={{ fontFamily: 'Poppins_400Regular', fontSize: 15 }}>Lubin</Text>
+          <Text style={{ fontFamily: 'Poppins_400Regular', fontSize: 15 }}>{office.address1}</Text>
+          <Text style={{ fontFamily: 'Poppins_400Regular', fontSize: 15 }}>{office.city}</Text>
         </View>
         <View style={{ marginLeft: 'auto' }}>
           <TouchableOpacity
             onPress={() => {
               navigation.navigate(Routes.OfficeDetails, {
                 id: 1,
-                name: 'Gabinet Stomatologiczny Ząbek'
+                name: office.name,
+                office: office
               });
             }}
             centerV={true}

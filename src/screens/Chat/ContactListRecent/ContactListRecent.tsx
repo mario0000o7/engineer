@@ -18,6 +18,7 @@ export interface SearchSchema {
 
 const ContactListRecent = ({ navigation, route }: NavigationProps<Routes.ContactListRecent>) => {
   const id = useAppSelector((state) => state.session.id);
+  const role = useAppSelector((state) => state.session.role);
   const mail = useAppSelector((state) => state.session.email);
   const chat = useAppSelector((state) => state.chat);
   const dispatchChat = useAppDispatch();
@@ -25,7 +26,7 @@ const ContactListRecent = ({ navigation, route }: NavigationProps<Routes.Contact
   const [getUserByIds] = useGetUserByIdsMutation();
 
   const getAllUsersHandler = useCallback(() => {
-    dispatchChat(loginUserRedux(id!.toString(), mail!)).then(() => {
+    dispatchChat(loginUserRedux(id!.toString(), mail!, role!)).then(() => {
       dispatchChat(getRecentConversationsStatesRedux(getUserByIds)).then();
     });
   }, []);

@@ -11,10 +11,11 @@ export const useChatInit = (
   id: number,
   mail: string,
   receiverId: number,
-  dispatch: ThunkDispatch<any, any, any>
+  dispatch: ThunkDispatch<any, any, any>,
+  role: number
 ) =>
   useCallback(() => {
-    dispatch(loginUserRedux(id.toString(), mail)).then(() => {
+    dispatch(loginUserRedux(id.toString(), mail, role)).then(() => {
       dispatch(getMessagesRedux(receiverId.toString())).then();
     });
 

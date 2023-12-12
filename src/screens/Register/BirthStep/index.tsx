@@ -47,7 +47,7 @@ const BirthStep = ({ navigation }: NavigationProps<Routes.BirthStep>) => {
       .unwrap()
       .then(({ token }) => {
         const decoded = jwtDecode(token ?? '') as JwtProps;
-        createUser(decoded!.id.toString(), decoded.email!);
+        createUser(decoded!.id.toString(), decoded.email!, decoded.role!);
         dispatch(setToken(token));
       })
       .catch((err) => {

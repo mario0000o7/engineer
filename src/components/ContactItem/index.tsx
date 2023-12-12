@@ -53,7 +53,7 @@ const ContactItem = ({ navigation, registerState }: ContactItemProps) => {
             style={{ backgroundColor: COLOR.PRIMARY }}
             onPress={() => {
               navigation.navigate(Routes.Message, {
-                name: `Lek. ${registerState.firstName} ${registerState.lastName}`,
+                name: `${registerState.title} ${registerState.firstName} ${registerState.lastName}`,
                 id: registerState.id!
               });
             }}

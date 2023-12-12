@@ -2,6 +2,7 @@
 
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { CustomFile } from '~/types/CustomMessage';
+import { OfficeState } from '~/types/office';
 
 export enum Routes {
   MainNavigation = 'MainNavigation',
@@ -58,7 +59,7 @@ export type RootStackParamList = {
   [Routes.OfficeList]: undefined;
   [Routes.OfficeNavigator]: undefined;
   [Routes.OfficeItem]: undefined;
-  [Routes.OfficeDetails]: { name: string; id: number; create?: boolean };
+  [Routes.OfficeDetails]: { name: string; id: number; create?: boolean; office?: OfficeState };
 };
 
 export type NavigationProps<T extends Routes> = NativeStackScreenProps<RootStackParamList, T>;

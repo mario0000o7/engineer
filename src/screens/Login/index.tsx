@@ -32,6 +32,7 @@ const LoginScreen = ({ navigation }: NavigationProps<Routes.Login>) => {
   } = useForm<LoginSchema>();
 
   const onSubmit = ({ email, password }: LoginSchema) => {
+    console.log(email, password);
     login({ email, password })
       .unwrap()
       .then(({ token }) => {
