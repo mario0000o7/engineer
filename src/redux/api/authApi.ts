@@ -1,6 +1,7 @@
 import { RegisterState } from '../slices/registerSlice';
 import { baseApi } from './baseApi';
 import { OfficeState } from '~/types/office';
+import { ServiceState } from '~/types/service';
 
 export const authApi = baseApi.injectEndpoints({
   endpoints: (builder) => ({
@@ -82,6 +83,27 @@ export const authApi = baseApi.injectEndpoints({
         url: '/office/delete',
         body: data
       })
+    }),
+    createService: builder.mutation<void, ServiceState>({
+      query: (data) => ({
+        method: 'POST',
+        url: '/service/create',
+        body: data
+      })
+    }),
+    getServicesByIdOwner: builder.mutation<[ServiceState], { officeId: number }>({
+      query: (data) => ({
+        method: 'POST',
+        url: '/service/retrieveAllByOfficeId',
+        body: data
+      })
+    }),
+    deleteService: builder.mutation<number, { serviceId: number }>({
+      query: (data) => ({
+        method: 'POST',
+        url: '/service/delete',
+        body: data
+      })
     })
   })
 });
@@ -97,5 +119,7 @@ export const {
   useCreateOfficeMutation,
   useGetOfficesByIdOwnerMutation,
   useUpdateOfficeMutation,
-  useDeleteOfficeMutation
+  useDeleteOfficeMutation,
+  useCreateServiceMutation,
+  useGetServicesByIdOwnerMutation
 } = authApi;

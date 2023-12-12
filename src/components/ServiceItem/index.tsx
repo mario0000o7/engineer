@@ -3,6 +3,8 @@ import { AntDesign } from '@expo/vector-icons';
 import { Controller, useForm } from 'react-hook-form';
 import TimePickerCustom from '~/components/TimePickerCustom';
 import PriceInputCustom from '~/components/PriceInputCustom';
+import { ServiceState } from '~/types/service';
+import React from 'react';
 
 export interface ServiceItemSchema {
   name: string;
@@ -10,18 +12,34 @@ export interface ServiceItemSchema {
   price: number;
 }
 
-const ServiceItem = () => {
+interface ServiceItemProps {
+  service?: ServiceState;
+  create?: boolean;
+  setServices?: React.Dispatch<React.SetStateAction<ServiceState[]>>;
+}
+
+const ServiceItem = ({ service, create }: ServiceItemProps) => {
   const {
     control,
     handleSubmit,
     formState: { errors }
   } = useForm<ServiceItemSchema>({
     defaultValues: {
-      name: '',
-      duration: new Date(),
-      price: 0
+      name: create ? '' : service?.name!,
+      duration: create ? new Date() : new Date(service?.duration!),
+      price: create ? 0 : service?.price!
     }
   });
+
+  const onSubmitCreate = (data: ServiceItemSchema) => {
+    console.log(data);
+  };
+  const onSubmitUpdate = (data: ServiceItemSchema) => {
+    console.log(data);
+  };
+  const onSubmitDelete = (data: ServiceItemSchema) => {
+    console.log(data);
+  };
 
   return (
     <View row={true} margin-5>
@@ -60,12 +78,23 @@ const ServiceItem = () => {
       </View>
       <View style={{ marginLeft: 'auto' }}></View>
       <View centerV={true} row={true} style={{ marginLeft: 'auto' }}>
-        <TouchableOpacity>
-          <AntDesign name={'edit'} size={30} />
-        </TouchableOpacity>
-        <TouchableOpacity>
-          <AntDesign style={{ marginLeft: 10 }} name={'delete'} size={30} />
-        </TouchableOpacity>
+        {/*<TouchableOpacity>*/}
+        {/*  <AntDesign name={'edit'} size={30} />*/}
+        {/*</TouchableOpacity>*/}
+        {create ? (
+          <TouchableOpacity>
+            <AntDesign style={{ marginLeft: 10 }} name={'plus'} size={30} />
+          </TouchableOpacity>
+        ) : (
+          <>
+            <TouchableOpacity>
+              <AntDesign style={{ marginLeft: 10 }} name={'delete'} size={30} />
+            </TouchableOpacity>
+            <TouchableOpacity>
+              <AntDesign name={'save'} size={30} />
+            </TouchableOpacity>
+          </>
+        )}
       </View>
     </View>
   );

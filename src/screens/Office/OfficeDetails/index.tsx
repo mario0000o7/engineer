@@ -10,11 +10,14 @@ import TimePickerCustom from '~/components/TimePickerCustom';
 import {
   useCreateOfficeMutation,
   useDeleteOfficeMutation,
+  useGetServicesByIdOwnerMutation,
   useUpdateOfficeMutation
 } from '~/redux/api/authApi';
 import { OfficeState } from '~/types/office';
-import { useState } from 'react';
+import { useCallback, useState } from 'react';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
+import { ServiceState } from '~/types/service';
+import { useFocusEffect } from '@react-navigation/native';
 
 export interface OfficeDetailsSchema {
   name: string;
@@ -30,6 +33,9 @@ const OfficeDetails = ({ navigation, route }: NavigationProps<Routes.OfficeDetai
   const [createOffice, { isLoading }] = useCreateOfficeMutation();
   const [updateOffice, { isLoading: isLoadingUpdate }] = useUpdateOfficeMutation();
   const [deleteOffice, { isLoading: isLoadingDelete }] = useDeleteOfficeMutation();
+  const [getServicesByIdOwner, { isLoading: isLoadingServices }] =
+    useGetServicesByIdOwnerMutation();
+  const [services, setServices] = useState<ServiceState[]>([]);
   const { office } = route.params;
   const [timeFrom, setTimeFrom] = office?.timeFrom!
     ? useState<Date>(new Date(office?.timeFrom!))
@@ -68,6 +74,19 @@ const OfficeDetails = ({ navigation, route }: NavigationProps<Routes.OfficeDetai
       })
       .catch((err) => console.log(err));
   };
+
+  const serviceListHandler = useCallback(() => {
+    getServicesByIdOwner({ officeId: route.params.office?.id! })
+      .unwrap()
+      .then((res) => {
+        console.log(res);
+        setServices(res);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  }, []);
+  useFocusEffect(serviceListHandler);
 
   const {
     control,
@@ -151,28 +170,29 @@ const OfficeDetails = ({ navigation, route }: NavigationProps<Routes.OfficeDetai
                 refTimeFrom={timeFrom}
               />
             </View>
-            <View
-              centerH={true}
-              height={45}
-              row={true}
-              padding-5
-              marginT-10
-              style={{ borderBottomWidth: 3 }}>
-              <Text style={{ fontSize: 25 }}>Usługi</Text>
-            </View>
-            <ScrollView
-              style={{ height: 230 }}
-              nestedScrollEnabled={true}
-              showsVerticalScrollIndicator={false}>
-              <ServiceItem />
-              <ServiceItem />
-              <ServiceItem />
-              <ServiceItem />
-              <ServiceItem />
-              <ServiceItem />
-              <ServiceItem />
-              <ServiceItem />
-            </ScrollView>
+            {!route.params.create! && (
+              <>
+                <View
+                  centerH={true}
+                  height={45}
+                  row={true}
+                  padding-5
+                  marginT-10
+                  style={{ borderBottomWidth: 3 }}>
+                  <Text style={{ fontSize: 25 }}>Usługi</Text>
+                </View>
+
+                <ScrollView
+                  style={{ height: 230 }}
+                  nestedScrollEnabled={true}
+                  showsVerticalScrollIndicator={false}>
+                  {services.map((service) => (
+                    <ServiceItem key={service.id} service={service} />
+                  ))}
+                  <ServiceItem create={true} />
+                </ScrollView>
+              </>
+            )}
           </View>
           <View row={true} centerH={true}>
             <Button
