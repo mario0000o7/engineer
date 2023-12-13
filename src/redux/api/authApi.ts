@@ -84,7 +84,7 @@ export const authApi = baseApi.injectEndpoints({
         body: data
       })
     }),
-    createService: builder.mutation<void, ServiceState>({
+    createService: builder.mutation<ServiceState, ServiceState>({
       query: (data) => ({
         method: 'POST',
         url: '/service/create',
@@ -104,6 +104,13 @@ export const authApi = baseApi.injectEndpoints({
         url: '/service/delete',
         body: data
       })
+    }),
+    updateService: builder.mutation<number, ServiceState>({
+      query: (data) => ({
+        method: 'POST',
+        url: '/service/update',
+        body: data
+      })
     })
   })
 });
@@ -121,5 +128,7 @@ export const {
   useUpdateOfficeMutation,
   useDeleteOfficeMutation,
   useCreateServiceMutation,
-  useGetServicesByIdOwnerMutation
+  useGetServicesByIdOwnerMutation,
+  useDeleteServiceMutation,
+  useUpdateServiceMutation
 } = authApi;

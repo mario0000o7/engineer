@@ -21,9 +21,10 @@ const MessageChat = ({ navigation, route }: NavigationProps<Routes.Message>) => 
   const id = useAppSelector((state) => state.session.id);
   const mail = useAppSelector((state) => state.session.email);
   const chat = useAppSelector((state) => state.chat);
+  const role = useAppSelector((state) => state.session.role);
   const dispatchChat = useAppDispatch();
 
-  useFocusEffect(useChatInit(id!, mail!, route.params.id, dispatchChat));
+  useFocusEffect(useChatInit(id!, mail!, route.params.id, dispatchChat, role!));
 
   // add a function attach file using DocumentPicker.pick
 

@@ -21,7 +21,30 @@ const PriceInputCustom = ({ control, name, error }: CustomTextInputProps) => {
           }
         }}
         render={({ field: { onChange, value } }) => (
-          <NumberInput onChangeNumber={onChange} initialNumber={value} trailingText={'zł'} />
+          <NumberInput
+            onChangeNumber={(number) => {
+              if (number.type !== 'error') {
+                console.log(number.number);
+                onChange(number.number);
+              }
+            }}
+            trailingTextStyle={{
+              fontFamily: 'Poppins_400Regular',
+              fontSize: 20
+            }}
+            textFieldProps={{
+              style: {
+                fontFamily: 'Poppins_400Regular',
+                fontSize: 20
+              }
+            }}
+            leadingTextStyle={{
+              fontFamily: 'Poppins_400Regular',
+              fontSize: 20
+            }}
+            initialNumber={value}
+            trailingText={'zł'}
+          />
         )}
       />
       {error && (

@@ -1,8 +1,8 @@
 import { NavigationProps, Routes } from '~/router/navigationTypes';
 import { Text, TouchableOpacity, View } from 'react-native-ui-lib';
 import { COLOR } from '~/styles/constants';
-import Feather from 'react-native-vector-icons/Feather';
 import { OfficeState } from '~/types/office';
+import { MaterialIcons } from '@expo/vector-icons';
 
 interface OfficeItemProps {
   navigation: NavigationProps<Routes.OfficeList>['navigation'];
@@ -13,7 +13,18 @@ const OfficeItem = ({ navigation, office }: OfficeItemProps) => {
   return (
     <View
       backgroundColor={COLOR.BACKGROUND}
-      style={{ borderWidth: 3, borderColor: COLOR.PRIMARY }}
+      style={{
+        borderWidth: 3,
+        borderColor: COLOR.DARK_GREY,
+        shadowColor: COLOR.DARK_GREY,
+        shadowOffset: {
+          width: 0,
+          height: 4
+        },
+        shadowOpacity: 0.5,
+        shadowRadius: 5.62,
+        elevation: 6
+      }}
       height={150}
       padding-10
       br50={true}
@@ -29,9 +40,21 @@ const OfficeItem = ({ navigation, office }: OfficeItemProps) => {
         {office.name}
       </Text>
       <View row={true}>
-        <View>
-          <Text style={{ fontFamily: 'Poppins_400Regular', fontSize: 15 }}>{office.address1}</Text>
-          <Text style={{ fontFamily: 'Poppins_400Regular', fontSize: 15 }}>{office.city}</Text>
+        <View row={true}>
+          <View>
+            <Text style={{ fontFamily: 'Poppins_400Regular', fontSize: 15 }}>
+              {office.address1}
+            </Text>
+            <Text style={{ fontFamily: 'Poppins_400Regular', fontSize: 15 }}>
+              {office.address2}
+            </Text>
+          </View>
+          <View marginL-10>
+            <Text style={{ fontFamily: 'Poppins_400Regular', fontSize: 15 }}>
+              {office.postalCode}
+            </Text>
+            <Text style={{ fontFamily: 'Poppins_400Regular', fontSize: 15 }}>{office.city}</Text>
+          </View>
         </View>
         <View style={{ marginLeft: 'auto' }}>
           <TouchableOpacity
@@ -47,7 +70,7 @@ const OfficeItem = ({ navigation, office }: OfficeItemProps) => {
             style={{ width: 50, height: 50 }}
             br40={true}
             backgroundColor={COLOR.ORANGE}>
-            <Feather name={'edit'} color={COLOR.BLACK} size={30} />
+            <MaterialIcons name={'design-services'} color={COLOR.BLACK} size={30} />
           </TouchableOpacity>
         </View>
       </View>

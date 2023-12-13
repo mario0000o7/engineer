@@ -1,7 +1,6 @@
 import { NavigationProps, Routes } from '~/router/navigationTypes';
-import { Text, View } from 'react-native-ui-lib';
-import { ScrollView } from 'react-native';
-import { Button } from 'react-native-paper';
+import { Text, TouchableOpacity, View } from 'react-native-ui-lib';
+import { ActivityIndicator } from 'react-native';
 import { COLOR } from '~/styles/constants';
 import ServiceItem from '~/components/ServiceItem';
 import OfficeInputCustom from '~/components/OfficeInputCustom';
@@ -15,9 +14,11 @@ import {
 } from '~/redux/api/authApi';
 import { OfficeState } from '~/types/office';
 import { useCallback, useState } from 'react';
-import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import { ServiceState } from '~/types/service';
 import { useFocusEffect } from '@react-navigation/native';
+import ErrorChip from '~/components/ErrorChip';
+import { AntDesign } from '@expo/vector-icons';
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 
 export interface OfficeDetailsSchema {
   name: string;
@@ -33,6 +34,8 @@ const OfficeDetails = ({ navigation, route }: NavigationProps<Routes.OfficeDetai
   const [createOffice, { isLoading }] = useCreateOfficeMutation();
   const [updateOffice, { isLoading: isLoadingUpdate }] = useUpdateOfficeMutation();
   const [deleteOffice, { isLoading: isLoadingDelete }] = useDeleteOfficeMutation();
+
+  const [resError, setResError] = useState('');
   const [getServicesByIdOwner, { isLoading: isLoadingServices }] =
     useGetServicesByIdOwnerMutation();
   const [services, setServices] = useState<ServiceState[]>([]);
@@ -49,6 +52,10 @@ const OfficeDetails = ({ navigation, route }: NavigationProps<Routes.OfficeDetai
       .unwrap()
       .then(() => {
         navigation.goBack();
+      })
+      .catch((err) => {
+        console.log(err);
+        setResError('Nie udało się dodać gabinetu');
       });
   };
 
@@ -62,7 +69,10 @@ const OfficeDetails = ({ navigation, route }: NavigationProps<Routes.OfficeDetai
         console.log(res);
         navigation.goBack();
       })
-      .catch((err) => console.log(err));
+      .catch((err) => {
+        console.log(err);
+        setResError('Nie udało się zaktualizować gabinetu');
+      });
   };
 
   const onSubmitDelete = () => {
@@ -72,10 +82,14 @@ const OfficeDetails = ({ navigation, route }: NavigationProps<Routes.OfficeDetai
       .then(() => {
         navigation.goBack();
       })
-      .catch((err) => console.log(err));
+      .catch((err) => {
+        console.log(err);
+        setResError('Nie udało się usunąć gabinetu');
+      });
   };
 
   const serviceListHandler = useCallback(() => {
+    if (route.params.create) return;
     getServicesByIdOwner({ officeId: route.params.office?.id! })
       .unwrap()
       .then((res) => {
@@ -84,9 +98,38 @@ const OfficeDetails = ({ navigation, route }: NavigationProps<Routes.OfficeDetai
       })
       .catch((err) => {
         console.log(err);
+        setResError('Nie udało się pobrać usług');
       });
   }, []);
   useFocusEffect(serviceListHandler);
+
+  const buttonsHandler = useCallback(() => {
+    navigation.setOptions({
+      headerRight: () => (
+        <View>
+          {isLoading || isLoadingUpdate ? (
+            <ActivityIndicator size={'large'} color={COLOR.PRIMARY} />
+          ) : route.params.create ? (
+            <View row={true}>
+              <TouchableOpacity onPress={handleSubmit(onSubmitSave)}>
+                <AntDesign name={'pluscircle'} size={35} color={COLOR.GREEN} />
+              </TouchableOpacity>
+            </View>
+          ) : (
+            <View row={true}>
+              <TouchableOpacity onPress={handleSubmit(onSubmitDelete)}>
+                <AntDesign name={'delete'} size={35} color={COLOR.RED} />
+              </TouchableOpacity>
+              <TouchableOpacity style={{ marginLeft: 5 }} onPress={handleSubmit(onSubmitUpdate)}>
+                <AntDesign name={'checkcircle'} size={35} color={COLOR.GREEN} />
+              </TouchableOpacity>
+            </View>
+          )}
+        </View>
+      )
+    });
+  }, [navigation, isLoading, isLoadingUpdate, route.params.create, onSubmitSave, onSubmitUpdate]);
+  useFocusEffect(buttonsHandler);
 
   const {
     control,
@@ -104,127 +147,89 @@ const OfficeDetails = ({ navigation, route }: NavigationProps<Routes.OfficeDetai
     }
   });
   return (
-    <View useSafeArea={true} backgroundColor={COLOR.BACKGROUND}>
-      <KeyboardAwareScrollView
-        showsVerticalScrollIndicator={false}
-        scrollEnabled={false}
-        style={{ height: '100%' }}
-        enableAutomaticScroll={true}>
-        <ScrollView
-          nestedScrollEnabled={true}
-          style={{ height: '100%', backgroundColor: COLOR.BACKGROUND }}>
-          <View margin-10>
+    <View useSafeArea={true} backgroundColor={COLOR.BACKGROUND} style={{ height: '100%' }}>
+      <View margin-10 flex={true}>
+        <OfficeInputCustom
+          name={'name'}
+          error={errors.name?.message!}
+          control={control}
+          placeholder={'Nazwa gabinetu'}
+        />
+        <View row={true}>
+          <View style={{ marginRight: 5, flex: 1 }}>
             <OfficeInputCustom
-              name={'name'}
-              error={errors.name?.message!}
+              placeholder={'Adres gabinetu 1'}
               control={control}
-              placeholder={'Nazwa gabinetu'}
+              error={errors.address1?.message!}
+              name={'address1'}
             />
-            <View row={true}>
-              <View style={{ marginRight: 5, flex: 1 }}>
-                <OfficeInputCustom
-                  placeholder={'Adres gabinetu 1'}
-                  control={control}
-                  error={errors.address1?.message!}
-                  name={'address1'}
-                />
-                <OfficeInputCustom
-                  placeholder={'Adres gabinetu 2 (opcjonalnie)'}
-                  control={control}
-                  error={errors.address2?.message!}
-                  name={'address2'}
-                />
-              </View>
-              <View style={{ marginLeft: 'auto', width: 150 }}>
-                <OfficeInputCustom
-                  name={'city'}
-                  error={errors.city?.message!}
-                  control={control}
-                  placeholder={'Miasto'}
-                />
-                <OfficeInputCustom
-                  name={'postalCode'}
-                  control={control}
-                  error={errors.postalCode?.message!}
-                  placeholder={'Kod pocztowy'}
-                />
-              </View>
-            </View>
-            <View centerV={true} marginT-10 row={true}>
-              <Text style={{ width: 130, fontSize: 15 }}>Godziny pracy od:</Text>
-              <TimePickerCustom
-                name={'timeFrom'}
-                control={control}
-                normalTime={true}
-                error={errors.timeFrom?.message}
-                setTimeFrom={setTimeFrom}
+            <OfficeInputCustom
+              placeholder={'Adres gabinetu 2 (opcjonalnie)'}
+              control={control}
+              error={errors.address2?.message!}
+              name={'address2'}
+            />
+          </View>
+          <View style={{ marginLeft: 'auto', width: 150 }}>
+            <OfficeInputCustom
+              name={'city'}
+              error={errors.city?.message!}
+              control={control}
+              placeholder={'Miasto'}
+            />
+            <OfficeInputCustom
+              name={'postalCode'}
+              control={control}
+              error={errors.postalCode?.message!}
+              placeholder={'Kod pocztowy'}
+            />
+          </View>
+        </View>
+        <View marginB-10 centerH={true} centerV={true} row={true}>
+          <Text style={{ width: 130, fontSize: 15 }}>Godziny pracy od:</Text>
+          <TimePickerCustom
+            name={'timeFrom'}
+            control={control}
+            normalTime={true}
+            error={errors.timeFrom?.message}
+            setTimeFrom={setTimeFrom}
+          />
+          <Text style={{ width: 20, textAlign: 'center', fontSize: 15, marginLeft: 10 }}>do</Text>
+          <TimePickerCustom
+            name={'timeTo'}
+            control={control}
+            normalTime={true}
+            error={errors.timeTo?.message}
+            refTimeFrom={timeFrom}
+          />
+        </View>
+        {!route.params.create! && (
+          <View useSafeArea={true} flex={true}>
+            {/*<KeyboardAwareScrollView>*/}
+            <KeyboardAwareScrollView showsVerticalScrollIndicator={false} style={{ flex: 1 }}>
+              <ServiceItem
+                create={true}
+                officeId={office?.id!}
+                setServices={setServices}
+                setResError={setResError}
               />
-              <Text style={{ width: 20, textAlign: 'center', fontSize: 15, marginLeft: 10 }}>
-                do
-              </Text>
-              <TimePickerCustom
-                name={'timeTo'}
-                control={control}
-                normalTime={true}
-                error={errors.timeTo?.message}
-                refTimeFrom={timeFrom}
-              />
-            </View>
-            {!route.params.create! && (
-              <>
-                <View
-                  centerH={true}
-                  height={45}
-                  row={true}
-                  padding-5
-                  marginT-10
-                  style={{ borderBottomWidth: 3 }}>
-                  <Text style={{ fontSize: 25 }}>Usługi</Text>
-                </View>
 
-                <ScrollView
-                  style={{ height: 230 }}
-                  nestedScrollEnabled={true}
-                  showsVerticalScrollIndicator={false}>
-                  {services.map((service) => (
-                    <ServiceItem key={service.id} service={service} />
-                  ))}
-                  <ServiceItem create={true} />
-                </ScrollView>
-              </>
-            )}
+              {services.map((service) => (
+                <ServiceItem
+                  key={service.id}
+                  service={service}
+                  setServices={setServices}
+                  setResError={setResError}
+                />
+              ))}
+              {isLoadingServices && <ActivityIndicator size={'large'} color={COLOR.PRIMARY} />}
+            </KeyboardAwareScrollView>
+            {/*</KeyboardAwareScrollView>*/}
           </View>
-          <View row={true} centerH={true}>
-            <Button
-              style={{ marginRight: 5 }}
-              buttonColor={COLOR.PRIMARY}
-              mode={'contained'}
-              onPress={() => navigation.goBack()}>
-              Anuluj
-            </Button>
-            <Button
-              style={{ marginLeft: 5 }}
-              loading={isLoading || isLoadingUpdate}
-              buttonColor={COLOR.GREEN}
-              mode={'contained'}
-              onPress={
-                route.params.create ? handleSubmit(onSubmitSave) : handleSubmit(onSubmitUpdate)
-              }>
-              {route.params.create ? 'Dodaj gabinet' : 'Zapisz'}
-            </Button>
-          </View>
-          {!route.params.create && (
-            <Button
-              loading={isLoadingDelete}
-              onPress={handleSubmit(onSubmitDelete)}
-              style={{ marginTop: 15, width: 150, alignSelf: 'center' }}
-              buttonColor={COLOR.RED}
-              mode={'contained'}>
-              Usuń gabinet
-            </Button>
-          )}
-        </ScrollView>
-      </KeyboardAwareScrollView>
+        )}
+        {resError && <ErrorChip onClose={() => setResError('')} errorMsg={resError} />}
+      </View>
+      {/*</ScrollView>*/}
     </View>
   );
 };

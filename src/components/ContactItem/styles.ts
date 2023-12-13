@@ -3,6 +3,8 @@ import { COLOR } from '~/styles/constants';
 
 const styles = StyleSheet.create({
   container: {
+    borderColor: COLOR.DARK_GREY,
+    borderWidth: 3,
     flex: 1,
     backgroundColor: COLOR.BACKGROUND,
     marginBottom: 10,
