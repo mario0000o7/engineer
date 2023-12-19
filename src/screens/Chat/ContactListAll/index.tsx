@@ -1,4 +1,3 @@
-import ContactItem from '../../../components/ContactItem';
 import { NavigationProps, Routes } from '~/router/navigationTypes';
 import { ScrollView } from 'react-native';
 import { COLOR } from '~/styles/constants';
@@ -13,6 +12,7 @@ import { SearchSchema } from '~/screens/Chat/ContactListRecent/ContactListRecent
 import SearchingContact from '~/components/Chat/searchingContact';
 import styles from '~/screens/Chat/ContactListRecent/styles';
 import { useAppSelector } from '~/redux/hooks';
+import ContactItem from '~/components/ContactItem';
 
 const ContactListAll = ({ navigation, route }: NavigationProps<Routes.ContactListAll>) => {
   const [getAllUsers, { isLoading }] = useGetAllUsersMutation();

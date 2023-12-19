@@ -111,6 +111,13 @@ export const authApi = baseApi.injectEndpoints({
         url: '/service/update',
         body: data
       })
+    }),
+    retrieveAll: builder.mutation<OfficeState, { nameOffice: string }>({
+      query: (data) => ({
+        method: 'POST',
+        url: '/office/retrieveAll',
+        body: data
+      })
     })
   })
 });
@@ -130,5 +137,6 @@ export const {
   useCreateServiceMutation,
   useGetServicesByIdOwnerMutation,
   useDeleteServiceMutation,
-  useUpdateServiceMutation
+  useUpdateServiceMutation,
+  useRetrieveAllMutation
 } = authApi;
