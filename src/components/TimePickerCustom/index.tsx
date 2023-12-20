@@ -11,6 +11,8 @@ interface CustomTextInputProps {
   normalTime?: boolean;
   setTimeFrom?: React.Dispatch<React.SetStateAction<Date>>;
   refTimeFrom?: Date;
+  readonly?: boolean;
+  service?: boolean;
 }
 
 const TimePickerCustom = ({
@@ -19,8 +21,13 @@ const TimePickerCustom = ({
   error,
   normalTime,
   setTimeFrom,
-  refTimeFrom
+  refTimeFrom,
+  readonly,
+  service
 }: CustomTextInputProps) => {
+  const maxDate = new Date();
+  maxDate.setHours(3);
+  maxDate.setMinutes(0);
   return (
     <View>
       <Controller
@@ -30,19 +37,28 @@ const TimePickerCustom = ({
           required: {
             value: true,
             message: 'Te pole jest wymagane'
+          },
+          pattern: {
+            value: /^([0-1]?[0-9]|2[0-3]):[0-5][0-9]$/,
+            message: 'Niepoprawny format godziny'
           }
         }}
         render={({ field: { onChange, value } }) => (
           <DateTimePicker
             onChange={(_, selectedDate) => {
-              onChange(selectedDate || value);
-              setTimeFrom && setTimeFrom(selectedDate || value);
+              const currentDate = new Date();
+              currentDate.setHours(selectedDate?.getHours()!);
+              currentDate.setMinutes(selectedDate?.getMinutes()!);
+              currentDate.setSeconds(0);
+              onChange(currentDate);
+              setTimeFrom && setTimeFrom(currentDate);
             }}
+            disabled={readonly}
             display={'default'}
             value={value}
             mode={'time'}
-            timeZoneOffsetInMinutes={0}
-            maximumDate={!normalTime ? new Date(0, 0, 0, 4, 0) : undefined}
+            timeZoneOffsetInMinutes={service ? 60 : 60}
+            maximumDate={!normalTime ? maxDate : undefined}
             {...(refTimeFrom && { minimumDate: refTimeFrom })}
             minuteInterval={15}
           />

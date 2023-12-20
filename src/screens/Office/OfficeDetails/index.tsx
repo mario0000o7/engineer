@@ -63,6 +63,7 @@ const OfficeDetails = ({ navigation, route }: NavigationProps<Routes.OfficeDetai
     const office = data as OfficeState;
     office.ownerId = route.params.office!.ownerId;
     office.id = route.params.office!.id;
+    console.log('OfficeUpdate', data);
     updateOffice(office)
       .unwrap()
       .then((res) => {
@@ -93,7 +94,7 @@ const OfficeDetails = ({ navigation, route }: NavigationProps<Routes.OfficeDetai
     getServicesByIdOwner({ officeId: route.params.office?.id! })
       .unwrap()
       .then((res) => {
-        console.log(res);
+        console.log('RES', res);
         setServices(res);
       })
       .catch((err) => {
@@ -107,22 +108,26 @@ const OfficeDetails = ({ navigation, route }: NavigationProps<Routes.OfficeDetai
     navigation.setOptions({
       headerRight: () => (
         <View>
-          {isLoading || isLoadingUpdate ? (
+          {isLoading || isLoadingUpdate || isLoadingDelete ? (
             <ActivityIndicator size={'large'} color={COLOR.PRIMARY} />
           ) : route.params.create ? (
             <View row={true}>
-              <TouchableOpacity onPress={handleSubmit(onSubmitSave)}>
-                <AntDesign name={'pluscircle'} size={35} color={COLOR.GREEN} />
-              </TouchableOpacity>
+              {isDirty && (
+                <TouchableOpacity onPress={handleSubmit(onSubmitSave)}>
+                  <AntDesign name={'pluscircle'} size={35} color={COLOR.GREEN} />
+                </TouchableOpacity>
+              )}
             </View>
           ) : (
             <View row={true}>
               <TouchableOpacity onPress={handleSubmit(onSubmitDelete)}>
                 <AntDesign name={'delete'} size={35} color={COLOR.RED} />
               </TouchableOpacity>
-              <TouchableOpacity style={{ marginLeft: 5 }} onPress={handleSubmit(onSubmitUpdate)}>
-                <AntDesign name={'checkcircle'} size={35} color={COLOR.GREEN} />
-              </TouchableOpacity>
+              {isDirty && (
+                <TouchableOpacity style={{ marginLeft: 5 }} onPress={handleSubmit(onSubmitUpdate)}>
+                  <AntDesign name={'checkcircle'} size={35} color={COLOR.GREEN} />
+                </TouchableOpacity>
+              )}
             </View>
           )}
         </View>
@@ -134,7 +139,7 @@ const OfficeDetails = ({ navigation, route }: NavigationProps<Routes.OfficeDetai
   const {
     control,
     handleSubmit,
-    formState: { errors }
+    formState: { errors, isDirty }
   } = useForm<OfficeDetailsSchema>({
     defaultValues: {
       name: office?.name ?? '',

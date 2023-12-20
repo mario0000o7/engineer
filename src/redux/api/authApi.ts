@@ -112,7 +112,7 @@ export const authApi = baseApi.injectEndpoints({
         body: data
       })
     }),
-    retrieveAll: builder.mutation<OfficeState, { nameOffice: string }>({
+    retrieveAll: builder.mutation<OfficeState[], { nameOffice: string }>({
       query: (data) => ({
         method: 'POST',
         url: '/office/retrieveAll',

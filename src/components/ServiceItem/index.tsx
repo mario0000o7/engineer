@@ -1,5 +1,5 @@
 import { TextField, TouchableOpacity, View } from 'react-native-ui-lib';
-import { AntDesign } from '@expo/vector-icons';
+import { AntDesign, MaterialCommunityIcons } from '@expo/vector-icons';
 import { Controller, useForm } from 'react-hook-form';
 import TimePickerCustom from '~/components/TimePickerCustom';
 import PriceInputCustom from '~/components/PriceInputCustom';
@@ -12,6 +12,8 @@ import {
 } from '~/redux/api/authApi';
 import { ActivityIndicator } from 'react-native';
 import { COLOR } from '~/styles/constants';
+import { NavigationProps, Routes } from '~/router/navigationTypes';
+import { useNavigation } from '@react-navigation/native';
 
 export interface ServiceItemSchema {
   name: string;
@@ -25,26 +27,41 @@ interface ServiceItemProps {
   setServices?: React.Dispatch<React.SetStateAction<ServiceState[]>>;
   officeId?: number;
   setResError?: React.Dispatch<React.SetStateAction<string>>;
+  readonly?: boolean;
 }
 
-const ServiceItem = ({ service, create, setServices, officeId, setResError }: ServiceItemProps) => {
+const ServiceItem = ({
+  service,
+  create,
+  setServices,
+  officeId,
+  setResError,
+  readonly
+}: ServiceItemProps) => {
+  const minDate = new Date();
+  minDate.setHours(0);
+  minDate.setMinutes(0);
+  minDate.setSeconds(0);
   const {
     control,
     handleSubmit,
-    formState: { errors }
+    reset,
+
+    formState: { errors, isDirty }
   } = useForm<ServiceItemSchema>({
     defaultValues: {
       name: create ? '' : service?.name!,
-      duration: create ? new Date() : new Date(service?.duration!),
+      duration: create ? minDate : new Date(service?.duration!),
       price: create ? 0 : service?.price!
     }
   });
-
+  const navigation = useNavigation<NavigationProps<Routes.OfficeServiceList>['navigation']>();
   const [createService, { isLoading: isLoadingCreate }] = useCreateServiceMutation();
   const [deleteService, { isLoading: isLoadingDelete }] = useDeleteServiceMutation();
   const [updateService, { isLoading: isLoadingUpdate }] = useUpdateServiceMutation();
 
   const onSubmitCreate = (data: ServiceItemSchema) => {
+    console.log('DATA SERVICE', data);
     const serviceTMP = data as ServiceState;
     serviceTMP.officeId = officeId!;
     createService(serviceTMP)
@@ -70,6 +87,11 @@ const ServiceItem = ({ service, create, setServices, officeId, setResError }: Se
           const index = prevState.findIndex((item) => item.id === serviceTMP.id);
           prevState[index] = serviceTMP;
           return prevState;
+        });
+        reset({
+          name: serviceTMP.name,
+          duration: new Date(serviceTMP.duration),
+          price: serviceTMP.price
         });
       })
       .catch(() => {
@@ -119,7 +141,7 @@ const ServiceItem = ({ service, create, setServices, officeId, setResError }: Se
             }}
             render={({ field: { onChange, value } }) => (
               <TextField
-                fieldStyle={{ borderBottomWidth: 2 }}
+                fieldStyle={{ borderBottomWidth: readonly ? 0 : 2 }}
                 style={{ fontFamily: 'Poppins_400Regular' }}
                 onChangeText={onChange}
                 value={value}
@@ -127,6 +149,8 @@ const ServiceItem = ({ service, create, setServices, officeId, setResError }: Se
                 floatingPlaceholder={false}
                 enableErrors={true}
                 validateOnChange={true}
+                editable={!readonly}
+                color={COLOR.BLACK}
                 validationMessage={[errors.name?.message!]}
               />
             )}
@@ -134,10 +158,15 @@ const ServiceItem = ({ service, create, setServices, officeId, setResError }: Se
         </View>
         <View row={true}>
           <View centerV={true} row={true}>
-            <PriceInputCustom control={control} name={'price'} />
+            <PriceInputCustom control={control} name={'price'} readonly={readonly} />
           </View>
           <View centerV={true} row={true}>
-            <TimePickerCustom control={control} name={'duration'} />
+            <TimePickerCustom
+              control={control}
+              name={'duration'}
+              readonly={readonly}
+              service={true}
+            />
           </View>
         </View>
       </View>
@@ -148,29 +177,63 @@ const ServiceItem = ({ service, create, setServices, officeId, setResError }: Se
         style={{
           marginLeft: 'auto'
         }}>
-        {create ? (
-          <TouchableOpacity onPress={handleSubmit(onSubmitCreate)}>
-            <AntDesign style={{ marginLeft: 10 }} name={'plus'} size={30} color={COLOR.GREEN} />
-          </TouchableOpacity>
-        ) : (
+        {!readonly ? (
           <>
-            {isLoadingCreate || isLoadingDelete || isLoadingUpdate ? (
-              <ActivityIndicator size="large" color="#0000ff" />
-            ) : (
-              <>
-                <TouchableOpacity onPress={handleSubmit(onSubmitDelete)}>
+            {create ? (
+              !isLoadingCreate ? (
+                <TouchableOpacity onPress={handleSubmit(onSubmitCreate)}>
                   <AntDesign
                     style={{ marginLeft: 10 }}
-                    name={'delete'}
+                    name={'plus'}
                     size={30}
-                    color={COLOR.RED}
+                    color={COLOR.GREEN}
                   />
                 </TouchableOpacity>
-                <TouchableOpacity onPress={handleSubmit(onSubmitUpdate)}>
-                  <AntDesign name={'save'} size={30} color={COLOR.ORANGE} />
-                </TouchableOpacity>
+              ) : (
+                <ActivityIndicator size="large" color="#0000ff" />
+              )
+            ) : (
+              <>
+                {isLoadingCreate || isLoadingDelete || isLoadingUpdate ? (
+                  <ActivityIndicator size="large" color="#0000ff" />
+                ) : (
+                  <>
+                    <TouchableOpacity onPress={handleSubmit(onSubmitDelete)}>
+                      <AntDesign
+                        style={{ marginLeft: 10 }}
+                        name={'delete'}
+                        size={30}
+                        color={COLOR.RED}
+                      />
+                    </TouchableOpacity>
+                    {isDirty && (
+                      <TouchableOpacity onPress={handleSubmit(onSubmitUpdate)}>
+                        <AntDesign name={'save'} size={30} color={COLOR.ORANGE} />
+                      </TouchableOpacity>
+                    )}
+                  </>
+                )}
               </>
             )}
+          </>
+        ) : (
+          <>
+            <TouchableOpacity
+              onPress={() => {
+                navigation.navigate(Routes.OfficeCalendar, {
+                  id: service?.id!,
+                  name: service?.name!
+                });
+              }}
+              centerV={true}
+              centerH={true}
+              style={{ width: 50, height: 50 }}
+              br40={true}
+              backgroundColor={COLOR.PRIMARY}>
+              <MaterialCommunityIcons name={'calendar-month'} color={COLOR.WHITE} size={30} />
+
+              {/*<MaterialIcons name={'design-services'} color={COLOR.BLACK} size={30} />*/}
+            </TouchableOpacity>
           </>
         )}
       </View>

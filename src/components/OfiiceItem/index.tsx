@@ -2,14 +2,15 @@ import { NavigationProps, Routes } from '~/router/navigationTypes';
 import { Text, TouchableOpacity, View } from 'react-native-ui-lib';
 import { COLOR } from '~/styles/constants';
 import { OfficeState } from '~/types/office';
-import { MaterialIcons } from '@expo/vector-icons';
+import { MaterialCommunityIcons, MaterialIcons } from '@expo/vector-icons';
 
 interface OfficeItemProps {
   navigation: NavigationProps<Routes.OfficeList>['navigation'];
   office: OfficeState;
+  role: number;
 }
 
-const OfficeItem = ({ navigation, office }: OfficeItemProps) => {
+const OfficeItem = ({ navigation, office, role }: OfficeItemProps) => {
   return (
     <View
       backgroundColor={COLOR.BACKGROUND}
@@ -56,22 +57,42 @@ const OfficeItem = ({ navigation, office }: OfficeItemProps) => {
             <Text style={{ fontFamily: 'Poppins_400Regular', fontSize: 15 }}>{office.city}</Text>
           </View>
         </View>
-        <View style={{ marginLeft: 'auto' }}>
+        <View row={true} style={{ marginLeft: 'auto' }}>
           <TouchableOpacity
             onPress={() => {
-              navigation.navigate(Routes.OfficeDetails, {
-                id: 1,
-                name: office.name,
-                office: office
+              navigation.navigate(Routes.OfficeServiceList, {
+                id: office.id,
+                name: office.name
               });
             }}
             centerV={true}
             centerH={true}
             style={{ width: 50, height: 50 }}
             br40={true}
-            backgroundColor={COLOR.ORANGE}>
-            <MaterialIcons name={'design-services'} color={COLOR.BLACK} size={30} />
+            backgroundColor={COLOR.PRIMARY}>
+            <MaterialCommunityIcons name={'calendar-month'} color={COLOR.WHITE} size={30} />
+
+            {/*<MaterialIcons name={'design-services'} color={COLOR.BLACK} size={30} />*/}
           </TouchableOpacity>
+          {role === 1 ? (
+            <TouchableOpacity
+              onPress={() => {
+                navigation.navigate(Routes.OfficeDetails, {
+                  id: office.id,
+                  name: office.name,
+                  office: office
+                });
+              }}
+              centerV={true}
+              centerH={true}
+              style={{ width: 50, height: 50 }}
+              br40={true}
+              backgroundColor={COLOR.ORANGE}>
+              <MaterialIcons name={'edit'} color={COLOR.BLACK} size={30} />
+
+              {/*<MaterialIcons name={'design-services'} color={COLOR.BLACK} size={30} />*/}
+            </TouchableOpacity>
+          ) : undefined}
         </View>
       </View>
     </View>

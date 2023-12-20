@@ -4,6 +4,8 @@ import { COLOR } from '~/styles/constants';
 import PDFViewer from '~/screens/Chat/PDFViewer';
 import OfficeList from '~/screens/Office/OfficeList';
 import OfficeDetails from '~/screens/Office/OfficeDetails';
+import OfficeCalendar from '~/screens/Office/OfficeCalendar';
+import OfficeServicesList from '~/screens/Office/OfficeServicesList';
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
 
@@ -34,6 +36,21 @@ const OfficeNavigator = ({
         component={PDFViewer}
         options={() => ({
           headerTitle: ''
+        })}
+      />
+      <Stack.Screen
+        name={Routes.OfficeCalendar}
+        component={OfficeCalendar}
+        options={({ route }) => ({
+          headerTitle: route.params.name,
+          headerBackTitleVisible: false
+        })}
+      />
+      <Stack.Screen
+        name={Routes.OfficeServiceList}
+        component={OfficeServicesList}
+        options={({ route }) => ({
+          headerTitle: route.params.name
         })}
       />
     </Stack.Navigator>

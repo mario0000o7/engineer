@@ -1,14 +1,16 @@
 import { Control, Controller } from 'react-hook-form';
 import { HelperText } from 'react-native-paper';
 import { NumberInput, View } from 'react-native-ui-lib';
+import { COLOR } from '~/styles/constants';
 
 interface CustomTextInputProps {
   name: string;
   control: Control<any>;
   error?: string;
+  readonly?: boolean;
 }
 
-const PriceInputCustom = ({ control, name, error }: CustomTextInputProps) => {
+const PriceInputCustom = ({ control, name, error, readonly }: CustomTextInputProps) => {
   return (
     <View>
       <Controller
@@ -35,8 +37,11 @@ const PriceInputCustom = ({ control, name, error }: CustomTextInputProps) => {
             textFieldProps={{
               style: {
                 fontFamily: 'Poppins_400Regular',
-                fontSize: 20
-              }
+                fontSize: 20,
+                color: COLOR.BLACK
+              },
+              editable: !readonly,
+              maxLength: 6
             }}
             leadingTextStyle={{
               fontFamily: 'Poppins_400Regular',

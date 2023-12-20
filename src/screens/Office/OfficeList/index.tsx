@@ -6,7 +6,7 @@ import { ScrollView } from 'react-native';
 import { AntDesign } from '@expo/vector-icons';
 import { COLOR } from '~/styles/constants';
 import { useCallback, useState } from 'react';
-import { useGetOfficesByIdOwnerMutation } from '~/redux/api/authApi';
+import { useGetOfficesByIdOwnerMutation, useRetrieveAllMutation } from '~/redux/api/authApi';
 import { useAppSelector } from '~/redux/hooks';
 import { OfficeState } from '~/types/office';
 import { useFocusEffect } from '@react-navigation/native';
@@ -21,14 +21,25 @@ const OfficeList = ({ navigation }: NavigationProps<Routes.OfficeList>) => {
   const [officeList, setOfficeList] = useState<OfficeState[]>([]);
   const role = useAppSelector((state) => state.session.role);
   const [tmpOfficeList, setTmpOfficeList] = useState<OfficeState[]>([]);
+  const [retrieveAll, { isLoading: isLoadingRetrieveAll }] = useRetrieveAllMutation();
 
   const idOwner = useAppSelector((state) => state.session.id);
   const handleListOffice = useCallback(() => {
-    getOfficesByIdOwner({ ownerId: idOwner! })
-      .unwrap()
-      .then((officeList) => {
-        setOfficeList(officeList);
-      });
+    console.log('ROLE', role);
+    if (role === 2) {
+      retrieveAll({ nameOffice: '' })
+        .unwrap()
+        .then((res) => {
+          const listOffice = res as OfficeState[];
+          setOfficeList(listOffice);
+        });
+    } else {
+      getOfficesByIdOwner({ ownerId: idOwner! })
+        .unwrap()
+        .then((officeList) => {
+          setOfficeList(officeList);
+        });
+    }
   }, []);
   useFocusEffect(handleListOffice);
 
@@ -41,12 +52,21 @@ const OfficeList = ({ navigation }: NavigationProps<Routes.OfficeList>) => {
   const { isSubmitted } = formState;
 
   const onSubmit = (data: SearchOffice) => {
-    console.log('DATA', data);
-    const result = officeList.filter((office) => {
-      return office.name!.toLowerCase().includes(data.nameOffice.toLowerCase());
-    });
-    console.log(result);
-    setTmpOfficeList(result);
+    if (role === 2) {
+      retrieveAll({ nameOffice: data.nameOffice })
+        .unwrap()
+        .then((res) => {
+          const listOffice = res as OfficeState[];
+          setTmpOfficeList(listOffice);
+        });
+    } else {
+      console.log('DATA', data);
+      const result = officeList.filter((office) => {
+        return office.name!.toLowerCase().includes(data.nameOffice.toLowerCase());
+      });
+      console.log(result);
+      setTmpOfficeList(result);
+    }
   };
 
   return (
@@ -92,13 +112,13 @@ const OfficeList = ({ navigation }: NavigationProps<Routes.OfficeList>) => {
       <ScrollView style={{ height: '100%' }}>
         {isSubmitted
           ? tmpOfficeList.map((office) => (
-              <OfficeItem key={office.id} navigation={navigation} office={office} />
+              <OfficeItem key={office.id} navigation={navigation} office={office} role={role!} />
             ))
           : officeList.map((office) => (
-              <OfficeItem key={office.id} navigation={navigation} office={office} />
+              <OfficeItem key={office.id} navigation={navigation} office={office} role={role!} />
             ))}
 
-        {isLoading && <LoaderScreen color={COLOR.PRIMARY} />}
+        {isLoading || (isLoadingRetrieveAll && <LoaderScreen color={COLOR.PRIMARY} />)}
       </ScrollView>
     </View>
   );
