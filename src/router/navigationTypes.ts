@@ -3,6 +3,7 @@
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { CustomFile } from '~/types/CustomMessage';
 import { OfficeState } from '~/types/office';
+import { ServiceState } from '~/types/service';
 
 export enum Routes {
   MainNavigation = 'MainNavigation',
@@ -62,7 +63,7 @@ export type RootStackParamList = {
   [Routes.OfficeNavigator]: undefined;
   [Routes.OfficeItem]: undefined;
   [Routes.OfficeDetails]: { name: string; id: number; create?: boolean; office?: OfficeState };
-  [Routes.OfficeCalendar]: { name: string; id: number };
+  [Routes.OfficeCalendar]: { name: string; id: number; service: ServiceState };
   [Routes.OfficeServiceList]: { name: string; id: number };
 };
 

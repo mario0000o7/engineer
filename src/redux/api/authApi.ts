@@ -2,6 +2,7 @@ import { RegisterState } from '../slices/registerSlice';
 import { baseApi } from './baseApi';
 import { OfficeState } from '~/types/office';
 import { ServiceState } from '~/types/service';
+import { AppointmentState } from '~/types/appointment';
 
 export const authApi = baseApi.injectEndpoints({
   endpoints: (builder) => ({
@@ -118,6 +119,20 @@ export const authApi = baseApi.injectEndpoints({
         url: '/office/retrieveAll',
         body: data
       })
+    }),
+    readAvailableDatesForService: builder.mutation<Date[], { serviceId: number }>({
+      query: (data) => ({
+        method: 'POST',
+        url: '/appointment/readAvailableDatesForService',
+        body: data
+      })
+    }),
+    createAppointment: builder.mutation<void, AppointmentState>({
+      query: (data) => ({
+        method: 'POST',
+        url: '/appointment/create',
+        body: data
+      })
     })
   })
 });
@@ -138,5 +153,7 @@ export const {
   useGetServicesByIdOwnerMutation,
   useDeleteServiceMutation,
   useUpdateServiceMutation,
-  useRetrieveAllMutation
+  useRetrieveAllMutation,
+  useReadAvailableDatesForServiceMutation,
+  useCreateAppointmentMutation
 } = authApi;

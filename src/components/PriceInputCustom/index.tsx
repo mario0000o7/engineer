@@ -20,6 +20,10 @@ const PriceInputCustom = ({ control, name, error, readonly }: CustomTextInputPro
           required: {
             value: true,
             message: 'Te pole jest wymagane'
+          },
+          maxLength: {
+            value: 6,
+            message: 'Maksymalna wartość to 999 999 zł'
           }
         }}
         render={({ field: { onChange, value } }) => (

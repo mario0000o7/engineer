@@ -222,7 +222,8 @@ const ServiceItem = ({
               onPress={() => {
                 navigation.navigate(Routes.OfficeCalendar, {
                   id: service?.id!,
-                  name: service?.name!
+                  name: service?.name!,
+                  service: service!
                 });
               }}
               centerV={true}
