@@ -65,16 +65,20 @@ const OfficeCalendar = ({ navigation, route }: NavigationProps<Routes.OfficeCale
   const [markedDates, setMarkedDates] = useState<MarkedDates>({});
   const [sections, setSections] = useState<SectionListData<any>[]>([]);
   const [readAvailableDatesForService, { isLoading }] = useReadAvailableDatesForServiceMutation();
+  const [day, setDay] = useState(new Date());
+  const [dates, setDates] = useState<Date[]>([]);
 
   const freeDayHandler = useCallback(() => {
     readAvailableDatesForService({ serviceId: route.params.id })
       .unwrap()
       .then((res) => {
         let markedDatesTMP = {};
-        const tmpSections: SectionListData<any, DefaultSectionT>[] = [];
-        const tmp: sectionData = {};
+        const tmpDates: Date[] = [];
+        // const tmpSections: SectionListData<any, DefaultSectionT>[] = [];
+        // const tmp: sectionData = {};
         res.forEach((date) => {
           const tmpDate = new Date(date);
+          tmpDates.push(tmpDate);
 
           markedDatesTMP = {
             ...markedDatesTMP,
@@ -88,33 +92,70 @@ const OfficeCalendar = ({ navigation, route }: NavigationProps<Routes.OfficeCale
             }
           };
 
-          const durationTMP = new Date(route.params.service.duration);
-          const dayData: dayData = {
-            hour: tmpDate.toString(),
-            duration:
-              durationTMP.getHours().toString() +
-              ':' +
-              durationTMP.getMinutes().toString().padStart(2, '0'),
-            title:
-              tmpDate.getHours().toString() + ':' + tmpDate.getMinutes().toString().padStart(2, '0')
-          };
-          const titleTMP =
-            tmpDate.getFullYear().toString() +
-            '-' +
-            (tmpDate.getUTCMonth() + 1).toString().padStart(2, '0') +
-            '-' +
-            tmpDate.getDate().toString().padStart(2, '0');
-          tmp[titleTMP] = {
-            title: titleTMP,
-            data: [...(tmp[titleTMP]?.data || []), dayData]
-          };
+          // const durationTMP = new Date(route.params.service.duration);
+          // const dayData: dayData = {
+          //   hour: tmpDate.toString(),
+          //   duration:
+          //     durationTMP.getHours().toString() +
+          //     ':' +
+          //     durationTMP.getMinutes().toString().padStart(2, '0'),
+          //   title:
+          //     tmpDate.getHours().toString() + ':' + tmpDate.getMinutes().toString().padStart(2, '0')
+          // };
+          // const titleTMP =
+          //   tmpDate.getFullYear().toString() +
+          //   '-' +
+          //   (tmpDate.getUTCMonth() + 1).toString().padStart(2, '0') +
+          //   '-' +
+          //   tmpDate.getDate().toString().padStart(2, '0');
+          // tmp[titleTMP] = {
+          //   title: titleTMP,
+          //   data: [...(tmp[titleTMP]?.data || []), dayData]
+          // };
         });
         setMarkedDates(markedDatesTMP);
-        tmpSections.push(...Object.values(tmp));
+        setDates(tmpDates);
+        setDay(new Date());
+        // tmpSections.push(...Object.values(tmp));
 
-        setSections(tmpSections);
+        // setSections(tmpSections);
       });
   }, []);
+
+  const onChangeDayHandler = useCallback(() => {
+    const tmpSections: SectionListData<any, DefaultSectionT>[] = [];
+    const tmp: sectionData = {};
+    dates.forEach((date) => {
+      if (
+        date.getDate() === day.getDate() &&
+        date.getMonth() === day.getMonth() &&
+        date.getFullYear() === day.getFullYear()
+      ) {
+        const durationTMP = new Date(route.params.service.duration);
+        const dayData: dayData = {
+          hour: date.toString(),
+          duration:
+            durationTMP.getHours().toString() +
+            ':' +
+            durationTMP.getMinutes().toString().padStart(2, '0'),
+          title: date.getHours().toString() + ':' + date.getMinutes().toString().padStart(2, '0')
+        };
+        const titleTMP =
+          date.getFullYear().toString() +
+          '-' +
+          (date.getUTCMonth() + 1).toString().padStart(2, '0') +
+          '-' +
+          date.getDate().toString().padStart(2, '0');
+        tmp[titleTMP] = {
+          title: titleTMP,
+          data: [...(tmp[titleTMP]?.data || []), dayData]
+        };
+      }
+    });
+    tmpSections.push(...Object.values(tmp));
+    setSections(tmpSections);
+  }, [day]);
+  useFocusEffect(onChangeDayHandler);
 
   useFocusEffect(freeDayHandler);
 
@@ -165,6 +206,9 @@ const OfficeCalendar = ({ navigation, route }: NavigationProps<Routes.OfficeCale
   //     />
   //   </View>
   // );
+  const onDayChange = (date: string) => {
+    setDay(new Date(date));
+  };
 
   const renderItem = useCallback(({ item }: any) => {
     return <AgendaItem item={item} service={route.params.service} />;
@@ -174,6 +218,7 @@ const OfficeCalendar = ({ navigation, route }: NavigationProps<Routes.OfficeCale
     <CalendarProvider
       date={new Date().toDateString()}
       // onMonthChange={onMonthChange}
+      onDateChanged={onDayChange}
       showTodayButton
       // disabledOpacity={0.6}
       // todayBottomMargin={16}
@@ -198,6 +243,12 @@ const OfficeCalendar = ({ navigation, route }: NavigationProps<Routes.OfficeCale
       <AgendaList
         sections={sections}
         renderItem={renderItem}
+        initialNumToRender={10}
+        maxToRenderPerBatch={5}
+        updateCellsBatchingPeriod={30}
+        removeClippedSubviews={false}
+        onEndReachedThreshold={0.1}
+        windowSize={5}
         // scrollToNextEvent
 
         // dayFormat={'yyyy-MM-d'}

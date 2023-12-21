@@ -1,5 +1,5 @@
 import { NavigationProps, Routes } from '~/router/navigationTypes';
-import { Text, TouchableOpacity, View } from 'react-native-ui-lib';
+import { SegmentedControl, Text, TouchableOpacity, View } from 'react-native-ui-lib';
 import { ActivityIndicator } from 'react-native';
 import { COLOR } from '~/styles/constants';
 import ServiceItem from '~/components/ServiceItem';
@@ -35,18 +35,36 @@ const OfficeDetails = ({ navigation, route }: NavigationProps<Routes.OfficeDetai
   const [updateOffice, { isLoading: isLoadingUpdate }] = useUpdateOfficeMutation();
   const [deleteOffice, { isLoading: isLoadingDelete }] = useDeleteOfficeMutation();
 
+  const [numberOfDay, setNumberOfDay] = useState<number>(0);
+  const [daysFrom, setDaysFrom] = useState<Date[]>(
+    !route.params.office?.timeFrom
+      ? [new Date(), new Date(), new Date(), new Date(), new Date(), new Date(), new Date()]
+      : route.params.office!.timeFrom.map((time) => new Date(time))
+  );
+  const [daysTo, setDaysTo] = useState<Date[]>(
+    !route.params.office?.timeFrom
+      ? [new Date(), new Date(), new Date(), new Date(), new Date(), new Date(), new Date()]
+      : route.params.office!.timeTo.map((time) => new Date(time))
+  );
+
   const [resError, setResError] = useState('');
   const [getServicesByIdOwner, { isLoading: isLoadingServices }] =
     useGetServicesByIdOwnerMutation();
   const [services, setServices] = useState<ServiceState[]>([]);
   const { office } = route.params;
-  const [timeFrom, setTimeFrom] = office?.timeFrom!
-    ? useState<Date>(new Date(office?.timeFrom!))
-    : useState<Date>(new Date());
+
   const onSubmitSave = (data: OfficeDetailsSchema) => {
     console.log(data);
-    const officeTMP = data as OfficeState;
-    officeTMP.ownerId = route.params.id;
+    const officeTMP: OfficeState = {
+      timeFrom: daysFrom,
+      timeTo: daysTo,
+      name: data.name,
+      address1: data.address1,
+      address2: data.address2,
+      city: data.city,
+      postalCode: data.postalCode,
+      ownerId: route.params.id
+    };
 
     createOffice(officeTMP)
       .unwrap()
@@ -60,9 +78,18 @@ const OfficeDetails = ({ navigation, route }: NavigationProps<Routes.OfficeDetai
   };
 
   const onSubmitUpdate = (data: OfficeDetailsSchema) => {
-    const office = data as OfficeState;
-    office.ownerId = route.params.office!.ownerId;
-    office.id = route.params.office!.id;
+    const office: OfficeState = {
+      timeFrom: daysFrom,
+      timeTo: daysTo,
+      name: data.name,
+      address1: data.address1,
+      address2: data.address2,
+      city: data.city,
+      postalCode: data.postalCode,
+      ownerId: route.params.id,
+      id: route.params.office!.id
+    };
+
     console.log('OfficeUpdate', data);
     updateOffice(office)
       .unwrap()
@@ -139,6 +166,7 @@ const OfficeDetails = ({ navigation, route }: NavigationProps<Routes.OfficeDetai
   const {
     control,
     handleSubmit,
+    setValue,
     formState: { errors, isDirty }
   } = useForm<OfficeDetailsSchema>({
     defaultValues: {
@@ -147,8 +175,8 @@ const OfficeDetails = ({ navigation, route }: NavigationProps<Routes.OfficeDetai
       address2: office?.address2 ?? '',
       city: office?.city ?? '',
       postalCode: office?.postalCode ?? '',
-      timeFrom: office?.timeFrom! ? new Date(office?.timeFrom!) : new Date(),
-      timeTo: office?.timeTo! ? new Date(office?.timeTo!) : new Date()
+      timeFrom: office?.timeFrom! ? daysFrom[numberOfDay] : new Date(),
+      timeTo: office?.timeTo! ? daysTo[numberOfDay] : new Date()
     }
   });
   return (
@@ -190,6 +218,24 @@ const OfficeDetails = ({ navigation, route }: NavigationProps<Routes.OfficeDetai
             />
           </View>
         </View>
+        <SegmentedControl
+          initialIndex={0}
+          segments={[
+            { label: 'Pon.' },
+            { label: 'Wt.' },
+            { label: 'Śr.' },
+            { label: 'Czw.' },
+            { label: 'Pt.' },
+            { label: 'Sob.' },
+            { label: 'Nd.' }
+          ]}
+          onChangeIndex={(index) => {
+            setNumberOfDay(index);
+
+            setValue('timeFrom', daysFrom[index]!);
+            setValue('timeTo', daysTo[index]!);
+          }}
+        />
         <View marginB-10 centerH={true} centerV={true} row={true}>
           <Text style={{ width: 130, fontSize: 15 }}>Godziny pracy od:</Text>
           <TimePickerCustom
@@ -197,7 +243,9 @@ const OfficeDetails = ({ navigation, route }: NavigationProps<Routes.OfficeDetai
             control={control}
             normalTime={true}
             error={errors.timeFrom?.message}
-            setTimeFrom={setTimeFrom}
+            numberOfDay={numberOfDay}
+            setDays={setDaysFrom}
+            days={daysFrom}
           />
           <Text style={{ width: 20, textAlign: 'center', fontSize: 15, marginLeft: 10 }}>do</Text>
           <TimePickerCustom
@@ -205,7 +253,10 @@ const OfficeDetails = ({ navigation, route }: NavigationProps<Routes.OfficeDetai
             control={control}
             normalTime={true}
             error={errors.timeTo?.message}
-            refTimeFrom={timeFrom}
+            refTimeFrom={daysFrom[numberOfDay]!}
+            numberOfDay={numberOfDay}
+            setDays={setDaysTo}
+            days={daysTo}
           />
         </View>
         {!route.params.create! && (

@@ -29,7 +29,7 @@ const AgendaItem = (props: ItemProps) => {
         console.log(res);
       });
     console.log('Service', service);
-  }, []);
+  }, [item, service, createAppointment]);
 
   return (
     <View style={styles.item}>

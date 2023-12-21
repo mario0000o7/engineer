@@ -9,10 +9,12 @@ interface CustomTextInputProps {
   control: Control<any>;
   error?: string;
   normalTime?: boolean;
-  setTimeFrom?: React.Dispatch<React.SetStateAction<Date>>;
   refTimeFrom?: Date;
   readonly?: boolean;
   service?: boolean;
+  numberOfDay?: number;
+  setDays?: React.Dispatch<React.SetStateAction<Date[]>>;
+  days?: Date[];
 }
 
 const TimePickerCustom = ({
@@ -20,10 +22,12 @@ const TimePickerCustom = ({
   name,
   error,
   normalTime,
-  setTimeFrom,
   refTimeFrom,
   readonly,
-  service
+  service,
+  numberOfDay,
+  setDays,
+  days
 }: CustomTextInputProps) => {
   const maxDate = new Date();
   maxDate.setHours(3);
@@ -51,7 +55,11 @@ const TimePickerCustom = ({
               currentDate.setMinutes(selectedDate?.getMinutes()!);
               currentDate.setSeconds(0);
               onChange(currentDate);
-              setTimeFrom && setTimeFrom(currentDate);
+              if (numberOfDay === undefined) return;
+              const tmpDays = [...days!];
+              tmpDays[numberOfDay!] = currentDate;
+              setDays && setDays(tmpDays);
+              console.log('Days', days);
             }}
             disabled={readonly}
             display={'default'}

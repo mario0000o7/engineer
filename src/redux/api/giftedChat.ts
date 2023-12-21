@@ -43,7 +43,7 @@ export const loginUserRedux =
 
 export const getMessagesRedux =
   (receiverIdString: string) => async (dispatch: Dispatch<GiftedChatActionTypes>) => {
-    dispatch({ type: 'CLEAR_MESSAGES' });
+    // dispatch({ type: 'CLEAR_MESSAGES' });
     dispatch({ type: 'GET_MESSAGES_REQUEST' });
 
     try {

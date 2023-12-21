@@ -1,5 +1,5 @@
 export interface OfficeState {
-  id: number;
+  id?: number;
   name: string;
   address1?: string;
   address2?: string;
@@ -7,6 +7,7 @@ export interface OfficeState {
   country?: string;
   postalCode?: string;
   ownerId: number;
-  timeFrom: Date;
-  timeTo: Date;
+  timeFrom: Date[];
+  timeTo: Date[];
+  archive?: boolean;
 }
