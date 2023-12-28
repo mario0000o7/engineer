@@ -87,8 +87,18 @@ const OfficeCalendar = ({ navigation, route }: NavigationProps<Routes.OfficeCale
             (tmpDate.getUTCMonth() + 1).toString().padStart(2, '0') +
             '-' +
             tmpDate.getDate().toString().padStart(2, '0')]: {
-              marked: true,
-              dotColor: COLOR.PRIMARY
+              dotColor: COLOR.PRIMARY,
+              color: COLOR.GREEN,
+              customStyles: {
+                container: {
+                  backgroundColor: COLOR.GREEN,
+                  borderRadius: 50
+                },
+                text: {
+                  color: COLOR.WHITE,
+                  fontWeight: 'bold'
+                }
+              }
             }
           };
 
@@ -227,28 +237,26 @@ const OfficeCalendar = ({ navigation, route }: NavigationProps<Routes.OfficeCale
         // horizontal={false}
         // hideArrows
         // disablePan
-        // hideKnob
+        hideKnob
+        disableScrollViewPanResponder={true}
         // initialPosition={ExpandableCalendar.positions.OPEN}
         // calendarStyle={styles.calendar}
         // headerStyle={styles.header} // for horizontal only
-        // disableWeekScroll
-        // disableAllTouchEventsForDisabledDays
+        disableWeekScroll
+        disableAllTouchEventsForDisabledDays
         displayLoadingIndicator={isLoading}
         firstDay={1}
+        markingType={'custom'}
         minDate={new Date().toDateString()}
         markedDates={markedDates}
-        // animateScroll
+        animateScroll
         // closeOnDayPress={false}
       />
       <AgendaList
         sections={sections}
         renderItem={renderItem}
-        initialNumToRender={10}
-        maxToRenderPerBatch={5}
-        updateCellsBatchingPeriod={30}
-        removeClippedSubviews={false}
-        onEndReachedThreshold={0.1}
         windowSize={5}
+        maxToRenderPerBatch={5}
         // scrollToNextEvent
 
         // dayFormat={'yyyy-MM-d'}

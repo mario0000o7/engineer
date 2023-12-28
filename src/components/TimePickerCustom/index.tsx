@@ -54,6 +54,7 @@ const TimePickerCustom = ({
               currentDate.setHours(selectedDate?.getHours()!);
               currentDate.setMinutes(selectedDate?.getMinutes()!);
               currentDate.setSeconds(0);
+              currentDate.setMilliseconds(0);
               onChange(currentDate);
               if (numberOfDay === undefined) return;
               const tmpDays = [...days!];

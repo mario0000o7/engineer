@@ -42,6 +42,7 @@ const ServiceItem = ({
   minDate.setHours(0);
   minDate.setMinutes(0);
   minDate.setSeconds(0);
+  minDate.setMilliseconds(0);
   const {
     control,
     handleSubmit,

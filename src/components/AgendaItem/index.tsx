@@ -1,22 +1,23 @@
-import React, { useCallback } from 'react';
-import { Button, StyleSheet, Text, View } from 'react-native';
+import React from 'react';
+import { ActivityIndicator, StyleSheet, Text, View } from 'react-native';
 import { ServiceState } from '~/types/service';
+import FontAwesome5Icon from 'react-native-vector-icons/FontAwesome5';
+import { TouchableOpacity } from 'react-native-ui-lib';
 import { useCreateAppointmentMutation } from '~/redux/api/authApi';
-import { AppointmentState } from '~/types/appointment';
+import { useNavigation } from '@react-navigation/native';
 
 interface ItemProps {
   item: any;
   service?: ServiceState;
 }
 
-const AgendaItem = (props: ItemProps) => {
-  const { item, service } = props;
-  const [createAppointment] = useCreateAppointmentMutation();
+const AgendaItemContent = ({ item, service }: ItemProps) => {
+  const navigation = useNavigation();
+  const [createAppointment, { isLoading }] = useCreateAppointmentMutation();
 
-  const buttonPressed = useCallback(() => {
+  const buttonPressed = () => {
     console.log('AgendaItemHour', new Date(item.hour));
-    const appointment: AppointmentState = {
-      id: 0,
+    const appointment = {
       date: new Date(item.hour),
       price: service?.price!,
       serviceId: service?.id!,
@@ -27,24 +28,46 @@ const AgendaItem = (props: ItemProps) => {
       .then((res) => {
         console.log('Appointment created');
         console.log(res);
+        navigation.goBack();
+      })
+      .catch((error) => {
+        console.error('Error creating appointment:', error);
       });
     console.log('Service', service);
-  }, [item, service, createAppointment]);
+  };
+
+  const { title, duration } = item;
 
   return (
     <View style={styles.item}>
       <View>
-        <Text style={styles.itemTitleText}>{item.title}</Text>
-        <Text style={styles.itemTitleText}>{item.duration}</Text>
+        <Text style={styles.itemTitleText}>{title}</Text>
+        <Text style={styles.itemTitleText}>{duration}</Text>
       </View>
       <View style={styles.itemButtonContainer}>
-        <Button color={'grey'} title={'Info'} onPress={buttonPressed} />
+        {isLoading ? (
+          <ActivityIndicator size={'large'} color={'black'} />
+        ) : (
+          <TouchableOpacity onPress={buttonPressed}>
+            <FontAwesome5Icon name={'calendar-check'} size={20} />
+          </TouchableOpacity>
+        )}
       </View>
     </View>
   );
 };
 
-export default React.memo(AgendaItem);
+class AgendaItem extends React.Component<ItemProps> {
+  shouldComponentUpdate(nextProps: Readonly<ItemProps>): boolean {
+    return this.props.item !== nextProps.item;
+  }
+
+  render() {
+    return <AgendaItemContent {...this.props} />;
+  }
+}
+
+export default AgendaItem;
 
 const styles = StyleSheet.create({
   item: {

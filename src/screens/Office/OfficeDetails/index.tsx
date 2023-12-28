@@ -19,6 +19,7 @@ import { useFocusEffect } from '@react-navigation/native';
 import ErrorChip from '~/components/ErrorChip';
 import { AntDesign } from '@expo/vector-icons';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
+import { useAppSelector } from '~/redux/hooks';
 
 export interface OfficeDetailsSchema {
   name: string;
@@ -34,16 +35,21 @@ const OfficeDetails = ({ navigation, route }: NavigationProps<Routes.OfficeDetai
   const [createOffice, { isLoading }] = useCreateOfficeMutation();
   const [updateOffice, { isLoading: isLoadingUpdate }] = useUpdateOfficeMutation();
   const [deleteOffice, { isLoading: isLoadingDelete }] = useDeleteOfficeMutation();
+  const minDate = new Date();
+  const idSession = useAppSelector((state) => state.session.id);
+  minDate.setHours(8);
+  minDate.setMinutes(0);
+  minDate.setSeconds(0);
 
   const [numberOfDay, setNumberOfDay] = useState<number>(0);
   const [daysFrom, setDaysFrom] = useState<Date[]>(
     !route.params.office?.timeFrom
-      ? [new Date(), new Date(), new Date(), new Date(), new Date(), new Date(), new Date()]
+      ? Array(7).fill(minDate)
       : route.params.office!.timeFrom.map((time) => new Date(time))
   );
   const [daysTo, setDaysTo] = useState<Date[]>(
     !route.params.office?.timeFrom
-      ? [new Date(), new Date(), new Date(), new Date(), new Date(), new Date(), new Date()]
+      ? Array(7).fill(minDate)
       : route.params.office!.timeTo.map((time) => new Date(time))
   );
 
@@ -63,7 +69,7 @@ const OfficeDetails = ({ navigation, route }: NavigationProps<Routes.OfficeDetai
       address2: data.address2,
       city: data.city,
       postalCode: data.postalCode,
-      ownerId: route.params.id
+      ownerId: idSession!
     };
 
     createOffice(officeTMP)
@@ -86,7 +92,7 @@ const OfficeDetails = ({ navigation, route }: NavigationProps<Routes.OfficeDetai
       address2: data.address2,
       city: data.city,
       postalCode: data.postalCode,
-      ownerId: route.params.id,
+      ownerId: route.params.office!.ownerId,
       id: route.params.office!.id
     };
 
@@ -175,8 +181,8 @@ const OfficeDetails = ({ navigation, route }: NavigationProps<Routes.OfficeDetai
       address2: office?.address2 ?? '',
       city: office?.city ?? '',
       postalCode: office?.postalCode ?? '',
-      timeFrom: office?.timeFrom! ? daysFrom[numberOfDay] : new Date(),
-      timeTo: office?.timeTo! ? daysTo[numberOfDay] : new Date()
+      timeFrom: office?.timeFrom! ? daysFrom[numberOfDay] : minDate,
+      timeTo: office?.timeTo! ? daysTo[numberOfDay] : minDate
     }
   });
   return (

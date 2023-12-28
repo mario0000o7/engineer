@@ -8,6 +8,7 @@ const AUTH_KEY = 'AUTH_TOKEN';
 export const preloadToken = createAsyncThunk('preloadToken', async () => {
   const token = await AsyncStorage.getItem(AUTH_KEY);
   const decoded = jwtDecode(token ?? '') as JwtProps;
+  console.log('decoded', decoded);
 
   return {
     token: token ?? undefined,

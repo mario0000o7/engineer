@@ -61,7 +61,7 @@ const OfficeItem = ({ navigation, office, role }: OfficeItemProps) => {
           <TouchableOpacity
             onPress={() => {
               navigation.navigate(Routes.OfficeServiceList, {
-                id: office.id,
+                id: office.id!,
                 name: office.name
               });
             }}
@@ -78,7 +78,6 @@ const OfficeItem = ({ navigation, office, role }: OfficeItemProps) => {
             <TouchableOpacity
               onPress={() => {
                 navigation.navigate(Routes.OfficeDetails, {
-                  id: office.id,
                   name: office.name,
                   office: office
                 });

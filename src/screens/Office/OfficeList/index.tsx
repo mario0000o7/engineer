@@ -101,8 +101,7 @@ const OfficeList = ({ navigation }: NavigationProps<Routes.OfficeList>) => {
             onPress={() =>
               navigation.navigate(Routes.OfficeDetails, {
                 create: true,
-                name: 'Utwórz gabinet',
-                id: idOwner!
+                name: 'Utwórz gabinet'
               })
             }>
             <AntDesign name={'pluscircle'} size={50} color={COLOR.GREEN} />

@@ -62,7 +62,7 @@ export type RootStackParamList = {
   [Routes.OfficeList]: undefined;
   [Routes.OfficeNavigator]: undefined;
   [Routes.OfficeItem]: undefined;
-  [Routes.OfficeDetails]: { name: string; id: number; create?: boolean; office?: OfficeState };
+  [Routes.OfficeDetails]: { name: string; create?: boolean; office?: OfficeState };
   [Routes.OfficeCalendar]: { name: string; id: number; service: ServiceState };
   [Routes.OfficeServiceList]: { name: string; id: number };
 };
