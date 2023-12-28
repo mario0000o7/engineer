@@ -1,15 +1,18 @@
-import { Calendar } from 'react-native-calendars';
-import { Text } from 'react-native-paper';
-import { useState } from 'react';
-import { Platform, ScrollView, View } from 'react-native';
+import { CalendarProvider, ExpandableCalendar, TimelineList } from 'react-native-calendars';
+import { useCallback, useState } from 'react';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import { LocaleConfig } from 'react-native-calendars/src/index';
-import { VisitComponent } from '~/components/VisitComponent';
-import { styles } from '~/screens/Calendar/styles';
-import { COLOR } from '~/styles/constants';
-import Icon from 'react-native-paper/src/components/Icon';
 import { NavigationProps, Routes } from '~/router/navigationTypes';
+import {
+  useGetAppointmentsByDoctorIdMutation,
+  useGetAppointmentsByUserIdMutation
+} from '~/redux/api/authApi';
+import { useAppSelector } from '~/redux/hooks';
+import { useFocusEffect } from '@react-navigation/native';
+import { MarkedDates } from 'react-native-calendars/src/types';
+import { COLOR } from '~/styles/constants';
+import { FloatingButton } from 'react-native-ui-lib';
 
 LocaleConfig.locales['pl'] = {
   monthNames: [
@@ -46,192 +49,127 @@ LocaleConfig.locales['pl'] = {
 };
 LocaleConfig.defaultLocale = 'pl';
 
+interface Event {
+  id?: string;
+  start: string;
+  end: string;
+  title: string;
+  summary: string;
+  color?: string;
+}
+
+interface Events {
+  [key: string]: Event[];
+}
+
 const CalendarScreen = ({ navigation }: NavigationProps<Routes.Calendar>) => {
-  const [day, setDay] = useState('');
+  const [day, setDay] = useState(new Date());
   const insets = useSafeAreaInsets();
+  const role = useAppSelector((state) => state.session.role);
+  const id = useAppSelector((state) => state.session.id);
+  const [getAppointment, { isLoading: isLoadingAppointment }] =
+    role === 1 ? useGetAppointmentsByDoctorIdMutation() : useGetAppointmentsByUserIdMutation();
+  const [events, setEvents] = useState<Events>({});
+  const [markedDates, setMarkedDates] = useState<MarkedDates>({});
 
-  if (Platform.OS === 'web') {
-    return (
-      <View
-        style={{
-          width: '100%',
-          height: '100%',
-          backgroundColor: COLOR.BACKGROUND
-        }}>
-        <View style={styles.hBox}>
-          <View style={{ height: '100%', width: '50%' }}>
-            <Calendar
-              style={{ width: '100%', height: '100%' }}
-              renderArrow={(direction) => {
-                if (direction === 'left') {
-                  return <Icon source={'arrow-left-thick'} color={COLOR.PRIMARY} size={45} />;
-                } else {
-                  return <Icon source={'arrow-right-thick'} color={COLOR.PRIMARY} size={45} />;
+  const getAppointmentHandler = useCallback(() => {
+    getAppointment({ userId: id! })
+      .unwrap()
+      .then((res) => {
+        let markedDatesTMP = {};
+        const eventsTMP: Events = {};
+        res.forEach((appointment) => {
+          const date = new Date(appointment.date).toISOString().split('T')[0];
+          const dateTMP = new Date(appointment.date);
+          const startDate = new Date(appointment.date);
+          const duration = new Date(appointment.services!.duration);
+          const endDate = new Date(
+            startDate.getTime() +
+              duration.getHours() * 60 * 60 * 1000 +
+              duration.getMinutes() * 60 * 1000
+          );
+
+          if (eventsTMP[date]) {
+            eventsTMP[date].push({
+              start: startDate.toISOString(),
+              end: endDate.toISOString(),
+              title: appointment.services!.name,
+              summary: appointment.services!.offices!.name,
+              id: appointment.id!.toString()
+            });
+          } else {
+            eventsTMP[date] = [
+              {
+                start: startDate.toISOString(),
+                end: endDate.toISOString(),
+                title: appointment.services!.name,
+                summary: appointment.services!.offices!.name,
+                id: appointment.id!.toString()
+              }
+            ];
+          }
+          markedDatesTMP = {
+            ...markedDatesTMP,
+            [date]: {
+              dotColor: COLOR.PRIMARY,
+              color: COLOR.GREEN,
+              customStyles: {
+                container: {
+                  backgroundColor: dateTMP < new Date() ? COLOR.ORANGE : COLOR.GREEN,
+                  borderRadius: 50
+                },
+                text: {
+                  color: COLOR.WHITE,
+                  fontWeight: 'bold'
                 }
-              }}
-              theme={{
-                // @ts-ignore
-                'stylesheet.calendar.main': {
-                  container: {
-                    // height: '100%',
-                    width: '100%',
-                    backgroundColor: COLOR.BACKGROUND
-                  },
-                  week: {
-                    flexDirection: 'row',
-                    justifyContent: 'space-around'
-                  }
-                },
-                'stylesheet.day.basic': {
-                  selected: {
-                    borderRadius: 100,
-                    backgroundColor: COLOR.PRIMARY
-                  },
-                  base: {
-                    width: 100,
-                    height: 100,
-                    alignItems: 'center'
-                  },
-                  text: {
-                    fontSize: 45,
-                    textAlign: 'center',
-                    marginTop: 15,
-                    marginBottom: 0
-                  },
-                  container: {
-                    alignSelf: 'stretch',
-                    alignItems: 'center'
-                  }
-                },
-                dotStyle: {
-                  width: 10,
-                  height: 10,
-                  borderRadius: 5
-                },
-
-                // textDayFontSize: 20,
-                textDayHeaderFontSize: 15,
-                textMonthFontSize: 40,
-
-                textMonthFontWeight: 'bold',
-                backgroundColor: COLOR.BACKGROUND,
-                selectedDayBackgroundColor: COLOR.PRIMARY,
-                calendarBackground: COLOR.BACKGROUND
-              }}
-              onDayPress={(day) => {
-                console.log('selected day', day);
-                setDay(day.dateString);
-              }}
-              current={new Date().toDateString()}
-              markedDates={{
-                [day]: { selected: true, disableTouchEvent: true },
-                '2023-10-16': {
-                  marked: true,
-                  dotColor: 'orange',
-                  disableTouchEvent: false,
-                  selected: day === '2023-10-16'
-                }
-              }}
-            />
-          </View>
-          <View style={{ height: '100%', width: '50%', backgroundColor: COLOR.BACKGROUND }}>
-            <Text
-              style={{
-                alignSelf: 'center',
-                fontSize: 40,
-                fontWeight: 'bold',
-                color: 'black',
-                paddingTop: 10,
-                paddingBottom: 10
-              }}>
-              Wizyty
-            </Text>
-            <ScrollView showsHorizontalScrollIndicator={false}>
-              <VisitComponent />
-              <VisitComponent />
-              <VisitComponent />
-              <VisitComponent />
-              <VisitComponent />
-              <VisitComponent />
-              <VisitComponent />
-              <VisitComponent />
-              <VisitComponent />
-            </ScrollView>
-          </View>
-        </View>
-      </View>
-    );
-  } else
-    return (
-      <View
-        style={{
-          justifyContent: 'center',
-          flex: 1,
-          width: '100%',
-          backgroundColor: COLOR.BACKGROUND,
-          paddingBottom: insets.bottom
-        }}>
-        <Calendar
-          style={{
-            width: '100%',
-            alignSelf: 'center',
-            height: 'auto',
-            borderColor: 'grey',
-            backgroundColor: COLOR.BACKGROUND
-          }}
-          renderArrow={(direction) => {
-            if (direction === 'left') {
-              return <Icon source={'arrow-left-thick'} color={COLOR.PRIMARY} size={35} />;
-            } else {
-              return <Icon source={'arrow-right-thick'} color={COLOR.PRIMARY} size={35} />;
+              }
             }
-          }}
-          theme={{
-            backgroundColor: COLOR.BACKGROUND,
-            selectedDayBackgroundColor: COLOR.PRIMARY,
-            calendarBackground: COLOR.BACKGROUND,
-            textMonthFontWeight: 'bold',
-            textMonthFontSize: 25
-          }}
-          onDayPress={(day) => {
-            console.log('selected day', day);
-            setDay(day.dateString);
-          }}
-          current={new Date().toDateString()}
-          markedDates={{
-            [day]: { selected: true, disableTouchEvent: true },
-            '2023-10-16': {
-              marked: true,
-              dotColor: 'orange',
-              disableTouchEvent: false,
-              selected: day === '2023-10-16'
-            }
-          }}
-        />
-        <Text
-          style={{
-            alignSelf: 'center',
-            fontSize: 40,
-            fontWeight: 'bold',
-            color: 'black',
-            paddingTop: 10,
-            paddingBottom: 10
-          }}>
-          Wizyty
-        </Text>
-        <ScrollView
-          showsHorizontalScrollIndicator={false}
-          style={{ width: '100%', alignSelf: 'center' }}>
-          <VisitComponent />
-          <VisitComponent />
-          <VisitComponent />
-          <VisitComponent />
-          <VisitComponent />
-          <VisitComponent />
-          <VisitComponent />
-          <VisitComponent />
-        </ScrollView>
-      </View>
-    );
+          };
+        });
+        setEvents(eventsTMP);
+        setMarkedDates(markedDatesTMP);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  }, []);
+  useFocusEffect(getAppointmentHandler);
+
+  // if (Platform.OS === 'web') {
+  return (
+    <CalendarProvider
+      date={new Date().toDateString()}
+      showTodayButton
+      disabledOpacity={0.6}
+      // numberOfDays={3}
+    >
+      <ExpandableCalendar
+        hideKnob
+        disableAllTouchEventsForDisabledDays
+        animateScroll
+        disableScrollViewPanResponder={true}
+        firstDay={1}
+        markingType={'custom'}
+        markedDates={markedDates}
+        displayLoadingIndicator={isLoadingAppointment}
+      />
+      <TimelineList
+        events={events}
+        showNowIndicator
+        timelineProps={{
+          onEventPress: (event) => {
+            console.log('event pressed', event);
+          }
+        }}
+        scrollToNow
+        scrollToFirst
+        // initialTime={{ hour: new Date().getHours(), minutes: new Date().getMinutes() }}
+      />
+      <FloatingButton
+        visible={true}
+        button={{ label: 'Approve', onPress: () => console.log('approved') }}
+      />
+    </CalendarProvider>
+  );
 };
 export default CalendarScreen;

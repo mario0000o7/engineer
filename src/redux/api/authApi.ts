@@ -133,6 +133,20 @@ export const authApi = baseApi.injectEndpoints({
         url: '/appointment/create',
         body: data
       })
+    }),
+    getAppointmentsByUserId: builder.mutation<AppointmentState[], { userId: number }>({
+      query: (data) => ({
+        method: 'POST',
+        url: '/appointment/getAppointmentsByUserId',
+        body: data
+      })
+    }),
+    getAppointmentsByDoctorId: builder.mutation<AppointmentState[], { userId: number }>({
+      query: (data) => ({
+        method: 'POST',
+        url: '/appointment/getAppointmentsByDoctorId',
+        body: data
+      })
     })
   })
 });
@@ -155,5 +169,7 @@ export const {
   useUpdateServiceMutation,
   useRetrieveAllMutation,
   useReadAvailableDatesForServiceMutation,
-  useCreateAppointmentMutation
+  useCreateAppointmentMutation,
+  useGetAppointmentsByDoctorIdMutation,
+  useGetAppointmentsByUserIdMutation
 } = authApi;
