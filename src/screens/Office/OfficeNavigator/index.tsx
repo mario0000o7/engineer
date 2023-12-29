@@ -9,10 +9,7 @@ import OfficeServicesList from '~/screens/Office/OfficeServicesList';
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
 
-const OfficeNavigator = ({
-  navigation,
-  route
-}: NavigationProps<Routes.ContactListNavigatorRecent>) => {
+const OfficeNavigator = ({ navigation, route }: NavigationProps<Routes.OfficeNavigator>) => {
   return (
     <Stack.Navigator
       initialRouteName={Routes.OfficeList}

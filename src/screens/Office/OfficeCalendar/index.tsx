@@ -101,27 +101,6 @@ const OfficeCalendar = ({ navigation, route }: NavigationProps<Routes.OfficeCale
               }
             }
           };
-
-          // const durationTMP = new Date(route.params.service.duration);
-          // const dayData: dayData = {
-          //   hour: tmpDate.toString(),
-          //   duration:
-          //     durationTMP.getHours().toString() +
-          //     ':' +
-          //     durationTMP.getMinutes().toString().padStart(2, '0'),
-          //   title:
-          //     tmpDate.getHours().toString() + ':' + tmpDate.getMinutes().toString().padStart(2, '0')
-          // };
-          // const titleTMP =
-          //   tmpDate.getFullYear().toString() +
-          //   '-' +
-          //   (tmpDate.getUTCMonth() + 1).toString().padStart(2, '0') +
-          //   '-' +
-          //   tmpDate.getDate().toString().padStart(2, '0');
-          // tmp[titleTMP] = {
-          //   title: titleTMP,
-          //   data: [...(tmp[titleTMP]?.data || []), dayData]
-          // };
         });
         setMarkedDates(markedDatesTMP);
         setDates(tmpDates);
@@ -169,53 +148,6 @@ const OfficeCalendar = ({ navigation, route }: NavigationProps<Routes.OfficeCale
 
   useFocusEffect(freeDayHandler);
 
-  // return (
-  //   <View
-  //     style={{
-  //       flex: 1,
-  //       width: '100%',
-  //       backgroundColor: COLOR.BACKGROUND
-  //     }}>
-  //     <Calendar
-  //       style={{
-  //         width: '100%',
-  //         alignSelf: 'center',
-  //         height: 'auto',
-  //         borderColor: 'grey',
-  //         backgroundColor: COLOR.BACKGROUND
-  //       }}
-  //       renderArrow={(direction) => {
-  //         if (direction === 'left') {
-  //           return <Icon source={'arrow-left-thick'} color={COLOR.PRIMARY} size={35} />;
-  //         } else {
-  //           return <Icon source={'arrow-right-thick'} color={COLOR.PRIMARY} size={35} />;
-  //         }
-  //       }}
-  //       theme={{
-  //         backgroundColor: COLOR.BACKGROUND,
-  //         selectedDayBackgroundColor: COLOR.PRIMARY,
-  //         calendarBackground: COLOR.BACKGROUND,
-  //         textMonthFontWeight: 'bold',
-  //         textMonthFontSize: 25
-  //       }}
-  //       minDate={new Date().toDateString()}
-  //       onDayPress={(day) => {
-  //         console.log('selected day', day);
-  //         setDay(day.dateString);
-  //       }}
-  //       current={new Date().toDateString()}
-  //       markedDates={markedDates}
-  //     />
-  //     <AgendaList
-  //       sections={[
-  //         {
-  //           title: '2023-12-23',
-  //           data: [{ hour: '12', duration: '1h', title: 'Wizyta' }]
-  //         }
-  //       ]}
-  //     />
-  //   </View>
-  // );
   const onDayChange = (date: string) => {
     setDay(new Date(date));
   };

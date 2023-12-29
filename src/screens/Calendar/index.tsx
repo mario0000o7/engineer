@@ -1,6 +1,5 @@
 import { CalendarProvider, ExpandableCalendar, TimelineList } from 'react-native-calendars';
 import { useCallback, useState } from 'react';
-import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import { LocaleConfig } from 'react-native-calendars/src/index';
 import { NavigationProps, Routes } from '~/router/navigationTypes';
@@ -12,7 +11,9 @@ import { useAppSelector } from '~/redux/hooks';
 import { useFocusEffect } from '@react-navigation/native';
 import { MarkedDates } from 'react-native-calendars/src/types';
 import { COLOR } from '~/styles/constants';
-import { FloatingButton } from 'react-native-ui-lib';
+import { Dialog } from 'react-native-ui-lib';
+import TimelineItem from '~/components/TimelineItem';
+import { ServiceState } from '~/types/service';
 
 LocaleConfig.locales['pl'] = {
   monthNames: [
@@ -56,6 +57,8 @@ interface Event {
   title: string;
   summary: string;
   color?: string;
+  price?: number;
+  service?: ServiceState;
 }
 
 interface Events {
@@ -63,14 +66,14 @@ interface Events {
 }
 
 const CalendarScreen = ({ navigation }: NavigationProps<Routes.Calendar>) => {
-  const [day, setDay] = useState(new Date());
-  const insets = useSafeAreaInsets();
   const role = useAppSelector((state) => state.session.role);
   const id = useAppSelector((state) => state.session.id);
+  const [event, setEvent] = useState<Event>();
   const [getAppointment, { isLoading: isLoadingAppointment }] =
     role === 1 ? useGetAppointmentsByDoctorIdMutation() : useGetAppointmentsByUserIdMutation();
   const [events, setEvents] = useState<Events>({});
   const [markedDates, setMarkedDates] = useState<MarkedDates>({});
+  const [visible, setVisible] = useState(false);
 
   const getAppointmentHandler = useCallback(() => {
     getAppointment({ userId: id! })
@@ -95,7 +98,9 @@ const CalendarScreen = ({ navigation }: NavigationProps<Routes.Calendar>) => {
               end: endDate.toISOString(),
               title: appointment.services!.name,
               summary: appointment.services!.offices!.name,
-              id: appointment.id!.toString()
+              id: appointment.id!.toString(),
+              price: appointment.price,
+              service: appointment.services
             });
           } else {
             eventsTMP[date] = [
@@ -104,7 +109,9 @@ const CalendarScreen = ({ navigation }: NavigationProps<Routes.Calendar>) => {
                 end: endDate.toISOString(),
                 title: appointment.services!.name,
                 summary: appointment.services!.offices!.name,
-                id: appointment.id!.toString()
+                id: appointment.id!.toString(),
+                price: appointment.price,
+                service: appointment.services
               }
             ];
           }
@@ -159,16 +166,26 @@ const CalendarScreen = ({ navigation }: NavigationProps<Routes.Calendar>) => {
         timelineProps={{
           onEventPress: (event) => {
             console.log('event pressed', event);
+            const eventTMP = event as Event;
+            setEvent({
+              id: eventTMP.id,
+              start: eventTMP.start,
+              end: eventTMP.end,
+              title: eventTMP.title,
+              summary: eventTMP.summary!,
+              price: eventTMP.price!,
+              service: eventTMP.service!
+            });
+            setVisible(true);
           }
         }}
         scrollToNow
         scrollToFirst
         // initialTime={{ hour: new Date().getHours(), minutes: new Date().getMinutes() }}
       />
-      <FloatingButton
-        visible={true}
-        button={{ label: 'Approve', onPress: () => console.log('approved') }}
-      />
+      <Dialog visible={visible} onDismiss={() => setVisible(false)}>
+        <TimelineItem item={event} setModalVisible={setVisible} />
+      </Dialog>
     </CalendarProvider>
   );
 };

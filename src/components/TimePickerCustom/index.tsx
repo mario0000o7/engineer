@@ -32,6 +32,13 @@ const TimePickerCustom = ({
   const maxDate = new Date();
   maxDate.setHours(3);
   maxDate.setMinutes(0);
+  maxDate.setSeconds(0);
+  maxDate.setMilliseconds(0);
+  const minDate = new Date();
+  minDate.setHours(0);
+  minDate.setMinutes(15);
+  minDate.setSeconds(0);
+  minDate.setMilliseconds(0);
   return (
     <View>
       <Controller

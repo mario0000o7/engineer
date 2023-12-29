@@ -5,6 +5,8 @@ import FontAwesome5Icon from 'react-native-vector-icons/FontAwesome5';
 import { TouchableOpacity } from 'react-native-ui-lib';
 import { useCreateAppointmentMutation } from '~/redux/api/authApi';
 import { useNavigation } from '@react-navigation/native';
+import { NavigationProps, Routes } from '~/router/navigationTypes';
+import { useAppSelector } from '~/redux/hooks';
 
 interface ItemProps {
   item: any;
@@ -12,8 +14,9 @@ interface ItemProps {
 }
 
 const AgendaItemContent = ({ item, service }: ItemProps) => {
-  const navigation = useNavigation();
+  const navigation = useNavigation() as NavigationProps<Routes.OfficeCalendar>['navigation'];
   const [createAppointment, { isLoading }] = useCreateAppointmentMutation();
+  const id = useAppSelector((state) => state.session.id);
 
   const buttonPressed = () => {
     console.log('AgendaItemHour', new Date(item.hour));
@@ -21,14 +24,17 @@ const AgendaItemContent = ({ item, service }: ItemProps) => {
       date: new Date(item.hour),
       price: service?.price!,
       serviceId: service?.id!,
-      userId: 4
+      userId: id!
     };
     createAppointment(appointment)
       .unwrap()
       .then((res) => {
         console.log('Appointment created');
         console.log(res);
-        navigation.goBack();
+        navigation.reset({
+          index: 0,
+          routes: [{ name: Routes.Calendar }]
+        });
       })
       .catch((error) => {
         console.error('Error creating appointment:', error);

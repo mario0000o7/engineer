@@ -5,6 +5,7 @@ import { COLOR } from '~/styles/constants';
 import ServiceItem from '~/components/ServiceItem';
 import OfficeInputCustom from '~/components/OfficeInputCustom';
 import { useForm } from 'react-hook-form';
+import Entypo from 'react-native-vector-icons/Entypo';
 import TimePickerCustom from '~/components/TimePickerCustom';
 import {
   useCreateOfficeMutation,
@@ -36,6 +37,7 @@ const OfficeDetails = ({ navigation, route }: NavigationProps<Routes.OfficeDetai
   const [updateOffice, { isLoading: isLoadingUpdate }] = useUpdateOfficeMutation();
   const [deleteOffice, { isLoading: isLoadingDelete }] = useDeleteOfficeMutation();
   const minDate = new Date();
+  const [isClear, setIsClear] = useState(false);
   const idSession = useAppSelector((state) => state.session.id);
   minDate.setHours(8);
   minDate.setMinutes(0);
@@ -156,11 +158,14 @@ const OfficeDetails = ({ navigation, route }: NavigationProps<Routes.OfficeDetai
               <TouchableOpacity onPress={handleSubmit(onSubmitDelete)}>
                 <AntDesign name={'delete'} size={35} color={COLOR.RED} />
               </TouchableOpacity>
-              {isDirty && (
-                <TouchableOpacity style={{ marginLeft: 5 }} onPress={handleSubmit(onSubmitUpdate)}>
-                  <AntDesign name={'checkcircle'} size={35} color={COLOR.GREEN} />
-                </TouchableOpacity>
-              )}
+              {isDirty ||
+                (isClear && (
+                  <TouchableOpacity
+                    style={{ marginLeft: 5 }}
+                    onPress={handleSubmit(onSubmitUpdate)}>
+                    <AntDesign name={'checkcircle'} size={35} color={COLOR.GREEN} />
+                  </TouchableOpacity>
+                ))}
             </View>
           )}
         </View>
@@ -242,7 +247,7 @@ const OfficeDetails = ({ navigation, route }: NavigationProps<Routes.OfficeDetai
             setValue('timeTo', daysTo[index]!);
           }}
         />
-        <View marginB-10 centerH={true} centerV={true} row={true}>
+        <View marginB-10 marginT-10 centerH={true} centerV={true} row={true}>
           <Text style={{ width: 130, fontSize: 15 }}>Godziny pracy od:</Text>
           <TimePickerCustom
             name={'timeFrom'}
@@ -264,6 +269,33 @@ const OfficeDetails = ({ navigation, route }: NavigationProps<Routes.OfficeDetai
             setDays={setDaysTo}
             days={daysTo}
           />
+          <TouchableOpacity
+            onPress={() => {
+              const clearDate = new Date();
+              clearDate.setHours(0);
+              clearDate.setMinutes(0);
+              clearDate.setSeconds(0);
+              clearDate.setMilliseconds(0);
+
+              const tmpDaysFrom = [...daysFrom];
+              const tmpDaysTo = [...daysTo];
+              tmpDaysFrom[numberOfDay] = clearDate;
+              tmpDaysTo[numberOfDay] = clearDate;
+              setDaysFrom(tmpDaysFrom);
+              setDaysTo(tmpDaysTo);
+              setValue('timeFrom', clearDate);
+              setValue('timeTo', clearDate);
+              setIsClear(true);
+            }}>
+            <Entypo
+              name={'back-in-time'}
+              size={35}
+              style={{
+                marginLeft: 10
+              }}
+              color={COLOR.PRIMARY}
+            />
+          </TouchableOpacity>
         </View>
         {!route.params.create! && (
           <View useSafeArea={true} flex={true}>
