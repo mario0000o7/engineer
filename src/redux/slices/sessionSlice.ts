@@ -42,6 +42,7 @@ const sessionSlice = createSlice({
       const decoded = jwtDecode(action.payload) as JwtProps;
       state.id = decoded.id;
       state.email = decoded.email;
+      state.role = decoded.role;
     },
     clearCurrentSessionData(state) {
       state.token = undefined;

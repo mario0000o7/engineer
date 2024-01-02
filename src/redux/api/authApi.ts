@@ -161,6 +161,13 @@ export const authApi = baseApi.injectEndpoints({
         url: '/appointment/delete',
         body: data
       })
+    }),
+    updateUser: builder.mutation<number, RegisterState>({
+      query: (data) => ({
+        method: 'POST',
+        url: '/user/update',
+        body: data
+      })
     })
   })
 });
@@ -187,5 +194,6 @@ export const {
   useGetAppointmentsByDoctorIdMutation,
   useGetAppointmentsByUserIdMutation,
   useMoveAppointmentMutation,
-  useDeleteAppointmentMutation
+  useDeleteAppointmentMutation,
+  useUpdateUserMutation
 } = authApi;

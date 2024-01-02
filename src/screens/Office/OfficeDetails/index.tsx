@@ -138,8 +138,25 @@ const OfficeDetails = ({ navigation, route }: NavigationProps<Routes.OfficeDetai
       });
   }, []);
   useFocusEffect(serviceListHandler);
+  const {
+    control,
+    handleSubmit,
+    setValue,
+    formState: { errors, isDirty }
+  } = useForm<OfficeDetailsSchema>({
+    defaultValues: {
+      name: office?.name ?? '',
+      address1: office?.address1 ?? '',
+      address2: office?.address2 ?? '',
+      city: office?.city ?? '',
+      postalCode: office?.postalCode ?? '',
+      timeFrom: office?.timeFrom! ? daysFrom[numberOfDay] : minDate,
+      timeTo: office?.timeTo! ? daysTo[numberOfDay] : minDate
+    }
+  });
 
   const buttonsHandler = useCallback(() => {
+    console.log('IsDirty', isDirty);
     navigation.setOptions({
       headerRight: () => (
         <View>
@@ -158,38 +175,28 @@ const OfficeDetails = ({ navigation, route }: NavigationProps<Routes.OfficeDetai
               <TouchableOpacity onPress={handleSubmit(onSubmitDelete)}>
                 <AntDesign name={'delete'} size={35} color={COLOR.RED} />
               </TouchableOpacity>
-              {isDirty ||
-                (isClear && (
-                  <TouchableOpacity
-                    style={{ marginLeft: 5 }}
-                    onPress={handleSubmit(onSubmitUpdate)}>
-                    <AntDesign name={'checkcircle'} size={35} color={COLOR.GREEN} />
-                  </TouchableOpacity>
-                ))}
+              {(isDirty || isClear) && (
+                <TouchableOpacity style={{ marginLeft: 5 }} onPress={handleSubmit(onSubmitUpdate)}>
+                  <AntDesign name={'checkcircle'} size={35} color={COLOR.GREEN} />
+                </TouchableOpacity>
+              )}
             </View>
           )}
         </View>
       )
     });
-  }, [navigation, isLoading, isLoadingUpdate, route.params.create, onSubmitSave, onSubmitUpdate]);
+  }, [
+    navigation,
+    isLoading,
+    isLoadingUpdate,
+    route.params.create,
+    onSubmitSave,
+    onSubmitUpdate,
+    isDirty,
+    isClear
+  ]);
   useFocusEffect(buttonsHandler);
 
-  const {
-    control,
-    handleSubmit,
-    setValue,
-    formState: { errors, isDirty }
-  } = useForm<OfficeDetailsSchema>({
-    defaultValues: {
-      name: office?.name ?? '',
-      address1: office?.address1 ?? '',
-      address2: office?.address2 ?? '',
-      city: office?.city ?? '',
-      postalCode: office?.postalCode ?? '',
-      timeFrom: office?.timeFrom! ? daysFrom[numberOfDay] : minDate,
-      timeTo: office?.timeTo! ? daysTo[numberOfDay] : minDate
-    }
-  });
   return (
     <View useSafeArea={true} backgroundColor={COLOR.BACKGROUND} style={{ height: '100%' }}>
       <View margin-10 flex={true}>

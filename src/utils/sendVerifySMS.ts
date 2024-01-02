@@ -24,8 +24,10 @@ export const sendSmsVerification = async (phoneNumber: string) => {
     );
 
     const json = await response.data;
+    console.log(json);
     return json.status === 'pending';
   } catch (error) {
+    console.log(error);
     return false;
   }
 };

@@ -26,6 +26,7 @@ interface CustomTextInputProps {
   keyboardType?: 'default' | 'email-address' | 'numeric' | 'phone-pad';
   maxLength?: number;
   label?: string;
+  unRequired?: boolean;
 }
 
 const CustomTextInput = ({
@@ -35,7 +36,8 @@ const CustomTextInput = ({
   placeholder,
   textContentType,
   keyboardType,
-  maxLength = 40
+  maxLength = 40,
+  unRequired
 }: CustomTextInputProps) => {
   const [hidePass, setHidePass] = useState(textContentType === 'password');
 
@@ -48,7 +50,7 @@ const CustomTextInput = ({
         name={name}
         control={control}
         rules={{
-          required: {
+          required: !unRequired && {
             value: textContentType !== 'streetAddressLine2',
             message: 'Te pole jest wymagane'
           },

@@ -7,16 +7,17 @@ interface CustomTextInputProps {
   name: string;
   control: Control<any>;
   error?: string;
+  unRequired?: boolean;
 }
 
-const phoneCode = ({ control, name, error }: CustomTextInputProps) => {
+const phoneCode = ({ control, name, error, unRequired }: CustomTextInputProps) => {
   return (
     <View style={{ width: 'auto', maxWidth: 100 }}>
       <Controller
         name={name}
         control={control}
         rules={{
-          required: {
+          required: !unRequired && {
             value: true,
             message: 'Te pole jest wymagane'
           }
