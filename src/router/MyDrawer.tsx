@@ -5,6 +5,7 @@ import ChatScreen from '~/router/ChatNavigation';
 import { RootStackParamList, Routes } from '~/router/navigationTypes';
 import LogoutScreen from '~/screens/Logout';
 import OfficeNavigator from '~/screens/Office/OfficeNavigator';
+import Settings from '~/screens/Settings';
 
 const Drawer = createDrawerNavigator<RootStackParamList>();
 
@@ -45,7 +46,11 @@ const MyDrawer = () => {
         }}
       />
       {/*<Drawer.Screen name="Konto" component={SettingsScreen} options={commonOptions} />*/}
-      {/*<Drawer.Screen name="Ustawienia" component={SettingsScreen} options={commonOptions} />*/}
+      <Drawer.Screen
+        name={Routes.Settings}
+        component={Settings}
+        options={{ ...commonOptions, title: 'Ustawienia' }}
+      />
       <Drawer.Screen
         name={Routes.Logout}
         component={LogoutScreen}

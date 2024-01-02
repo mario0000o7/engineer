@@ -14,6 +14,9 @@ import { COLOR } from '~/styles/constants';
 import { Dialog } from 'react-native-ui-lib';
 import TimelineItem from '~/components/TimelineItem';
 import { ServiceState } from '~/types/service';
+import * as Notifications from 'expo-notifications';
+import { subMinutes } from 'date-fns';
+import { Platform } from 'react-native';
 
 LocaleConfig.locales['pl'] = {
   monthNames: [
@@ -78,13 +81,26 @@ const CalendarScreen = ({ navigation }: NavigationProps<Routes.Calendar>) => {
   const getAppointmentHandler = useCallback(() => {
     getAppointment({ userId: id! })
       .unwrap()
-      .then((res) => {
+      .then(async (res) => {
+        if (Platform.OS !== 'web') await Notifications.cancelAllScheduledNotificationsAsync();
         let markedDatesTMP = {};
+        console.log('Appointments', res);
         const eventsTMP: Events = {};
         res.forEach((appointment) => {
           const date = new Date(appointment.date).toISOString().split('T')[0];
           const dateTMP = new Date(appointment.date);
           const startDate = new Date(appointment.date);
+          Notifications.scheduleNotificationAsync({
+            content: {
+              title: 'Przypomnienie o wizycie',
+              body: `Za 15 minut masz wizytę u ${appointment.services!.offices!.name} na usłudze ${
+                appointment.services!.name
+              }`
+            },
+            trigger: {
+              date: subMinutes(startDate, 15)
+            }
+          });
           const duration = new Date(appointment.services!.duration);
           const endDate = new Date(
             startDate.getTime() +

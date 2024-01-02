@@ -105,20 +105,32 @@ const AgendaItemContent = ({ item, setModalVisible }: ItemProps) => {
               alignSelf: 'center'
             }}>
             <View row={true}>
-              <Button
-                mode={'contained'}
-                style={{ marginTop: 20 }}
-                buttonColor={COLOR.ORANGE}
-                onPress={moveAppointment}>
-                <Text style={{ color: COLOR.WHITE }}>Przesuń</Text>
-              </Button>
-              <Button
-                mode={'contained'}
-                style={{ marginTop: 20, marginLeft: 10 }}
-                onPress={deleteAppointmentButton}
-                buttonColor={COLOR.RED}>
-                <Text style={{ color: COLOR.WHITE }}>Odwołaj</Text>
-              </Button>
+              {item.end > new Date() ? (
+                <Button
+                  mode={'contained'}
+                  style={{ marginTop: 20 }}
+                  buttonColor={COLOR.ORANGE}
+                  onPress={() => setModalVisible(false)}>
+                  <Text style={{ color: COLOR.WHITE }}>Zamknij</Text>
+                </Button>
+              ) : (
+                <>
+                  <Button
+                    mode={'contained'}
+                    style={{ marginTop: 20 }}
+                    buttonColor={COLOR.ORANGE}
+                    onPress={moveAppointment}>
+                    <Text style={{ color: COLOR.WHITE }}>Przesuń</Text>
+                  </Button>
+                  <Button
+                    mode={'contained'}
+                    style={{ marginTop: 20, marginLeft: 10 }}
+                    onPress={deleteAppointmentButton}
+                    buttonColor={COLOR.RED}>
+                    <Text style={{ color: COLOR.WHITE }}>Odwołaj</Text>
+                  </Button>
+                </>
+              )}
             </View>
             <Button
               mode={'text'}
