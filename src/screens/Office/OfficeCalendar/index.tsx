@@ -67,6 +67,7 @@ const OfficeCalendar = ({ navigation, route }: NavigationProps<Routes.OfficeCale
   const [readAvailableDatesForService, { isLoading }] = useReadAvailableDatesForServiceMutation();
   const [day, setDay] = useState(new Date());
   const [dates, setDates] = useState<Date[]>([]);
+  console.log('Move', route.params.move);
 
   const freeDayHandler = useCallback(() => {
     readAvailableDatesForService({ serviceId: route.params.id })
@@ -153,7 +154,15 @@ const OfficeCalendar = ({ navigation, route }: NavigationProps<Routes.OfficeCale
   };
 
   const renderItem = useCallback(({ item }: any) => {
-    return <AgendaItem item={item} service={route.params.service} />;
+    console.log('Route', route.params);
+    return (
+      <AgendaItem
+        item={item}
+        move={route.params.move}
+        appointmentId={route.params.appointmentId}
+        service={route.params.service}
+      />
+    );
   }, []);
 
   return (

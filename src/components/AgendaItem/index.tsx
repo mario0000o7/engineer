@@ -3,7 +3,7 @@ import { ActivityIndicator, StyleSheet, Text, View } from 'react-native';
 import { ServiceState } from '~/types/service';
 import FontAwesome5Icon from 'react-native-vector-icons/FontAwesome5';
 import { TouchableOpacity } from 'react-native-ui-lib';
-import { useCreateAppointmentMutation } from '~/redux/api/authApi';
+import { useCreateAppointmentMutation, useMoveAppointmentMutation } from '~/redux/api/authApi';
 import { useNavigation } from '@react-navigation/native';
 import { NavigationProps, Routes } from '~/router/navigationTypes';
 import { useAppSelector } from '~/redux/hooks';
@@ -11,12 +11,15 @@ import { useAppSelector } from '~/redux/hooks';
 interface ItemProps {
   item: any;
   service?: ServiceState;
+  move?: boolean;
+  appointmentId?: number;
 }
 
-const AgendaItemContent = ({ item, service }: ItemProps) => {
+const AgendaItemContent = ({ item, service, move, appointmentId }: ItemProps) => {
   const navigation = useNavigation() as NavigationProps<Routes.OfficeCalendar>['navigation'];
   const [createAppointment, { isLoading }] = useCreateAppointmentMutation();
   const id = useAppSelector((state) => state.session.id);
+  const [moveAppointment, { isLoading: isLoadingMove }] = useMoveAppointmentMutation();
 
   const buttonPressed = () => {
     console.log('AgendaItemHour', new Date(item.hour));
@@ -42,6 +45,23 @@ const AgendaItemContent = ({ item, service }: ItemProps) => {
     console.log('Service', service);
   };
 
+  const moveAppointmentButton = () => {
+    console.log('AgendaItemHour', new Date(item.hour));
+    moveAppointment({ appointmentId: appointmentId!, date: new Date(item.hour) })
+      .unwrap()
+      .then((res) => {
+        console.log('Appointment moved');
+        console.log(res);
+        navigation.reset({
+          index: 0,
+          routes: [{ name: Routes.Calendar }]
+        });
+      })
+      .catch((error) => {
+        console.error('Error moving appointment:', error);
+      });
+  };
+
   const { title, duration } = item;
 
   return (
@@ -51,10 +71,10 @@ const AgendaItemContent = ({ item, service }: ItemProps) => {
         <Text style={styles.itemTitleText}>{duration}</Text>
       </View>
       <View style={styles.itemButtonContainer}>
-        {isLoading ? (
+        {isLoading || isLoadingMove ? (
           <ActivityIndicator size={'large'} color={'black'} />
         ) : (
-          <TouchableOpacity onPress={buttonPressed}>
+          <TouchableOpacity onPress={move ? moveAppointmentButton : buttonPressed}>
             <FontAwesome5Icon name={'calendar-check'} size={20} />
           </TouchableOpacity>
         )}
