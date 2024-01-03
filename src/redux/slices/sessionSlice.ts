@@ -7,6 +7,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 const AUTH_KEY = 'AUTH_TOKEN';
 export const preloadToken = createAsyncThunk('preloadToken', async () => {
   const token = await AsyncStorage.getItem(AUTH_KEY);
+  console.log(token);
   const decoded = jwtDecode(token ?? '') as JwtProps;
   console.log('decoded', decoded);
 
