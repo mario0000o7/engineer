@@ -12,4 +12,10 @@ export module COLOR {
   export const ORANGE = '#FFA500';
   export const RED = '#FF0000';
   export const YELLOW = '#FFFF00';
+  export const BLUE = '#0000FF';
+  export const LIGHT_BLUE = '#00FFFF';
+  export const PURPLE = '#800080';
+  export const PINK = '#FF00FF';
+  export const LIGHT_PINK = '#FFC0CB';
+  export const LIGHT_YELLOW = '#FFFFE0';
 }

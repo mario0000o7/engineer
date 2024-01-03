@@ -6,10 +6,13 @@ import { RootStackParamList, Routes } from '~/router/navigationTypes';
 import LogoutScreen from '~/screens/Logout';
 import OfficeNavigator from '~/screens/Office/OfficeNavigator';
 import Settings from '~/screens/Settings';
+import { useAppSelector } from '~/redux/hooks';
+import DaysOffList from '~/screens/DaysOffList';
 
 const Drawer = createDrawerNavigator<RootStackParamList>();
 
 const MyDrawer = () => {
+  const role = useAppSelector((state) => state.session.role);
   return (
     <Drawer.Navigator
       id={'MainNavigator'}
@@ -45,7 +48,13 @@ const MyDrawer = () => {
           title: 'Gabinety'
         }}
       />
-      {/*<Drawer.Screen name="Konto" component={SettingsScreen} options={commonOptions} />*/}
+      {role === 1 && (
+        <Drawer.Screen
+          name={Routes.DaysOffList}
+          component={DaysOffList}
+          options={{ ...commonOptions, title: 'Urlopy' }}
+        />
+      )}
       <Drawer.Screen
         name={Routes.Settings}
         component={Settings}

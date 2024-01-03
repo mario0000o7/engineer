@@ -3,6 +3,7 @@ import { baseApi } from './baseApi';
 import { OfficeState } from '~/types/office';
 import { ServiceState } from '~/types/service';
 import { AppointmentState } from '~/types/appointment';
+import { DayOffState } from '~/types/dayOff';
 
 export const authApi = baseApi.injectEndpoints({
   endpoints: (builder) => ({
@@ -168,6 +169,34 @@ export const authApi = baseApi.injectEndpoints({
         url: '/user/update',
         body: data
       })
+    }),
+    getAllDaysOffRetrieveByUserId: builder.mutation<DayOffState[], { userId: number }>({
+      query: (data) => ({
+        method: 'POST',
+        url: '/dayOff/retrieveByUserId',
+        body: data
+      })
+    }),
+    createDayOff: builder.mutation<DayOffState, DayOffState>({
+      query: (data) => ({
+        method: 'POST',
+        url: '/dayOff/create',
+        body: data
+      })
+    }),
+    updateDayOff: builder.mutation<number, DayOffState>({
+      query: (data) => ({
+        method: 'POST',
+        url: '/dayOff/update',
+        body: data
+      })
+    }),
+    deleteDayOff: builder.mutation<number, { dayOffId: number }>({
+      query: (data) => ({
+        method: 'POST',
+        url: '/dayOff/delete',
+        body: data
+      })
     })
   })
 });
@@ -195,5 +224,9 @@ export const {
   useGetAppointmentsByUserIdMutation,
   useMoveAppointmentMutation,
   useDeleteAppointmentMutation,
-  useUpdateUserMutation
+  useUpdateUserMutation,
+  useGetAllDaysOffRetrieveByUserIdMutation,
+  useCreateDayOffMutation,
+  useDeleteDayOffMutation,
+  useUpdateDayOffMutation
 } = authApi;
