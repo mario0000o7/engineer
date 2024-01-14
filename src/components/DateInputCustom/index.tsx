@@ -37,7 +37,9 @@ const DateInputCustom = ({
         render={({ field: { onChange, value } }) => (
           <DateTimePicker
             onChange={(_, selectedDate) => {
-              if (refDate && selectedDate! > refDate) {
+              console.log('SELECTED DATE', selectedDate);
+              console.log('REF DATE', refDate);
+              if (refDate && selectedDate! < refDate) {
                 onChange(refDate);
                 return;
               }

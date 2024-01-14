@@ -69,12 +69,20 @@ const ContactInformationModal = (registerState: ContactInformationModalProps) =>
           </Text>
           <Text style={{ fontSize: 20, fontWeight: 'bold' }}>Email: {register!.email}</Text>
           <Text style={{ fontSize: 20, fontWeight: 'bold' }}>Telefon: {register!.phone}</Text>
-          <Text style={{ fontSize: 20, fontWeight: 'bold' }}>Miasto: {register!.city}</Text>
-          <Text style={{ fontSize: 20, fontWeight: 'bold' }}>Ulica: {register!.address1}</Text>
-          <Text style={{ fontSize: 20, fontWeight: 'bold' }}>Ulica: {register!.address2}</Text>
-          <Text style={{ fontSize: 20, fontWeight: 'bold' }}>
-            Kod pocztowy: {registerState.postalCode}
-          </Text>
+          {register.city && (
+            <Text style={{ fontSize: 20, fontWeight: 'bold' }}>Miasto: {register!.city}</Text>
+          )}
+          {register.address1 && (
+            <Text style={{ fontSize: 20, fontWeight: 'bold' }}>Ulica: {register!.address1}</Text>
+          )}
+          {register.address2 && (
+            <Text style={{ fontSize: 20, fontWeight: 'bold' }}>Ulica: {register!.address2}</Text>
+          )}
+          {register.postalCode && (
+            <Text style={{ fontSize: 20, fontWeight: 'bold' }}>
+              Kod pocztowy: {registerState.postalCode}
+            </Text>
+          )}
         </View>
       )}
       <TouchableOpacity

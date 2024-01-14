@@ -120,6 +120,10 @@ const DayOffItem = ({
                 marginLeft: 3
               }}
               onBlur={onBlur}
+              fieldStyle={{
+                flexWrap: 'wrap',
+                width: 50
+              }}
               placeholderTextColor={COLOR.BLACK}
               useWheelPicker={true}
               fieldType={PickerFieldTypes.filter}

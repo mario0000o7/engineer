@@ -82,7 +82,11 @@ const CalendarScreen = ({ navigation }: NavigationProps<Routes.Calendar>) => {
     getAppointment({ userId: id! })
       .unwrap()
       .then(async (res) => {
-        if (Platform.OS !== 'web') await Notifications.cancelAllScheduledNotificationsAsync();
+        try {
+          if (Platform.OS !== 'web') await Notifications.cancelAllScheduledNotificationsAsync();
+        } catch (err) {
+          //
+        }
         let markedDatesTMP = {};
         console.log('Appointments', res);
         const eventsTMP: Events = {};
