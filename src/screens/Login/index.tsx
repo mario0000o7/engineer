@@ -40,7 +40,7 @@ const LoginScreen = ({ navigation }: NavigationProps<Routes.Login>) => {
       })
       .catch((err) => {
         console.log(err);
-        setResError('Incorrect email or password');
+        setResError('Niepoprawne dane logowania');
       });
   };
 

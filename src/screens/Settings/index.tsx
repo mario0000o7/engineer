@@ -9,7 +9,12 @@ import DateInputCustom from '~/components/DateInputCustom';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import { COLOR } from '~/styles/constants';
 import { useAppSelector } from '~/redux/hooks';
-import { useGetUserByIdsMutation, useUpdateUserMutation } from '~/redux/api/authApi';
+import {
+  useCheckEmailMutation,
+  useCheckPhoneMutation,
+  useGetUserByIdsMutation,
+  useUpdateUserMutation
+} from '~/redux/api/authApi';
 import { useCallback } from 'react';
 import { useFocusEffect } from '@react-navigation/native';
 import { ActivityIndicator } from 'react-native';
@@ -40,12 +45,15 @@ export interface SettingsProps {
 const Settings = ({ navigation }: NavigationProps<Routes.Settings>) => {
   const role = useAppSelector((state) => state.session.role);
   const id = useAppSelector((state) => state.session.id);
+  const [checkEmail] = useCheckEmailMutation();
+  const [checkPhone] = useCheckPhoneMutation();
   const [getUserByIds, { isLoading }] = useGetUserByIdsMutation();
   const [updateUser, { isLoading: isLoadingUpdate }] = useUpdateUserMutation();
   const {
     control,
     handleSubmit,
-    formState: { isDirty },
+    setError,
+    formState: { isDirty, errors, defaultValues },
     resetField
   } = useForm<SettingsProps>({
     mode: 'onChange',
@@ -71,6 +79,38 @@ const Settings = ({ navigation }: NavigationProps<Routes.Settings>) => {
     if (data.password === '') {
       delete data.password;
     }
+    if (data.email != defaultValues!.email)
+      await checkEmail({ email: data.email! })
+        .unwrap()
+        .then(({ userExists }) => {
+          console.log(userExists);
+          if (userExists) {
+            setError('email', {
+              type: 'manual',
+              message: 'Ten email jest już zajęty'
+            });
+            return;
+          }
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    if (data.phone != defaultValues!.phone)
+      await checkPhone({ phone: data.phone! })
+        .unwrap()
+        .then(({ userExists }) => {
+          console.log(userExists);
+          if (userExists) {
+            setError('phone', {
+              type: 'manual',
+              message: 'Ten numer telefonu jest już zajęty'
+            });
+            return;
+          }
+        })
+        .catch((err) => {
+          console.log(err);
+        });
     data.id = id!;
     updateUser(data as RegisterState)
       .unwrap()
@@ -209,6 +249,7 @@ const Settings = ({ navigation }: NavigationProps<Routes.Settings>) => {
           placeholder={'Adres email'}
           keyboardType={'email-address'}
           textContentType={'emailAddress'}
+          error={errors.email?.message}
         />
         <LoginAndRegisterTextInput
           name={'password'}
@@ -253,43 +294,48 @@ const Settings = ({ navigation }: NavigationProps<Routes.Settings>) => {
               placeholder={'Numer telefonu'}
               textContentType={'telephoneNumber'}
               label={'phone'}
+              error={errors.phone?.message}
               keyboardType={'phone-pad'}
             />
           </View>
         </View>
-        <CustomTextInput
-          name={'address1'}
-          textContentType={'streetAddressLine1'}
-          placeholder={'Adres zamieszkania 1'}
-          control={control}
-          keyboardType={'default'}
-        />
-        <CustomTextInput
-          name={'address2'}
-          control={control}
-          placeholder={'Adres zamieszkania 2 (opcjonalnie)'}
-          textContentType={'streetAddressLine2'}
-          label={'address2'}
-          keyboardType={'default'}
-        />
-        <CustomTextInput
-          name={'city'}
-          placeholder={'Miasto'}
-          textContentType={'addressCity'}
-          label={'city'}
-          keyboardType={'default'}
-          control={control}
-        />
-        <CustomTextInput
-          name={'postalCode'}
-          placeholder={'Kod pocztowy'}
-          textContentType={'postalCode'}
-          label={'postalCode'}
-          keyboardType={'default'}
-          control={control}
-        />
+        {role === 1 && (
+          <>
+            <CustomTextInput
+              name={'address1'}
+              textContentType={'streetAddressLine1'}
+              placeholder={'Adres zamieszkania 1'}
+              control={control}
+              keyboardType={'default'}
+            />
+            <CustomTextInput
+              name={'address2'}
+              control={control}
+              placeholder={'Adres zamieszkania 2 (opcjonalnie)'}
+              textContentType={'streetAddressLine2'}
+              label={'address2'}
+              keyboardType={'default'}
+            />
+            <CustomTextInput
+              name={'city'}
+              placeholder={'Miasto'}
+              textContentType={'addressCity'}
+              label={'city'}
+              keyboardType={'default'}
+              control={control}
+            />
+            <CustomTextInput
+              name={'postalCode'}
+              placeholder={'Kod pocztowy'}
+              textContentType={'postalCode'}
+              label={'postalCode'}
+              keyboardType={'default'}
+              control={control}
+            />
 
-        <SelectCountry name={'country'} control={control} />
+            <SelectCountry name={'country'} control={control} />
+          </>
+        )}
       </KeyboardAwareScrollView>
     </View>
   );

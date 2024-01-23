@@ -29,12 +29,14 @@ export const checkVerificationRedux =
       const response = await checkVerification(phoneNumber, code);
 
       if (response) {
-        dispatch({ type: 'CHECK_VERIFICATION_SUCCESS' });
+        return dispatch({ type: 'CHECK_VERIFICATION_SUCCESS' });
       } else {
-        dispatch({ type: 'CHECK_VERIFICATION_FAILURE' });
+        console.log('checkVerificationRedux error');
+        return dispatch({ type: 'CHECK_VERIFICATION_FAILURE' });
       }
     } catch (error) {
-      dispatch({ type: 'CHECK_VERIFICATION_FAILURE' });
+      console.log('checkVerificationRedux error');
+      return dispatch({ type: 'CHECK_VERIFICATION_FAILURE' });
     }
   };
 

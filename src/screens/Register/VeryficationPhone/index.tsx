@@ -15,6 +15,7 @@ import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view
 import OPTCodeInput from '~/components/OPTCodeInput';
 import { checkVerificationRedux, clearError, sendVerificationRedux } from '~/redux/api/twilio';
 import { useFocusEffect } from '@react-navigation/native';
+import { CHECK_VERIFICATION_FAILURE } from '~/redux/types/twilio';
 
 export interface VerifySchema {
   code: string;
@@ -29,7 +30,11 @@ const VerifyStep = ({ navigation }: NavigationProps<Routes.VerifyStep>) => {
   const insets = useSafeAreaInsets();
 
   const onSubmit = async ({ code }: VerifySchema) => {
-    await dispatch(checkVerificationRedux(stored.phone, code));
+    const res = await dispatch(checkVerificationRedux(stored.phone, code));
+    if (res.type === CHECK_VERIFICATION_FAILURE) {
+      return;
+    }
+    console.log('verify');
     navigation.navigate(Routes.BirthStep);
   };
 

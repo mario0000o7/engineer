@@ -73,13 +73,13 @@ const EmailStep = ({ navigation, route }: NavigationProps<Routes.EmailStep>) => 
       })
       .catch((err) => {
         console.log(err);
-        setResError('Incorrect email or password');
+        setResError('Niepoprawny adres email');
       });
     await checkPhone({ phone })
       .unwrap()
       .then(({ userExists }) => {
         if (userExists) {
-          setResError(() => 'This phone number has already an account');
+          setResError(() => 'Ten numer telefonu jest już przypisany do konta');
         } else {
           isPhoneChecked = true;
           dispatch(setPhone(phone));
@@ -88,7 +88,7 @@ const EmailStep = ({ navigation, route }: NavigationProps<Routes.EmailStep>) => 
       })
       .catch((err) => {
         console.log(err);
-        setResError('Incorrect phone number');
+        setResError('Niepoprawny numer telefonu');
       });
     if (isEmailChecked && isPhoneChecked) {
       dispatch(setFirstName(firstName));
