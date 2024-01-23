@@ -48,6 +48,7 @@ const MessageChat = ({ navigation, route }: NavigationProps<Routes.Message>) => 
         renderBubble={(props) => CustomBubble(props, { navigation, route })}
         renderMessageText={renderMessageText}
         renderSend={renderSend}
+        placeholder={'Napisz wiadomość'}
         renderFooter={() =>
           chat.loading ? (
             <LoaderScreen backgroundColor={'transparent'} color={COLOR.PRIMARY} />

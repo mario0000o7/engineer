@@ -84,7 +84,8 @@ const DayOffItem = ({
   return (
     <View
       style={{ backgroundColor: COLOR.BACKGROUND, justifyContent: 'space-between' }}
-      padding-10
+      paddingB-5
+      paddingT-5
       row={true}>
       <View row={true} centerV={true}>
         <DateInputCustom

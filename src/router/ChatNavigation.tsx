@@ -40,7 +40,7 @@ const ChatScreen = ({ navigation }: NavigationProps<Routes.Chat>) => {
           tabBarLabelStyle: styles.tabLabel,
           tabBarActiveTintColor: COLOR.PRIMARY,
           tabBarInactiveTintColor: COLOR.GREY,
-          title: 'Lista lekarzy',
+          title: 'Lista użytkowników',
           tabBarIcon: ({ color, size }) => (
             <Icon source={'account-search'} size={size} color={color} />
           )
