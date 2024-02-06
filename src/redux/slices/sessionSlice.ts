@@ -39,6 +39,7 @@ const sessionSlice = createSlice({
   initialState,
   reducers: {
     setToken(state, action: PayloadAction<Jwt>) {
+      console.log('setToken', action.payload);
       state.token = action.payload;
       const decoded = jwtDecode(action.payload) as JwtProps;
       state.id = decoded.id;

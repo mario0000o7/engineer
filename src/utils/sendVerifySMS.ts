@@ -11,6 +11,7 @@ export const sendSmsVerification = async (phoneNumber: string) => {
       To: phoneNumber.replaceAll(/\s/g, ''),
       Channel: 'sms'
     };
+    console.log('body', body);
 
     const response = await axios.post(
       `${TWILIO_URL}/${TWILIO_VERIFY_SID}/Verifications`,

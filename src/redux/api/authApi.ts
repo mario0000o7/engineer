@@ -24,38 +24,33 @@ export const authApi = baseApi.injectEndpoints({
       invalidatesTags: ['User']
     }),
     checkPhone: builder.mutation<{ userExists: boolean }, { phone: string }>({
-      query: (data) => ({
-        method: 'POST',
-        url: '/user/checkPhone',
-        body: data
+      query: (phone) => ({
+        method: 'GET',
+        url: '/user/checkPhone?phone=' + phone
       })
     }),
     checkEmail: builder.mutation<{ userExists: boolean }, { email: string }>({
-      query: (data) => ({
-        method: 'POST',
-        url: '/user/checkEmail',
-        body: data
+      query: (email) => ({
+        method: 'GET',
+        url: '/user/checkEmail?email=' + email
       })
     }),
     findUser: builder.mutation<[RegisterState], { fullName: string; role: number }>({
-      query: (data) => ({
-        method: 'POST',
-        url: '/user/findUser',
-        body: data
+      query: ({ fullName, role }) => ({
+        method: 'GET',
+        url: `/user/findUser?fullName=${fullName}&role=${role}`
       })
     }),
     getAllUsers: builder.mutation<[RegisterState], { role: number }>({
-      query: (data) => ({
-        method: 'POST',
-        url: '/user/getAllUser',
-        body: data
+      query: ({ role }) => ({
+        method: 'GET',
+        url: `/user/getAllUser?role=${role}`
       })
     }),
     getUserByIds: builder.mutation<[RegisterState], { ids: number[] }>({
-      query: (data) => ({
-        method: 'POST',
-        url: '/user/getUserByIds',
-        body: data
+      query: ({ ids }) => ({
+        method: 'GET',
+        url: `/user/getUserByIds?ids=${ids.join(',')}`
       })
     }),
     createOffice: builder.mutation<void, OfficeState>({
@@ -66,22 +61,21 @@ export const authApi = baseApi.injectEndpoints({
       })
     }),
     getOfficesByIdOwner: builder.mutation<[OfficeState], { ownerId: number }>({
-      query: (data) => ({
-        method: 'POST',
-        url: '/office/retrieveByOwnerId',
-        body: data
+      query: ({ ownerId }) => ({
+        method: 'GET',
+        url: `/office/retrieveByOwnerId?ownerId=${ownerId}`
       })
     }),
     updateOffice: builder.mutation<number, OfficeState>({
       query: (data) => ({
-        method: 'POST',
+        method: 'PUT',
         url: '/office/update',
         body: data
       })
     }),
     deleteOffice: builder.mutation<number, { officeId: number }>({
       query: (data) => ({
-        method: 'POST',
+        method: 'DELETE',
         url: '/office/delete',
         body: data
       })
@@ -94,38 +88,35 @@ export const authApi = baseApi.injectEndpoints({
       })
     }),
     getServicesByIdOwner: builder.mutation<[ServiceState], { officeId: number }>({
-      query: (data) => ({
-        method: 'POST',
-        url: '/service/retrieveAllByOfficeId',
-        body: data
+      query: ({ officeId }) => ({
+        method: 'GET',
+        url: `/service/retrieveAllByOfficeId?officeId=${officeId}`
       })
     }),
     deleteService: builder.mutation<number, { serviceId: number }>({
       query: (data) => ({
-        method: 'POST',
+        method: 'DELETE',
         url: '/service/delete',
         body: data
       })
     }),
     updateService: builder.mutation<number, ServiceState>({
       query: (data) => ({
-        method: 'POST',
+        method: 'PUT',
         url: '/service/update',
         body: data
       })
     }),
     retrieveAll: builder.mutation<OfficeState[], { nameOffice: string }>({
-      query: (data) => ({
-        method: 'POST',
-        url: '/office/retrieveAll',
-        body: data
+      query: ({ nameOffice }) => ({
+        method: 'GET',
+        url: `/office/retrieveAll?nameOffice=${nameOffice}`
       })
     }),
     readAvailableDatesForService: builder.mutation<Date[], { serviceId: number }>({
-      query: (data) => ({
-        method: 'POST',
-        url: '/appointment/readAvailableDatesForService',
-        body: data
+      query: ({ serviceId }) => ({
+        method: 'GET',
+        url: `/appointment/readAvailableDatesForService?serviceId=${serviceId}`
       })
     }),
     createAppointment: builder.mutation<void, AppointmentState>({
@@ -136,45 +127,42 @@ export const authApi = baseApi.injectEndpoints({
       })
     }),
     getAppointmentsByUserId: builder.mutation<AppointmentState[], { userId: number }>({
-      query: (data) => ({
-        method: 'POST',
-        url: '/appointment/getAppointmentsByUserId',
-        body: data
+      query: ({ userId }) => ({
+        method: 'GET',
+        url: `/appointment/getAppointmentsByUserId?userId=${userId}`
       })
     }),
     getAppointmentsByDoctorId: builder.mutation<AppointmentState[], { userId: number }>({
-      query: (data) => ({
-        method: 'POST',
-        url: '/appointment/getAppointmentsByDoctorId',
-        body: data
+      query: ({ userId }) => ({
+        method: 'GET',
+        url: `/appointment/getAppointmentsByDoctorId?userId=${userId}`
       })
     }),
     moveAppointment: builder.mutation<number, { appointmentId: number; date: Date }>({
       query: (data) => ({
-        method: 'POST',
+        method: 'PUT',
         url: '/appointment/moveAppointment',
         body: data
       })
     }),
     deleteAppointment: builder.mutation<number, { appointmentId: number }>({
       query: (data) => ({
-        method: 'POST',
+        method: 'DELETE',
         url: '/appointment/delete',
         body: data
       })
     }),
     updateUser: builder.mutation<number, RegisterState>({
       query: (data) => ({
-        method: 'POST',
+        method: 'PUT',
         url: '/user/update',
         body: data
       })
     }),
     getAllDaysOffRetrieveByUserId: builder.mutation<DayOffState[], { userId: number }>({
-      query: (data) => ({
-        method: 'POST',
-        url: '/dayOff/retrieveByUserId',
-        body: data
+      query: ({ userId }) => ({
+        method: 'GET',
+        url: `/dayOff/retrieveByUserId?userId=${userId}`
       })
     }),
     createDayOff: builder.mutation<DayOffState, DayOffState>({
@@ -186,14 +174,14 @@ export const authApi = baseApi.injectEndpoints({
     }),
     updateDayOff: builder.mutation<number, DayOffState>({
       query: (data) => ({
-        method: 'POST',
+        method: 'PUT',
         url: '/dayOff/update',
         body: data
       })
     }),
     deleteDayOff: builder.mutation<number, { dayOffId: number }>({
       query: (data) => ({
-        method: 'POST',
+        method: 'DELETE',
         url: '/dayOff/delete',
         body: data
       })

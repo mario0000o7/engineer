@@ -147,6 +147,8 @@ const Settings = ({ navigation }: NavigationProps<Routes.Settings>) => {
   useFocusEffect(buttonsHandler);
 
   const getUserHandler = useCallback(() => {
+    console.log('getUserHandler');
+    console.log(id);
     getUserByIds({ ids: [id!] })
       .unwrap()
       .then((res) => {
