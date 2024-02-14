@@ -58,22 +58,24 @@ const OfficeItem = ({ navigation, office, role }: OfficeItemProps) => {
           </View>
         </View>
         <View row={true} style={{ marginLeft: 'auto' }}>
-          <TouchableOpacity
-            onPress={() => {
-              navigation.navigate(Routes.OfficeServiceList, {
-                id: office.id!,
-                name: office.name
-              });
-            }}
-            centerV={true}
-            centerH={true}
-            style={{ width: 50, height: 50 }}
-            br40={true}
-            backgroundColor={COLOR.PRIMARY}>
-            <MaterialCommunityIcons name={'calendar-month'} color={COLOR.WHITE} size={30} />
+          {role === 2 ? (
+            <TouchableOpacity
+              onPress={() => {
+                navigation.navigate(Routes.OfficeServiceList, {
+                  id: office.id!,
+                  name: office.name
+                });
+              }}
+              centerV={true}
+              centerH={true}
+              style={{ width: 50, height: 50 }}
+              br40={true}
+              backgroundColor={COLOR.PRIMARY}>
+              <MaterialCommunityIcons name={'calendar-month'} color={COLOR.WHITE} size={30} />
 
-            {/*<MaterialIcons name={'design-services'} color={COLOR.BLACK} size={30} />*/}
-          </TouchableOpacity>
+              {/*<MaterialIcons name={'design-services'} color={COLOR.BLACK} size={30} />*/}
+            </TouchableOpacity>
+          ) : undefined}
           {role === 1 ? (
             <TouchableOpacity
               onPress={() => {

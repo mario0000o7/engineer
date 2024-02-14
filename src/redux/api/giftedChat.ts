@@ -53,10 +53,18 @@ export const getMessagesRedux =
         .build();
       messagesRequest.fetchPrevious().then(
         (messages) => {
+          console.log('Message list fetched:', messages);
           let messageList: IMessage[] = [];
+          console.log('Messages length:', messages.length);
           for (let i = 0; i < messages.length; i++) {
             CometChat.markAsRead(messages[i] as TextMessage | MediaMessage);
-            messageList = messageList.concat(mapMessage(messages[i] as TextMessage | MediaMessage));
+            try {
+              messageList = messageList.concat(
+                mapMessage(messages[i] as TextMessage | MediaMessage)
+              );
+            } catch (e) {
+              console.log('Error in mapping message:', e);
+            }
           }
 
           dispatch({

@@ -87,22 +87,41 @@ const DayOffItem = ({
       paddingB-5
       paddingT-5
       row={true}>
-      <View row={true} centerV={true}>
-        <DateInputCustom
-          name={'dateFrom'}
-          control={control}
-          isUnMaxDate={true}
-          setRefDate={setRefDate}
-          isMinDate={true}
-        />
-        <Text style={{ fontSize: 25 }}>:</Text>
-        <DateInputCustom
-          name={'dateTo'}
-          control={control}
-          isUnMaxDate={true}
-          isMinDate={true}
-          refDate={refDate}
-        />
+      <View padding-5 row={true} centerV={true}>
+        <View>
+          <View row={true} centerV={true}>
+            <Text
+              style={{
+                fontSize: 20
+              }}>
+              Od:
+            </Text>
+            <DateInputCustom
+              name={'dateFrom'}
+              control={control}
+              isUnMaxDate={true}
+              setRefDate={setRefDate}
+              isMinDate={true}
+            />
+          </View>
+          <View centerV={true} row={true}>
+            {/*<Text style={{ fontSize: 25 }}>:</Text>*/}
+            <Text
+              style={{
+                fontSize: 20
+              }}>
+              Do:
+            </Text>
+
+            <DateInputCustom
+              name={'dateTo'}
+              control={control}
+              isUnMaxDate={true}
+              isMinDate={true}
+              refDate={refDate}
+            />
+          </View>
+        </View>
         <Controller
           rules={{
             required: {
@@ -123,7 +142,7 @@ const DayOffItem = ({
               onBlur={onBlur}
               fieldStyle={{
                 flexWrap: 'wrap',
-                width: 50
+                width: 150
               }}
               placeholderTextColor={COLOR.BLACK}
               useWheelPicker={true}

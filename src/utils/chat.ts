@@ -22,30 +22,37 @@ export function mapUser(user: CometChat.User | CometChat.Group): User {
 }
 
 export function mapMessage(message: TextMessage | MediaMessage): CustomMessage[] {
-  if (message instanceof MediaMessage) {
-    return [
-      {
-        user: mapUser(message.getSender()),
-        _id: message.getId(),
-        text: '',
-        createdAt: new Date(message.getSentAt() * 1000),
-        file: {
-          uri: message.getAttachment().getUrl(),
-          mimeType: message.getAttachment().getMimeType(),
-          name: message.getAttachment().getName(),
-          extension: message.getAttachment().getExtension()
+  try {
+    if (message instanceof MediaMessage) {
+      console.log('Media message:', message);
+      return [
+        {
+          user: mapUser(message.getSender()),
+          _id: message.getId(),
+          text: '',
+          createdAt: new Date(message.getSentAt() * 1000),
+          file: {
+            uri: message.getAttachment().getUrl(),
+            mimeType: message.getAttachment().getMimeType(),
+            name: message.getAttachment().getName(),
+            extension: message.getAttachment().getExtension()
+          }
         }
-      }
-    ];
-  } else {
-    return [
-      {
-        user: mapUser(message.getSender()),
-        _id: message.getId(),
-        text: message.getText(),
-        createdAt: new Date(message.getSentAt() * 1000)
-      }
-    ];
+      ];
+    } else {
+      console.log('Text message:', message);
+      return [
+        {
+          user: mapUser(message.getSender()),
+          _id: message.getId(),
+          text: message.getText(),
+          createdAt: new Date(message.getSentAt() * 1000)
+        }
+      ];
+    }
+  } catch (error) {
+    console.log('Error mapping message:', error);
+    return [];
   }
 }
 
